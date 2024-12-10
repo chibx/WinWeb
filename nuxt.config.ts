@@ -37,7 +37,6 @@ export default defineNuxtConfig({
 	modules: [
 		"@pinia/nuxt",
 		"@primevue/nuxt-module",
-		"@formkit/auto-animate/nuxt",
 		"@vite-pwa/nuxt",
 		"@vueuse/nuxt",
 		"@nuxtjs/tailwindcss",
@@ -94,9 +93,6 @@ export default defineNuxtConfig({
 				svgo: false,
 			}),
 		],
-		build: {
-			cssMinify: "lightningcss",
-		},
 		esbuild: {
 			target: "es2020",
 		},
