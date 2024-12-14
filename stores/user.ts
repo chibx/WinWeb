@@ -11,14 +11,14 @@ export const useUser = defineStore("user", () => {
 		if (totalUsers <= 1) {
 			try {
 				tx.abort();
-			} catch (error) {
+			} catch {
 				throw Error("Cannot delete only user");
 			}
 		}
 		store.delete(IDBKeyRange.only(id));
 		await tx.done;
-		if (currentUser.value?.uid === id && currentUser.value.isCurrent) {
-		}
+		// if (currentUser.value?.uid === id && currentUser.value.isCurrent) {
+		// } 
 	}
 
 	async function changeUser(id: string) {
@@ -31,7 +31,7 @@ export const useUser = defineStore("user", () => {
 		if (!newUser) return;
 		newUser.isCurrent = true;
 		store.put(newUser);
-		const oldUser = currentUser.value;
+		// const oldUser = currentUser.value;
 		await tx.done;
 	}
 

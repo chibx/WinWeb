@@ -26,7 +26,7 @@ export default defineNuxtConfig({
 				},
 				{ name: "format-detection", content: "telephone=no" },
 				{ name: "msapplication-tap-highlight", content: "no" },
-				{ name: "apple-mobile-web-app-capable", content: "yes" },
+				{ name: "mobile-web-app-capable", content: "yes" },
 				{ name: "apple-mobile-web-app-title", content: "winweb" },
 			],
 			// link: [{ rel: "icon", type: "image/png", href: "/icon.png" }],
@@ -34,13 +34,20 @@ export default defineNuxtConfig({
 			base: { href: "/" },
 		},
 	},
+	imports: {
+       dirs: ['./composables/**', './utils/**', '.stores/**', 'types/**'],
+	},
 	modules: [
 		"@pinia/nuxt",
+		"@nuxt/icon",
 		"@primevue/nuxt-module",
 		"@vite-pwa/nuxt",
 		"@vueuse/nuxt",
 		"@nuxtjs/tailwindcss",
 	],
+	icon: {
+		mode: "svg",
+	},
 	css: ["~/assets/css/main.css"],
 	primevue: {
 		components: {
