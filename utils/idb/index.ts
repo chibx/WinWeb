@@ -9,7 +9,7 @@ import type { WinWebSchema } from "../../types/idb";
 export let idb: Promise<IDBPDatabase<WinWebSchema>>;
 
 //TODO: Watch this
-const stores: ArrayLike<StoreNames<WinWebSchema>> = ["files", "users"];
+const stores: Array<StoreNames<WinWebSchema>> = ["files", "users"];
 
 if (import.meta.client) {
 	idb = openDB<WinWebSchema>("winweb", 1, {
@@ -60,4 +60,10 @@ export async function transaction<
 
 export function pad(str: string | number) {
 	return ("" + str).padStart(2, "0");
+}
+
+export async function isDBAvalaible() {
+	const db = await idb;
+
+	return db.count('users').then(a=> a>0);
 }

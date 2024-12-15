@@ -8,6 +8,12 @@ export async function getUsers() {
 	return users;
 }
 
+export async function getUser(id: string) {
+	const tx = await transaction("users", "readonly");
+	const cursor = await tx.objectStore("users").index("uid").openCursor(IDBKeyRange.only(id));
+	return cursor?.value
+}
+
 export async function addUser(tx: IDBTransactionWithWrite, newUser: NewUser) {
 	const store = tx.objectStore("users");
 	const user = { ...newUser, uid: uid(), isCurrent: false };
@@ -18,9 +24,17 @@ export async function deleteAllUsers(tx: IDBTransactionWithWrite) {
 	const store = tx.objectStore("users");
 	return store.clear();
 }
+
+export async function deleteUser(tx: IDBTransactionWithWrite, id: string) {
+	const store = tx.objectStore("users");
+	const cursor = await store.index("uid").openCursor(id)
+	if (cursor) {
+		await cursor.delete();
+	}
+}
+
 export async function refreshDB() {
 	const userStore = useUser();
-	const tx = await transaction(void 0, "readwrite");
 	const defaultUsers: User[] = [
 		{
 			avatar: null,
@@ -52,8 +66,8 @@ export async function refreshDB() {
 		(await idb).clear('users'),
 		(await idb).clear('files')
 	]);
+	const tx = await transaction(void 0, "readwrite");
 	const store = tx.objectStore("users");
-	store.clear();
 	defaultUsers.forEach((user) => { store.put(user) });
 	await tx.done;
 	userStore.$patch({

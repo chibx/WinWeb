@@ -9,7 +9,7 @@ const imgSrc = useObjectUrl(props.src ? new Blob([props.src]) : undefined)
 </script>
 
 <template>
-    <div class="rounded-full overflow-hidden relative z-1">
+    <div class="rounded-full overflow-hidden">
         <img v-if="imgSrc" :src="imgSrc" class="w-full h-full object-cover" alt="Profile" />
         <div v-else class="svg-bg w-full h-full">
             <svg role="img" alt="Placeholder Profile" class="w-full h-full" width="80" height="80"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 useHead({
   link: [
     {
@@ -11,7 +12,7 @@ useHead({
       crossorigin: "anonymous"
     },
     {
-      href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Gothic+A1:wght@400;700&family=Poppins:wght@400;500;700&family=Roboto:wght@500;700&display=swap", 
+      href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Gothic+A1:wght@400;700&family=Poppins:wght@400;500;700&family=Roboto:wght@500;700&display=swap",
       rel: "stylesheet"
     }
   ]
@@ -20,29 +21,65 @@ useHead({
 
 const showLogin = ref(false);
 const isLoginSuccess = ref(false);
-provide('isLoginSuccess', isLoginSuccess);
-provide('showLogin', showLogin); 
+const hasAssetLoaded = ref(false);
+const totalUsers = ref<User[]>([]);
+const dimensions = reactive(useWindowSize());
+
+provide(IS_LOGIN_SUCCESS, isLoginSuccess);
+provide(WINDOW_SIZE, dimensions);
+provide(IS_ASSET_LOADED, hasAssetLoaded);
+provide(SHOW_LOGIN, showLogin);
+provide(TOTAL_USERS, totalUsers);
+
+
+const userStore = useUser();
+const isFirstTime = useLocalStorage('first-time', true)
+const hideLogin = asyncComputed(async () => {
+  const res = isLoginSuccess.value && hasAssetLoaded.value;
+  if(res){
+    await delay(1000)
+  }
+  return res
+})
+
+const HomeScreen = defineAsyncComponent({
+  loader: async () => {
+    return delay(1500).then(() => import('@/components/Windows/HomeScreen.vue').then(res => (hasAssetLoaded.value = true, res.default)))
+  }
+})
+
+if (import.meta.browser) {
+  try {
+    let users: User[] = [];
+    const isDBValid = await isDBAvalaible()
+    if (!isDBValid || isFirstTime.value !== false) {
+      await refreshDB().catch(console.error);
+      isFirstTime.value = false;
+    }
+    else {
+      users = await getUsers();
+      // TODO change this
+      userStore.$patch({ currentUser: users.find((user) => user.isCurrent == true) });
+    }
+    totalUsers.value = users;
+  } catch { }
+}
+
+watch(isLoginSuccess, (newVal) => {
+  if (newVal && !hasAssetLoaded.value) {
+    HomeScreen?.__asyncLoader?.();
+  }
+})
 </script>
 
 <template>
-  <div class="h-full overflow-hidden relative" @click="showLogin = true">
+  <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
     <!-- Disable animation until user decides to go to login  -->
     <LoginWindowsLoading :stopBlur="!showLogin">
       <template #default>
         <div class="h-full w-full relative z-[2]">
-          <!-- <Transition name="fade-lift">
-            <div v-if="!showLogin"
-              class="absolute select-none z-10 flex-col gap-4 h-full w-full flex items-center justify-center">
-              <LockScreen />
-            </div>
-          </Transition>
-          <div class="h-full w-full absolute flex justify-center">
-            <Transition name="lift" mode="in-out">
-              <WindowsLogin v-if="showLogin" />
-            </Transition>
-          </div> -->
 
-          <Transition name="fade-lift">
+          <Transition name="fade">
             <div v-if="!showLogin"
               class="absolute select-none z-10 flex-col gap-4 h-full w-full flex items-center justify-center">
               <LoginLockScreen />
@@ -55,6 +92,10 @@ provide('showLogin', showLogin);
       </template>
     </LoginWindowsLoading>
   </div>
+
+  <Transition name="fade" mode="in-out">
+    <HomeScreen v-if="hasAssetLoaded" />
+  </Transition>
 </template>
 
 <style>
@@ -74,30 +115,14 @@ body,
   background-color: white;
 }
 
-.fade-lift-enter-active,
-.fade-lift-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: all .5s ease;
 }
 
-.fade-lift-enter-from,
-.fade-lift-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .lift-enter-active,
-  .lift-leave-active {
-    transition: all 1s cubic-bezier(0.55, 0, 0.1, 1);
-  }
-}
-
-.lift-enter-from,
-.lift-leave-to {
-  opacity: 0;
-  transform: translateY(400px);
-  filter: blur(30px);
-
 }
 
 .segoe {
@@ -112,7 +137,7 @@ body,
   font-family: "Poppins", serif;
 }
 
-.gothic {
+.gothic-a1 {
   font-family: "Gothic A1", serif;
 }
 
