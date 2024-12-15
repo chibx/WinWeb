@@ -67,6 +67,7 @@ if (import.meta.browser) {
 
 watch(isLoginSuccess, (newVal) => {
   if (newVal && !hasAssetLoaded.value) {
+    // TODO THIS INTERNAL METHOD COULD CHANGE ANYTIME
     HomeScreen?.__asyncLoader?.();
   }
 })
