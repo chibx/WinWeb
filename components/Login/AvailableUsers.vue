@@ -47,8 +47,8 @@ watch(isClosed, (newVal) => {
                     <ProfileIcon class="w-[20px] h-[20px]" :src="selectedUser?.avatar" />
                     <span :title="selectedUser?.userName" class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ selectedUser?.userName }}</span>
                 </div>
-                <Icon role="button" name="material-symbols:expand-more" class="transition duration-500"
-                    :class="{ 'rotate-180': !isClosed }" :aria-label="isClosed ? 'Expand' : 'Collapse'" />
+                <Icon role="button" :name="ICONS['expand']" class="transition duration-500"
+                    :class="{ 'rotate-180': isClosed }" :aria-label="isClosed ? 'Expand' : 'Collapse'" />
             </div>
         </div>
 </template>

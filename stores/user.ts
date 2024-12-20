@@ -4,6 +4,7 @@ export const useUser = defineStore("user", () => {
 	const currentUser = ref<User | null>(null);
 	const isLoggedIn = ref(false);
 
+
 	async function deleteUser(id: string) {
 		const tx = (await idb).transaction("users", "readwrite");
 		const store = tx.objectStore("users");
@@ -20,6 +21,7 @@ export const useUser = defineStore("user", () => {
 		// if (currentUser.value?.uid === id && currentUser.value.isCurrent) {
 		// } 
 	}
+
 
 	async function changeUser(id: string) {
 		if (!currentUser.value || currentUser.value.uid === id) {

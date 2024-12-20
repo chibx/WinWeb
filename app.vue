@@ -19,6 +19,7 @@ useHead({
 })
 
 
+const gettingWindowsReady = ref(true)
 const showLogin = ref(false);
 const isLoginSuccess = ref(false);
 const hasAssetLoaded = ref(false);

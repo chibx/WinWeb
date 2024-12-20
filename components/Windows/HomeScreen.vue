@@ -1,13 +1,19 @@
 <script lang="ts" setup>
-import ts from 'typescript';
+const background = ref('/backgrounds/background_6.webp')
+
 </script>
 
 <template>
-  <div class="h-full w-full fixed top-0 left-0 overflow-hidden z-[2] bg-blue-950">
-    {{ ref(0) }}
+  <div class="home-screen h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
+    :style="{ backgroundImage: `url(${background})` }">
+
   </div>
+  <WindowsTaskBar />
 </template>
 
 <style scoped>
-
+.home-screen {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 </style>

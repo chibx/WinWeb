@@ -9,7 +9,6 @@ useEventListener('keydown', (e) => {
     if (e.code === 'Space' || e.key === 'Enter') {
         showLogin.value = true
     }
-    console.log(e.key);
 })
 
 </script>

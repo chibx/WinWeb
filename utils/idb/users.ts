@@ -62,10 +62,9 @@ export async function refreshDB() {
 		},
 	];
 	// deleteAllUsers(tx);
-	await Promise.all([
-		(await idb).clear('users'),
-		(await idb).clear('files')
-	]);
+	const db = await idb;
+	await Promise.all(Array.from(db.objectStoreNames).map((name)=>db.clear(name)));
+	
 	const tx = await transaction(void 0, "readwrite");
 	const store = tx.objectStore("users");
 	defaultUsers.forEach((user) => { store.put(user) });
@@ -74,3 +73,5 @@ export async function refreshDB() {
 		currentUser: defaultUsers[0],
 	});
 }
+
+

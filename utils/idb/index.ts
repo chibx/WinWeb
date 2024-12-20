@@ -26,6 +26,12 @@ if (import.meta.client) {
 				keyPath: "uid",
 			});
 			files.createIndex("uid", "uid", { unique: true });
+            
+			// Background Image Related
+			const backgrounds = database.createObjectStore("backgrounds", {
+				keyPath: "uid",
+			});
+			backgrounds.createIndex("user", "user", { unique: false });
 		},
 	});
 }

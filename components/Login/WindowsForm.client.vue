@@ -18,16 +18,16 @@ const showLogin = inject(SHOW_LOGIN)!;
 const isLoginSuccess = inject(IS_LOGIN_SUCCESS)!;
 const isAssetsLoaded = inject(IS_ASSET_LOADED)!;
 const { currentUser: selectedUser } = storeToRefs(userStore)
+useEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        showLogin.value = false
+    }
+})
 
 provide('selectedUser', selectedUser);
 watch(selectedUser, () => {
     focused.value = true
 })
-
-
-const debouncedBack = useDebounceFn(() => {
-    showLogin.value = false;
-}, 200);
 
 async function validatePassword() {
     if (isValidating.value) return
@@ -55,8 +55,8 @@ onMounted(() => {
 
 <template>
     <button v-if="!isLoginSuccess" class="px-3 py-2 rounded fixed top-10 left-5" aria-label="Go Back" title="Go Back"
-        @click="debouncedBack">
-        <Icon class="text-white" name="material-symbols:arrow-left-alt-rounded" size="40" />
+        @click="showLogin = false">
+        <Icon class="text-white" :name="ICONS['arrow-left']" size="40" />
     </button>
 
 
@@ -74,14 +74,12 @@ onMounted(() => {
                             placeholder="Enter your password" />
 
                         <Icon v-if="isValidating" class="absolute top-1/2 -translate-y-1/2 right-3.5"
-                            name="i-svg-spinners:ring-resize" size="25" />
+                            :name="ICONS['circle']" size="25" />
                         <button v-else class="absolute top-1/2 -translate-y-1/2 right-3.5"
                             :aria-label="isPasswordVisible ? 'Hide Password' : 'Show Password'"
                             :title="isPasswordVisible ? 'Hide Password' : 'Show Password'"
                             @click="isPasswordVisible = !isPasswordVisible">
-                            <Icon v-if="isPasswordVisible" name="i-material-symbols:visibility-off-outline-rounded"
-                                size="25" />
-                            <Icon v-else name="i-material-symbols:visibility-outline-rounded" size="25" />
+                            <Icon :name="isPasswordVisible ? ICONS['eye-closed'] : ICONS['eye-open']" size="25" />
                         </button>
                     </div>
                     <div v-if="selectedUser?.uid == 'default'" class="text-center mt-2.5">
@@ -101,7 +99,7 @@ onMounted(() => {
         </div>
         <div v-else-if="!isAssetsLoaded" class="mt-5 flex flex-col items-center justify-center">
             <div class="text-center font-medium segoe tracking-wider text-3xl">Please Wait</div>
-            <Icon name="i-svg-spinners:6-dots-rotate" size="50" class="mt-6" />
+            <Icon :name="ICONS['spinner']" size="50" class="mt-6" />
         </div>
 
         <!-- svg-spinners:8-dots-rotate -->

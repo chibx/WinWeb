@@ -17,6 +17,12 @@ export type User = {
 
 export type NewUser = Omit<User, "uid" | "isCurrent">;
 
+export type Background = {
+	userId: string; /* "system" for all users */
+	uid: string;
+	data: Blob
+}
+
 export interface WinWebSchema extends DBSchema {
 	users: {
 		key: number;
@@ -28,9 +34,9 @@ export interface WinWebSchema extends DBSchema {
 	};
 	files: {
 		key: string;
-		user: string;
 		value: {
 			uid: string;
+			user: string;
 			name: string;
 			size: number;
 			path: string;
@@ -43,4 +49,11 @@ export interface WinWebSchema extends DBSchema {
 			userName: string;
 		};
 	};
+	backgrounds: {
+		key: string;
+		value: Background;
+		indexes: {
+			user: string
+		}
+	}
 }
