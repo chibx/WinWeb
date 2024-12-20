@@ -54,10 +54,10 @@ onMounted(() => {
 </script>
 
 <template>
-    <button v-if="!isLoginSuccess" class="px-3 py-2 rounded fixed top-10 left-5" aria-label="Go Back" title="Go Back"
+    <!-- <button v-if="!isLoginSuccess" class="px-3 py-2 rounded fixed top-10 left-5" aria-label="Go Back" title="Go Back"
         @click="showLogin = false">
         <Icon class="text-white" :name="ICONS['arrow-left']" size="40" />
-    </button>
+    </button> -->
 
 
     <div class="w-[600px] flex flex-col relative mt-40 gap-5 items-center">

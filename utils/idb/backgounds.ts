@@ -1,14 +1,16 @@
 import { uid } from "uid";
 
-export const defaultBgs = [
-      '/backgrounds/background_1.webp',
-      '/backgrounds/background_2.webp',
-      '/backgrounds/background_3.webp',
-      '/backgrounds/background_4.webp',
-      '/backgrounds/background_5.webp',
-      '/backgrounds/background_6.webp',
-      '/backgrounds/windows_11_logo.webp',
-]
+// export const defaultBgs = [
+//       '/backgrounds/bg_1.webp',
+//       '/backgrounds/background_2.webp',
+//       '/backgrounds/background_3.webp',
+//       '/backgrounds/background_4.webp',
+//       '/backgrounds/background_5.webp',
+//       '/backgrounds/background_6.webp',
+//       '/backgrounds/windows_11_logo.webp',
+// ]
+
+export const defaultBgs = Array.from({length: 12}).map((_, i)=> `/backgrounds/bg_${i+1}.webp`)
 
 export const getUserBackgrounds = async (userId: string) => {
       const bgTx = await transaction('backgrounds');
@@ -24,7 +26,7 @@ export const getUserBackgrounds = async (userId: string) => {
       return backgrounds
 }
 
-export const getSystemBackgrounds = async () => {
+export const getSystemBackgrounds = async (count?: number) => {
       const bgTx = await transaction('backgrounds');
       let cursor = await bgTx.objectStore('backgrounds').openCursor();
       const backgrounds: Background[] = [];
@@ -35,14 +37,13 @@ export const getSystemBackgrounds = async () => {
             cursor = await cursor.continue()
       }
 
-      return backgrounds
+      return backgrounds.slice(0, count)
 }
 
-export const getAllBackgrounds = async () => {
+export const getAllBackgrounds = async (count?: number) => {
       const bgTx = await transaction('backgrounds');
-      return bgTx.objectStore('backgrounds').getAll()
+      return bgTx.objectStore('backgrounds').getAll(null, count)
 }
-
 
 export const deleteBackground = async (id: string) => {
       const bgTx = await transaction('backgrounds', 'readwrite');
@@ -59,13 +60,18 @@ export const addBackground = async (background: Omit<Background, 'uid'>) => {
 
 
 export async function preloadBackgrounds() {
-      defaultBgs.forEach(async (url) => {
-            const res = await fetch(url).catch(() => void 0);
-            if (!res) { return }
-            const blob = await res.blob();
-            await addBackground({
-                  userId: 'system',
-                  data: blob
-            }).catch()
+      const promises: Promise<unknown>[] = []
+      defaultBgs.forEach((url) => {
+            promises.push(
+                  fetch(url).then(async (res) => {
+                        const blob = await res.blob();
+                        return await addBackground({
+                              userId: 'system',
+                              data: blob
+                        });
+                  })
+            )
       })
+
+      return Promise.allSettled(promises)
 }

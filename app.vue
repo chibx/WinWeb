@@ -50,20 +50,27 @@ const HomeScreen = defineAsyncComponent({
 })
 
 if (import.meta.browser) {
-  try {
-    let users: User[] = [];
-    const isDBValid = await isDBAvalaible()
-    if (!isDBValid || isFirstTime.value !== false) {
-      await refreshDB().catch(console.error);
-      isFirstTime.value = false;
-    }
-    else {
-      users = await getUsers();
-      // TODO change this
-      userStore.$patch({ currentUser: users.find((user) => user.isCurrent == true) });
-    }
-    totalUsers.value = users;
-  } catch { }
+  (async function() {
+    try {
+      let users: User[] = [];
+      const isDBValid = await isDBAvalaible()
+      if (!isDBValid || isFirstTime.value !== false) {
+        await refreshDB().catch(console.error);
+        await preloadBackgrounds()
+        users = await getUsers();
+        isFirstTime.value = false;
+      }
+      else {
+        users = await getUsers();
+        // TODO change this
+        userStore.$patch({ currentUser: users.find((user) => user.isCurrent == true) });
+      }
+      totalUsers.value = users;
+    } catch { }
+
+    await delay(2000);
+    gettingWindowsReady.value=false;
+  })()
 }
 
 watch(isLoginSuccess, (newVal) => {
@@ -75,15 +82,19 @@ watch(isLoginSuccess, (newVal) => {
 </script>
 
 <template>
+  <Transition name="fade">
+    <GettingWindowsReady v-if="gettingWindowsReady" />
+  </Transition>
+
   <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
     <!-- Disable animation until user decides to go to login  -->
     <LoginWindowsLoading :stopBlur="!showLogin">
       <template #default>
-        <div class="h-full w-full relative z-[2]">
+        <div class="h-full w-full relative z-[1]">
 
           <Transition name="fade">
             <div v-if="!showLogin"
-              class="absolute select-none z-10 flex-col gap-4 h-full w-full flex items-center justify-center">
+              class="absolute select-none flex-col gap-4 h-full w-full flex items-center justify-center">
               <LoginLockScreen />
             </div>
             <div v-else class="h-full w-full absolute flex justify-center">
