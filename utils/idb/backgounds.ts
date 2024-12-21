@@ -41,18 +41,15 @@ export const getSystemBackgrounds = async (count?: number) => {
 }
 
 export const getAllBackgrounds = async (count?: number) => {
-      const bgTx = await transaction('backgrounds');
-      return bgTx.objectStore('backgrounds').getAll(null, count)
+      return (await idb).getAll('backgrounds',null, count)
 }
 
 export const deleteBackground = async (id: string) => {
-      const bgTx = await transaction('backgrounds', 'readwrite');
-      return bgTx.objectStore('backgrounds').delete(id)
+      return (await idb).delete('backgrounds', id)
 }
 
 export const addBackground = async (background: Omit<Background, 'uid'>) => {
-      const bgTx = await transaction('backgrounds', 'readwrite');
-      return bgTx.objectStore('backgrounds').add({
+      return (await idb).add('backgrounds', {
             uid: uid(),
             ...background
       })

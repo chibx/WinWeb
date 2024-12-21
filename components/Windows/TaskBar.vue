@@ -3,21 +3,26 @@
 </script>
 
 <template>
-  <div class="taskbar fixed w-full py-[2.5px] bottom-0 left-0 place-content-center">
+  <div class="taskbar fixed w-full py-[4px] bottom-0 left-0 place-content-center">
      <div class="w-full">
         <div class="flex items-center gap-0.5">
-          <WindowsIcon name="Start" icon="/icons/windows_11.svg" />
-          <WindowsIcon name="File Explorer" icon="/icons/explorer.svg" />
-          <WindowsIcon name="Google Chrome" icon="/icons/chrome.svg" />
-          <WindowsIcon name="VLC Media Player" icon="/icons/vlc.svg" />
+          <WindowsTaskBarIcon name="Start" icon="/icons/windows_11.svg" />
+          <WindowsTaskBarIcon name="File Explorer" icon="/icons/explorer.svg" />
+          <WindowsTaskBarIcon name="Google Chrome" icon="/icons/chrome.svg" />
+          <WindowsTaskBarIcon name="VLC Media Player" icon="/icons/vlc.svg" />
         </div>
+     </div>
+     <div>
+        
      </div>
   </div>
 </template>
 
 <style scoped>
 .taskbar {
-     background: rgb(230, 230, 230);
+     /* background: #333333; */
+     background: var(--taskbar-bg);
+     transition: 0.15s linear;
      min-height: 50px;
      z-index: 3;
 }

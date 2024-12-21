@@ -45,7 +45,7 @@ const hideLogin = asyncComputed(async () => {
 
 const HomeScreen = defineAsyncComponent({
   loader: async () => {
-    return delay(1500).then(() => import('@/components/Windows/HomeScreen.vue').then(res => (hasAssetLoaded.value = true, res.default)))
+    return delay(1500).then(() => import('~/components/Windows/HomeScreen.client.vue').then(res => (hasAssetLoaded.value = true, res.default)))
   }
 })
 
@@ -55,6 +55,7 @@ if (import.meta.browser) {
       let users: User[] = [];
       const isDBValid = await isDBAvalaible()
       if (!isDBValid || isFirstTime.value !== false) {
+        localStorage.clear();
         await refreshDB().catch(console.error);
         await preloadBackgrounds()
         users = await getUsers();
@@ -86,9 +87,10 @@ watch(isLoginSuccess, (newVal) => {
     <GettingWindowsReady v-if="gettingWindowsReady" />
   </Transition>
 
-  <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
-    <!-- Disable animation until user decides to go to login  -->
-    <LoginWindowsLoading :stopBlur="!showLogin">
+  <ClientOnly>
+    <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
+      <!-- Disable animation until user decides to go to login  -->
+      <LoginWindowsLoading :stopBlur="!showLogin">
       <template #default>
         <div class="h-full w-full relative z-[1]">
 
@@ -105,6 +107,7 @@ watch(isLoginSuccess, (newVal) => {
       </template>
     </LoginWindowsLoading>
   </div>
+</ClientOnly>
 
   <Transition name="fade" mode="in-out">
     <HomeScreen v-if="hasAssetLoaded" />

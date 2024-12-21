@@ -11,14 +11,14 @@
     "prod": "nuxt build && node .output/server/index.mjs"
   },
   "dependencies": {
-    "@nuxt/icon": "^1.10.1",
+    "@nuxt/icon": "^1.10.3",
     "@pinia/nuxt": "^0.9.0",
     "@unhead/vue": "^1.11.14",
     "@vite-pwa/nuxt": "^0.10.6",
     "@vueuse/components": "^12.0.0",
     "@vueuse/core": "^12.0.0",
     "@vueuse/nuxt": "^12.0.0",
-    "idb": "^8.0.0",
+    "idb": "^8.0.1",
     "minisearch": "^7.1.1",
     "nuxt": "^3.14.1592",
     "pinia": "^2.3.0",
@@ -29,20 +29,20 @@
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
     "vuedraggable": "^2.24.3",
-    "yup": "^1.5.0"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.16.0",
+    "@eslint/js": "^9.17.0",
     "@iconify/vue": "^4.2.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@primevue/nuxt-module": "^4.2.5",
     "@types/eslint__js": "^8.42.3",
     "autoprefixer": "^10.4.20",
-    "eslint": "^9.16.0",
+    "eslint": "^9.17.0",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.0",
+    "typescript-eslint": "^8.18.1",
     "vite-plugin-pwa": "^0.21.1",
     "vite-svg-loader": "^5.1.0"
   }

@@ -1,36 +1,35 @@
 import { uid } from "uid";
-import type { IDBTransactionWithWrite, NewUser, User } from "~/types/idb";
+import type { NewUser, User } from "~/types/idb";
 
 export async function getUsers() {
-	const tx = await transaction("users", "readonly");
-	const store = tx.objectStore("users");
-	const users = await store.getAll();
-	return users;
+	return (await idb).getAll('users');
 }
 
 export async function getUser(id: string) {
-	const tx = await transaction("users", "readonly");
-	const cursor = await tx.objectStore("users").index("uid").openCursor(IDBKeyRange.only(id));
-	return cursor?.value
+	// const tx = await transaction("users", "readonly");
+	// const cursor = await tx.objectStore("users").index("uid").openCursor(IDBKeyRange.only(id));
+	return (await idb).get('users', IDBKeyRange.only(id))
 }
 
-export async function addUser(tx: IDBTransactionWithWrite, newUser: NewUser) {
-	const store = tx.objectStore("users");
+export async function addUser(newUser: NewUser) {
+	// const store = tx.objectStore("users");
 	const user = { ...newUser, uid: uid(), isCurrent: false };
-	return store.put(user);
+	return (await idb).add('users', user)
 }
 
-export async function deleteAllUsers(tx: IDBTransactionWithWrite) {
-	const store = tx.objectStore("users");
-	return store.clear();
+export async function deleteAllUsers() {
+	// const store = tx.objectStore("users");
+	return (await idb).clear('users');
 }
 
-export async function deleteUser(tx: IDBTransactionWithWrite, id: string) {
-	const store = tx.objectStore("users");
-	const cursor = await store.index("uid").openCursor(id)
-	if (cursor) {
-		await cursor.delete();
-	}
+export async function deleteUser(id: string) {
+	// const store = tx.objectStore("users");
+	// const cursor = await store.index("uid").openCursor(id)
+	// if (cursor) {
+	// 	await cursor.delete();
+	// }
+
+	(await idb).delete('users', IDBKeyRange.only(id))
 }
 
 export async function refreshDB() {
@@ -71,7 +70,7 @@ export async function refreshDB() {
 	await tx.done;
 	userStore.$patch({
 		currentUser: defaultUsers[0],
-	});
+	}); 
 }
 
 

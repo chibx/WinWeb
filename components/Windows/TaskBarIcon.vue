@@ -6,14 +6,18 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="icon w-[40px] h-[40px] p-[5px]" :aria-label="name" :title="name">
+  <div class="icon w-[45px] h-[45px] py-[7px] px-2.5 cursor-pointer" :aria-label="name" :title="name">
     <img :src="icon" :alt="name" />
   </div>
 </template>
 
 <style scoped>
 .icon {
-    background-color: rgba(255, 255, 255, 0.199);
     border-radius: 2px;
+    transition: 0.1s linear;
+}
+
+.icon:hover{ 
+    background-color: var(--icon-hover-color);
 }
 </style>
