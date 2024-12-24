@@ -45,7 +45,7 @@ const hideLogin = asyncComputed(async () => {
 
 const HomeScreen = defineAsyncComponent({
   loader: async () => {
-    return delay(1500).then(() => import('~/components/Windows/HomeScreen.client.vue').then(res => (hasAssetLoaded.value = true, res.default)))
+    return delay(1500).then(() => import('@/components/Windows/HomeScreen.client.vue').then(res => (hasAssetLoaded.value = true, res.default)))
   }
 })
 
@@ -110,7 +110,7 @@ watch(isLoginSuccess, (newVal) => {
 </ClientOnly>
 
   <Transition name="fade" mode="in-out">
-    <HomeScreen v-if="hasAssetLoaded" />
+      <HomeScreen v-if="hasAssetLoaded" />
   </Transition>
 </template>
 
@@ -125,6 +125,7 @@ html,
 body,
 #__nuxt {
   height: 100%;
+  overflow: hidden;
 }
 
 #__nuxt {

@@ -4,13 +4,12 @@ export const useDesktop = defineStore("desktop", () => {
     const taskbarIcons = ref<TaskBarIcon[]>([]);
     const desktopIcons = ref<[][]>([])
     const windows = ref([])
-    const config = reactive({
+    const config = reactive<DesktopConfig>({
         taskbar: {
-            position: 'down',
+            position: 'bottom',
             iconPosition: 'center',
-            bgColor: '#d6f0cf',
+            bgColor: '#1b0027',
             iconHoverColor: '#ffffff41',
-            count: 0
         }
    })
    const desktopVars = computed(()=>{

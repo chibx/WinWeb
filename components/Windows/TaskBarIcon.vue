@@ -6,7 +6,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="icon w-[45px] h-[45px] py-[7px] px-2.5 cursor-pointer" :aria-label="name" :title="name">
+  <div class="icon w-[45px] h-[45px] p-2.5 cursor-pointer" :aria-label="name" :title="name">
     <img :src="icon" :alt="name" />
   </div>
 </template>

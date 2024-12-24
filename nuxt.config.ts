@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import svgLoader from "vite-svg-loader";
+// import svgLoader from "vite-svg-loader";
 const sw = process.env.SW === "true";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -96,9 +96,9 @@ export default defineNuxtConfig({
 	},
 	vite: {
 		plugins: [
-			svgLoader({
-				svgo: false,
-			}),
+			// svgLoader({
+			// 	svgo: false,
+			// }),
 		],
 		esbuild: {
 			target: "es2020",

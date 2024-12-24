@@ -12,7 +12,6 @@ const isPasswordVisible = ref(false)
 const isPasswordValid = ref(true);
 const isValidating = ref(false)
 const password = ref("");
-const failCount = ref(0);
 const totalUsers = inject(TOTAL_USERS)!;
 const showLogin = inject(SHOW_LOGIN)!;
 const isLoginSuccess = inject(IS_LOGIN_SUCCESS)!;
