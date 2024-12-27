@@ -22,14 +22,16 @@ export type DesktopConfig = {
     }
 }
 
-export type DragPaneValidator = (func: (ev: MouseEvent)=>boolean)=>void
+export type DragPaneValidator = (func: (ev: MouseEvent) => boolean) => void
+
+export type DragPaneCoords = { x: number; y: number, width: number, height: number, left: number, top: number }
 
 export type Windows = {
     appName: string;
     /** Unique ID of the instance (Obviously gonna be the key) */
     id: string;
     isMini: boolean;
-    
+
 }
 
 type TaskBarMenu = {

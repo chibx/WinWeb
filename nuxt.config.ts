@@ -5,7 +5,7 @@ const sw = process.env.SW === "true";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: "2024-04-03",
-	devtools: { enabled: true },
+	devtools: { enabled: false },
 	app: {
 		keepalive: {
 			exclude: [],
@@ -40,7 +40,7 @@ export default defineNuxtConfig({
 	modules: [
 		"@pinia/nuxt",
 		"@nuxt/icon",
-		"@primevue/nuxt-module",
+		// "@primevue/nuxt-module",
 		"@vite-pwa/nuxt",
 		"@vueuse/nuxt",
 		"@nuxtjs/tailwindcss",
@@ -49,23 +49,21 @@ export default defineNuxtConfig({
 		mode: "svg",
 	},
 	css: ["~/assets/css/main.css"],
-	primevue: {
-		components: {
-			prefix: "Prime",
-		},
-		composables: {
-			exclude: "*",
-		},
-		directives: {
-			prefix: "p",
-			include: ["Ripple", "Tooltip"] /* Used as v-pripple and v-ptooltip */,
-		},
-		// usePrimeVue: false,
-	},
+	// primevue: {
+	// 	components: {
+	// 		prefix: "Prime",
+	// 	},
+	// 	composables: {
+	// 		exclude: "*",
+	// 	},
+	// 	directives: {
+	// 		prefix: "p",
+	// 		include: ["Ripple", "Tooltip"] /* Used as v-pripple and v-ptooltip */,
+	// 	},
+	// 	// usePrimeVue: false,
+	// },
 	vue: {
 		compilerOptions: {
-			prefixIdentifiers: true,
-			mode: "module",
 			comments: false,
 		},
 	},

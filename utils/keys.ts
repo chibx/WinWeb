@@ -1,4 +1,4 @@
-import type { InjectionKey } from "vue";
+import type { InjectionKey, ShallowRef } from "vue";
 
 const IS_LOGIN_SUCCESS: InjectionKey<Ref<boolean>> = Symbol();
 const SHOW_LOGIN: InjectionKey<Ref<boolean>> = Symbol();
@@ -7,7 +7,7 @@ const TOTAL_USERS: InjectionKey<Ref<User[]>> = Symbol();
 const IS_ASSET_LOADED: InjectionKey<Ref<boolean>> = Symbol();
 const WINDOW_SIZE:InjectionKey<{width: number; height: number}> = Symbol();
 const DRAG_PANE_KEY: InjectionKey<DragPaneValidator> = Symbol()
-const DESTOP_ICON_SET: InjectionKey<Set<HTMLElement>> = Symbol()
+const DESTOP_ICON_SET: InjectionKey<Set<[Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean>]>> = Symbol()
 
 
 

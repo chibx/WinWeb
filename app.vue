@@ -36,18 +36,18 @@ provide(TOTAL_USERS, totalUsers);
 const userStore = useUser();
 const isFirstTime = useLocalStorage('first-time', true)
 const hideLogin = asyncComputed(async () => {
-  const res = isLoginSuccess.value && hasAssetLoaded.value;
+  const res = isLoginSuccess.value;
   if(res){
     await delay(1000)
   }
   return res
 })
 
-const HomeScreen = defineAsyncComponent({
-  loader: async () => {
-    return delay(1500).then(() => import('@/components/Windows/HomeScreen.client.vue').then(res => (hasAssetLoaded.value = true, res.default)))
-  }
-})
+// const HomeScreen = defineAsyncComponent({
+//   loader: async () => {
+//     return delay(1500).then(() => import('@/components/Windows/HomeScreen.client.vue').then(res => (hasAssetLoaded.value = true, res.default)))
+//   }
+// })
 
 if (import.meta.browser) {
   (async function() {
@@ -74,12 +74,12 @@ if (import.meta.browser) {
   })()
 }
 
-watch(isLoginSuccess, (newVal) => {
-  if (newVal && !hasAssetLoaded.value) {
-    // TODO THIS INTERNAL METHOD COULD CHANGE ANYTIME
-    HomeScreen?.__asyncLoader?.();
-  }
-})
+// watch(isLoginSuccess, (newVal) => {
+//   if (newVal && !hasAssetLoaded.value) {
+//     // TODO THIS INTERNAL METHOD COULD CHANGE ANYTIME
+//     HomeScreen?.__asyncLoader?.();
+//   }
+// })
 </script>
 
 <template>
@@ -89,10 +89,11 @@ watch(isLoginSuccess, (newVal) => {
 
   <ClientOnly>
     <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
+    <!-- <div v-if="!isLoginSuccess" class="h-full overflow-hidden relative" @click="showLogin = true"> -->
       <!-- Disable animation until user decides to go to login  -->
       <LoginWindowsLoading :stopBlur="!showLogin">
       <template #default>
-        <div class="h-full w-full relative z-[1]">
+        <div class="h-full w-full relative">
 
           <Transition name="fade">
             <div v-if="!showLogin"
@@ -109,8 +110,9 @@ watch(isLoginSuccess, (newVal) => {
   </div>
 </ClientOnly>
 
-  <Transition name="fade" mode="in-out">
-      <HomeScreen v-if="hasAssetLoaded" />
+  <Transition name="fade">
+      <!-- <HomeScreen v-if="hasAssetLoaded" /> -->
+      <WindowsHomeScreen v-if="isLoginSuccess" />
   </Transition>
 </template>
 
