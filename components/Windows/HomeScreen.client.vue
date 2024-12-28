@@ -24,7 +24,7 @@ const validator = (ev: MouseEvent) => {
 	return res;
 };
 
-function onDrag(ev: MouseEvent, { height, left, top, width, x, y }: DragPaneCoords) {
+function onDrag(_: MouseEvent, { height, left, top, width, x, y }: DragPaneCoords) {
 	// console.time('res')
 	const right = left + width;
 	const bottom = top + height;
@@ -37,13 +37,16 @@ function onDrag(ev: MouseEvent, { height, left, top, width, x, y }: DragPaneCoor
 		const { left: cl, top: ct, width: cw, height: ch } = element.getBoundingClientRect();
 		const cr = cl + cw;
 		const cb = ct + ch;
-		// console.log(ct, y)
-		const inScope = (height > 0 && width > 0) && (
-			(bottom > ct + 20 && right > cl + 15 && y < cb - 20 && x < cr - 15) ||
-			(bottom > ct + 20 && left < cr - 15 && y < cb - 20 && x > cr - 15) ||
-			(top < cb - 20 && left < cr - 15 && y > ct + 20 && x > cr - 15) ||
-			(top < cb - 20 && right > cl + 15 && y < cb - 20 && x < cr - 15)
+		const isDraggingLeft = left < x
+		const isDraggingUp = top < y
+
+	    const inScope = (height > 0 && width > 0) && (
+			(!isDraggingLeft && !isDraggingUp && bottom > ct + 20 && right > cl + 15 && y < cb - 20 && x < cr - 15) ||
+			(isDraggingLeft && !isDraggingUp && bottom > ct + 20 && left < cr - 15 && y < cb - 20 && x > cr - 15) ||
+			(isDraggingLeft && isDraggingUp && top < cb - 20 && left < cr - 15 && y > ct + 20 && x > cr - 15) ||
+			(!isDraggingLeft && isDraggingUp && top < cb - 20 && right > cl + 15 && y > ct - 20 && x < cr - 15)
 		);
+
 		focused.value = inScope;
 	});
 	// console.timeEnd('res')
