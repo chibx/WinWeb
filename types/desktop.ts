@@ -22,6 +22,11 @@ export type DesktopConfig = {
     }
 }
 
+export type DesktopCoords = {
+    left: number;
+    top: number
+}
+
 export type DragPaneValidator = (func: (ev: MouseEvent) => boolean) => void
 
 export type DragPaneCoords = { x: number; y: number, width: number, height: number, left: number, top: number }

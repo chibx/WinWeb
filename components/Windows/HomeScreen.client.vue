@@ -7,7 +7,9 @@ const desktopIcons = new Set<[Readonly<ShallowRef<HTMLElement | null>>, Ref<bool
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0].uid);
 const bg = await (await idb).get("backgrounds", lastBg.value);
 const background = useObjectUrl(bg?.data);
-// const homeEl = useTemplateRef('home')
+const isPointerDown = ref(false);
+const homeEl = useTemplateRef('home-screen')
+const focusedIcons = ref([])
 provide(DESTOP_ICON_SET, desktopIcons);
 
 const validator = (ev: MouseEvent) => {
@@ -40,7 +42,7 @@ function onDrag(_: MouseEvent, { height, left, top, width, x, y }: DragPaneCoord
 		const isDraggingLeft = left < x
 		const isDraggingUp = top < y
 
-	    const inScope = (height > 0 && width > 0) && (
+		const inScope = (height > 0 && width > 0) && (
 			(!isDraggingLeft && !isDraggingUp && bottom > ct + 20 && right > cl + 15 && y < cb - 20 && x < cr - 15) ||
 			(isDraggingLeft && !isDraggingUp && bottom > ct + 20 && left < cr - 15 && y < cb - 20 && x > cr - 15) ||
 			(isDraggingLeft && isDraggingUp && top < cb - 20 && left < cr - 15 && y > ct + 20 && x > cr - 15) ||
@@ -52,6 +54,37 @@ function onDrag(_: MouseEvent, { height, left, top, width, x, y }: DragPaneCoord
 	// console.timeEnd('res')
 }
 
+useEventListener(homeEl, 'pointerdown', (ev) => {
+	const deskEl = (ev.target as HTMLElement).closest('.desktop-icon');
+	if (!deskEl) { desktopIcons.forEach(([, focused]) => {focused.value=false});return }
+
+	desktopIcons.forEach(([el, focused]) => { 
+		if(unref(el)===deskEl){
+        focused.value = true
+		}
+		else{
+			focused.value=false
+		}
+	});
+	isPointerDown.value=true
+})
+
+useEventListener(homeEl, 'pointermove', (ev) => {
+	// if(!isPointerDown.value){return}
+
+	// const deskEl = (ev.target as HTMLElement).closest('.desktop-icon');
+	// if (!deskEl) { desktopIcons.forEach(([, focused]) => {focused.value=false});return }
+
+	// desktopIcons.forEach(([el, focused]) => { 
+	// 	if(unref(el)===deskEl){
+    //     focused.value = true
+	// 	}
+	// 	else{
+	// 		focused.value=false
+	// 	}
+	// })
+})
+
 onMounted(() => {
 	const audio = new Audio("/audio/startup.mp3");
 	audio.play();
@@ -60,9 +93,28 @@ onMounted(() => {
 
 <template>
 	<div :style="desktop.desktopVars" ref="home">
-		<div class="home-screen select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
+		<div ref="home-screen"
+			class="home-screen select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
 			:style="{ backgroundImage: background && `url(${background})` }">
-			<WindowsDragPane :canDrag="validator" :onMove="onDrag" />
+			<WindowsDragPane :canDrag="validator" :onMove="onDrag">
+				<div class="h-full desk-house py-2.5 jsdjlj">
+					<!-- <WindowsDesktopIcon name="File Explorer" icon="/icons/explorer.svg"
+						:rClick="() => ({} as DesktopIcon['rClick'])" />
+					<WindowsDesktopIcon name="Google Chrome" icon="/icons/chrome.svg"
+						:rClick="() => ({} as DesktopIcon['rClick'])" />
+					<WindowsDesktopIcon name="Mozilla Firefox" icon="/icons/firefox.svg"
+						:rClick="() => ({} as DesktopIcon['rClick'])" />
+					<WindowsDesktopIcon name="Microsoft Store" icon="/icons/microsoft_store.svg"
+						:rClick="() => ({} as DesktopIcon['rClick'])" /> -->
+
+					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons" :name :icon :rClick ></WindowsDesktopIcon>
+
+					<!-- <button style="background-color: black; padding: 20px;"
+						@click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
+						Toggle pos
+					</button> -->
+				</div>
+			</WindowsDragPane>
 		</div>
 
 		<WindowsTaskBar />
@@ -77,8 +129,6 @@ onMounted(() => {
 }
 
 :deep(.desk-house) {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 20px;
+	
 }
 </style>

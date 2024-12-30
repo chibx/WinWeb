@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { BATTERY } from './utils/keys';
+
 
 useHead({
   link: [
@@ -25,13 +27,14 @@ const isLoginSuccess = ref(false);
 const hasAssetLoaded = ref(false);
 const totalUsers = ref<User[]>([]);
 const dimensions = reactive(useWindowSize());
+const battery = useBattery()
 
 provide(IS_LOGIN_SUCCESS, isLoginSuccess);
 provide(WINDOW_SIZE, dimensions);
 provide(IS_ASSET_LOADED, hasAssetLoaded);
 provide(SHOW_LOGIN, showLogin);
 provide(TOTAL_USERS, totalUsers);
-
+provide(BATTERY, battery)
 
 const userStore = useUser();
 const isFirstTime = useLocalStorage('first-time', true)

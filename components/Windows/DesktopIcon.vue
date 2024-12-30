@@ -17,9 +17,9 @@ const desktopIconInfo = [appEl, hasFocus] as [Readonly<ShallowRef<HTMLElement | 
 //   }, 5000)
 // })
 
-onClickOutside(appEl, () => {
-  hasFocus.value = false;
-})
+// onClickOutside(appEl, () => {
+//   hasFocus.value = false;
+// })
 
 onMounted(() => {
   desktopIcons?.add(desktopIconInfo)
@@ -33,7 +33,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="app-icon" @click="hasFocus = true" class="desktop-icon w-[75px] h-fit px-2.5 py-1.5" :class="{ clicked: hasFocus }"
-    :title="name" :aria-label="name">
+    :title="name" :aria-label="name" @contextmenu.prevent="rClick">
     <div class="flex flex-col gap-2.5 justify-center items-center">
       <img :src="props.icon" :alt="name" class="w-[30px]" draggable="false" />
       <div class="icon-name text-xs text-center">

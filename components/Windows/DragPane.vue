@@ -67,33 +67,7 @@ function dragPane(e: MouseEvent) {
         :style="{ width: width && `${width}px`, height: height && `${height}px`, left: `${left}px`, top: `${top}px` }">
     </div>
    
-    <div class="h-full desk-house py-2.5 jsdjlj">
-          <WindowsDesktopIcon
-            name="File Explorer"
-            icon="/icons/explorer.svg"
-            :rClick="() => ({} as DesktopIcon['rClick'])"
-          />
-          <WindowsDesktopIcon
-            name="Google Chrome"
-            icon="/icons/chrome.svg"
-            :rClick="() => ({} as DesktopIcon['rClick'])"
-          />
-          <WindowsDesktopIcon
-            name="Mozilla Firefox"
-            icon="/icons/firefox.svg"
-            :rClick="() => ({} as DesktopIcon['rClick'])"
-          />
-          <WindowsDesktopIcon
-            name="Microsoft Store"
-            icon="/icons/microsoft_store.svg"
-            :rClick="() => ({} as DesktopIcon['rClick'])"
-          />
-
-          <!-- <button style="background-color: black; padding: 20px;"
-            @click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
-            Toggle pos
-          </button> -->
-        </div>
+    <slot />
 </template>
 
 <style scoped>
