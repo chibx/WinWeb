@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { animate } from "motion/mini";
+import { animate } from "motion";
 import { stubTaskbarIcons } from '~/utils/desktop';
 const desktop = useDesktop();
 const innerBar = useTemplateRef("taskbar-inner");

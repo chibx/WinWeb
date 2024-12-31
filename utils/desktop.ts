@@ -214,3 +214,9 @@ export const stubTaskbarIcons: TaskBarIcon[] = [
         rClick: async ()=>([])
     },
 ]
+
+
+export function convertToGrid(desktopIcons: Set<DesktopIconWithFocus>): ((DesktopIconWithFocus | undefined)[] | undefined)[]{
+    
+    return desktopIcons.size, []
+}

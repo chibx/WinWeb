@@ -1,3 +1,5 @@
+import type { ShallowRef } from "vue";
+
 export type TaskBarIcon = {
     name: string;
     icon: string;
@@ -12,6 +14,8 @@ export type DesktopIcon = {
     /** Function that would be called on right-click  */
     rClick(): Promise<DesktopIconMenu[]>
 }
+
+export type DesktopIconWithFocus = [Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean, boolean>]
 
 export type DesktopConfig = {
     taskbar: {

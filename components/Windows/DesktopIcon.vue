@@ -48,6 +48,10 @@ onBeforeUnmount(() => {
   background-color: #9ae7ff41;
 }
 
+.icon-name{
+  text-shadow: 2px 2px 5px #000000, -2px -2px 5px #000000;
+}
+
 .clicked {
   background-color: #2098bd9f;
 }

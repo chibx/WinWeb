@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import type { ShallowRef } from "vue";
-import type { DragPaneCoords } from "~/types/desktop";
+import type { DesktopIconWithFocus, DragPaneCoords } from "~/types/desktop";
 
 const desktop = useDesktop();
-const desktopIcons = new Set<[Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean, boolean>]>();
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0].uid);
 const bg = await (await idb).get("backgrounds", lastBg.value);
 const background = useObjectUrl(bg?.data);
 const isPointerDown = ref(false);
 const homeEl = useTemplateRef('home-screen')
-const focusedIcons = ref([])
+
+const desktopIcons = new Set<DesktopIconWithFocus>();
+const focusedIcons = new Set<DesktopIconWithFocus>();
 provide(DESTOP_ICON_SET, desktopIcons);
 
 const validator = (ev: MouseEvent) => {
