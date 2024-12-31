@@ -14,7 +14,7 @@ provide(DESTOP_ICON_SET, desktopIcons);
 
 const validator = (ev: MouseEvent) => {
 	// console.time('res')
-	const res = ![...desktopIcons].some(([el]) => {
+	const res = (ev.target as Element).closest('#taskbar') === null && ![...desktopIcons].some(([el]) => {
 		const element = unref(el);
 		if (!element) {
 			return;

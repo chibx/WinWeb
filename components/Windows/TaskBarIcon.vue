@@ -1,16 +1,13 @@
 <script lang="ts" setup>
-const props = defineProps<{
-    icon: string;
-    name: string;
-    active: boolean
-}>()
+import type { TaskBarIcon } from '#build/imports';
+const props = defineProps<TaskBarIcon>()
 </script>
 
 <template>
   <div class="icon w-[45px] h-[45px] relative p-2.5 cursor-pointer" :aria-label="name" :title="name">
-    <img class="-mt-0.5" :src="icon" :alt="name" />
+    <img class="-mt-0.5 w-[25px] h-[25px]" :src="icon" :alt="name" draggable="false" />
 
-    <div class="app-open-indicator" :class="{active}"></div>
+    <div class="app-open-indicator" :class="[]"></div>
   </div>
 </template>
 
