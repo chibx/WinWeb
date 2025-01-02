@@ -14,7 +14,7 @@ const props = defineProps<TaskBarIcon>()
 <style scoped>
 .icon {
     border-radius: 2px;
-    transition: 0.1s linear;
+    transition: background-color 0.1s linear;
 }
 
 .icon:hover{ 
