@@ -1,15 +1,16 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 
 export const useDesktop = defineStore("desktop", () => {
-    const taskbarIcons = ref<TaskBarIcon[]>([]);
+    const taskbarIcons = reactive<TaskBarIcon[]>([]);
     const desktopIcons = ref<[][]>([])
-    const windows = ref([])
+    const windows = reactive([])
     const config = reactive<DesktopConfig>({
         taskbar: {
             position: 'bottom',
             iconPosition: 'center',
             bgColor: '#1b0027',
             iconHoverColor: '#ffffff41',
+            shouldHide: false
         }
    })
    const desktopVars = computed(()=>{
@@ -18,6 +19,7 @@ export const useDesktop = defineStore("desktop", () => {
             '--icon-hover-color': config.taskbar.iconHoverColor
         }
    })
+
    useLocalStorage('config', config);
 
    return {

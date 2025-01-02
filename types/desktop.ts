@@ -3,6 +3,7 @@ import type { ShallowRef } from "vue";
 export type TaskBarIcon = {
     name: string;
     icon: string;
+    pinned?: boolean;
     rClick(): Promise<TaskBarMenu[]>
 }
 
@@ -23,6 +24,7 @@ export type DesktopConfig = {
         iconPosition: 'center' | 'left',
         bgColor: string,
         iconHoverColor: string,
+        shouldHide: boolean
     }
 }
 

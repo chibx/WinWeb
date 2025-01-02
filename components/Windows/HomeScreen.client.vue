@@ -15,7 +15,8 @@ provide(DESTOP_ICON_SET, desktopIcons);
 
 const validator = (ev: MouseEvent) => {
 	// console.time('res')
-	const res = (ev.target as Element).closest('#taskbar') === null && ![...desktopIcons].some(([el]) => {
+    // Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener
+	const res = (ev.target as Element).closest('#desk-house') !== null && (ev.target as Element).closest('#taskbar') === null && ![...desktopIcons].some(([el]) => {
 		const element = unref(el);
 		if (!element) {
 			return;
@@ -98,7 +99,7 @@ onMounted(() => {
 			class="home-screen select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
 			:style="{ backgroundImage: background && `url(${background})` }">
 			<WindowsDragPane :canDrag="validator" :onMove="onDrag">
-				<div class="h-full desk-house py-2.5 jsdjlj">
+				<div id="desk-house" class="h-full py-2.5 jsdjlj">
 					<!-- <WindowsDesktopIcon name="File Explorer" icon="/icons/explorer.svg"
 						:rClick="() => ({} as DesktopIcon['rClick'])" />
 					<WindowsDesktopIcon name="Google Chrome" icon="/icons/chrome.svg"
@@ -108,12 +109,12 @@ onMounted(() => {
 					<WindowsDesktopIcon name="Microsoft Store" icon="/icons/microsoft_store.svg"
 						:rClick="() => ({} as DesktopIcon['rClick'])" /> -->
 
-					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons" :name :icon :rClick ></WindowsDesktopIcon>
+					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :name :icon :rClick ></WindowsDesktopIcon>
 
-					<!-- <button style="background-color: black; padding: 20px;"
+					<button style="background-color: black; padding: 20px;"
 						@click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
 						Toggle pos
-					</button> -->
+					</button>
 				</div>
 			</WindowsDragPane>
 		</div>
