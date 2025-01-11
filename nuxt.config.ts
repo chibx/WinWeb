@@ -6,6 +6,7 @@ const sw = process.env.SW === "true";
 export default defineNuxtConfig({
 	compatibilityDate: "2024-04-03",
 	devtools: { enabled: false },
+	ssr: false,
 	app: {
 		keepalive: {
 			exclude: [],
@@ -35,7 +36,7 @@ export default defineNuxtConfig({
 		},
 	},
 	imports: {
-       dirs: ['./composables/**', './utils/**', '.stores/**', 'types/**'],
+		dirs: ['./composables/**', './utils/**', '.stores/**', 'types/**'],
 	},
 	modules: [
 		"@pinia/nuxt",

@@ -1,101 +1,121 @@
 <script lang="ts" setup>
 import { animate } from "motion";
-import { stubTaskbarIcons } from '~/utils/desktop';
+import { stubTaskbarIcons } from "~/utils/desktop";
 const ICON_SIZE = 45; // 45px
 const SPACE_AFTER_RIGHT_BAR = 16; // 16px
+
 const desktop = useDesktop();
+
 const taskbarEl = useTemplateRef("taskbar");
 const innerBar = useTemplateRef("taskbar-inner");
 const rightBar = useTemplateRef("taskbar-right");
-const isCentered = ref(desktop.config.taskbar.iconPosition === "center");
-const { charging, level } = inject(BATTERY)!
-const now = useNow()
-const taskbarTime = useDateFormat(now, 'h:mm A')
-const taskbarDate = useDateFormat(now, 'MM/DD/YYYY')
-let initialXPos = 0;
-let isPointerDown = false
-let focusedTaskbarIcon: HTMLElement | null = null
 
-useEventListener(document, 'pointerdown', (ev) => {
-	if (ev.target && (ev.target as HTMLElement).closest('#taskbar-inner') !== null) {
-		isPointerDown = true
-		initialXPos = ev.clientX
-		focusedTaskbarIcon = (ev.target as HTMLElement).closest('.icon')
+const isCentered = computed(() => desktop.config.taskbar.iconPosition === "center");
+const { charging, level } = inject(BATTERY)!;
+const now = useNow();
+const taskbarTime = useDateFormat(now, "h:mm A");
+const taskbarDate = useDateFormat(now, "MM/DD/YYYY");
+
+let initialClientX = 0;
+let initialElX = 0;
+let isPointerDown = false;
+let focusedTaskbarIcon: HTMLElement | null = null;
+
+
+useEventListener(document, "pointerdown", (ev) => {
+	if (
+		ev.target &&
+		(ev.target as HTMLElement).closest("#taskbar-inner") !== null
+	) {
+		isPointerDown = true;
+		initialClientX = ev.clientX;
+		focusedTaskbarIcon = (ev.target as HTMLElement).closest(".icon");
 	}
-})
-useEventListener(document, 'pointerup', () => { isPointerDown = false; focusedTaskbarIcon = null })
+});
+useEventListener(document, "pointerup", () => {
+	isPointerDown = false;
+	focusedTaskbarIcon = null;
+});
 
-useEventListener(document, 'pointermove', (ev) => {
-	const innerBarEl = unref(innerBar)
-	if (!isPointerDown || !innerBarEl) { return }
+useEventListener(document, "pointermove", (ev) => {
+	const innerBarEl = unref(innerBar);
+	if (!isPointerDown || !innerBarEl) {
+		return;
+	}
 
-	const { clientX } = ev
-	const maxClientX = taskbarEl.value!.clientWidth - (rightBar.value!.clientWidth + SPACE_AFTER_RIGHT_BAR)
-	const { left, width } = innerBarEl.getBoundingClientRect()
+	const { clientX } = ev;
+	const maxClientX =
+		taskbarEl.value!.clientWidth -
+		(rightBar.value!.clientWidth + SPACE_AFTER_RIGHT_BAR);
+	const { left, width } = innerBarEl.getBoundingClientRect();
+	let resolvedPos = clientX - initialClientX;
 	if (focusedTaskbarIcon) {
 		// TODO: Fix the position reset when dragging taskbar icons
-		focusedTaskbarIcon.style.transform = `translateX(${clientX - initialXPos}px)`
+		const { left: left$1 } = focusedTaskbarIcon.getBoundingClientRect();
+		if (left$1 < left) {
+			resolvedPos = left;
+		}
+		else if (left$1 + ICON_SIZE > left + width) {
+			resolvedPos = left + width;
+		}
+		focusedTaskbarIcon.style.transform = `translateX(${resolvedPos}px)`;
 	}
-	console.log(left, clientX)
-
-})
+});
 
 watch(
 	() => desktop.config.taskbar.iconPosition,
 	async (newPos) => {
-		const innerBar = document.querySelector('#task-wrapper');
+		const innerBar = document.querySelector("#task-wrapper");
 		if (!innerBar) {
 			return;
 		}
-		const style = newPos === 'center' ?
-			{
-				transform: ["translate(0, -50%)", "translate(-50%, -50%)"],
-				left: ["0", "50%"],
-			} :
-			{
-				transform: ["translate(-50%, -50%)", "translate(0, -50%)"],
-				left: ["50%", "0"],
-			}
+		const style =
+			newPos === "center"
+				? {
+					transform: [
+						"translate(0, -50%)",
+						"translate(-50%, -50%)",
+					],
+					left: ["0", "50%"],
+				}
+				: {
+					transform: [
+						"translate(-50%, -50%)",
+						"translate(0, -50%)",
+					],
+					left: ["50%", "0"],
+				};
 
 		animate(
 			innerBar,
 			{ ...style, opacity: [0.75, 0, 1] },
 			{
-				duration: 0.3, ease: "linear",
+				duration: 0.3,
+				ease: "linear",
 				onComplete() {
-					isCentered.value = newPos === 'center'
-				}
-			},
+				},
+			}
 		);
-	},
+	}
 );
-
-
 </script>
 
 <template>
 	<div ref="taskbar" id="taskbar"
 		class="fixed z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none" @contextmenu.prevent="">
 		<div class="w-full">
-			<div id="task-wrapper"
-				class="flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2"
+			<div id="task-wrapper" class="flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2"
 				:class="{ 'left-1/2 -translate-x-1/2': isCentered }">
+				<WindowsTaskBarIcon name="Start" icon="/icons/windows_11.svg" :rClick />
 
-				<WindowsTaskBarIcon name="Start"
-					icon="/icons/windows_11.svg" :rClick />
+				<WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :rClick />
 
-					<WindowsTaskBarIcon name="Microsoft Copilot"
-					icon="/icons/microsoft-copilot.svg" :rClick />
-
-					<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center gap-0.5">
-						<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
+				<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center gap-0.5">
+					<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
 						:icon="icon" :rClick="rClick" />
-					</div>
-
+				</div>
 			</div>
 		</div>
-
-
 
 		<div ref="taskbar-right" class="taskbar-right h-full flex gap-[5px] absolute right-4 top-1/2 -translate-y-1/2">
 			<div class="chevron-ic">
@@ -109,8 +129,12 @@ watch(
 
 				<!-- :title="charging ? `${chargingTime} ${level * 100}%` : `${dischargingTime} ${level * 100}%`" -->
 				<div :title="`${level * 100}% left`">
-					<Icon
-						:name="charging ? ICONS['battery-charging'] : (level > 0.75) ? ICONS['battery'] : ICONS['battery-half']" />
+					<Icon :name="charging
+						? ICONS['battery-charging']
+						: level > 0.75
+							? ICONS['battery']
+							: ICONS['battery-half']
+						" />
 				</div>
 
 				<div>
@@ -128,7 +152,6 @@ watch(
 				</div>
 			</div>
 		</div>
-
 	</div>
 </template>
 
