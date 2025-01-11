@@ -5,6 +5,10 @@ import { BATTERY } from './utils/keys';
 useHead({
   link: [
     {
+      rel: 'icon',
+      href: '/icons/windows_11.svg',
+    },
+    {
       rel: "preconnect",
       href: "https://fonts.googleapis.com"
     },
@@ -40,7 +44,7 @@ const userStore = useUser();
 const isFirstTime = useLocalStorage('first-time', true)
 const hideLogin = asyncComputed(async () => {
   const res = isLoginSuccess.value;
-  if(res){
+  if (res) {
     await delay(1000)
   }
   return res
@@ -53,7 +57,7 @@ const hideLogin = asyncComputed(async () => {
 // })
 
 if (import.meta.browser) {
-  (async function() {
+  (async function () {
     try {
       let users: User[] = [];
       const isDBValid = await isDBAvalaible()
@@ -73,7 +77,7 @@ if (import.meta.browser) {
     } catch { }
 
     await delay(2000);
-    gettingWindowsReady.value=false;
+    gettingWindowsReady.value = false;
   })()
 }
 
@@ -92,30 +96,30 @@ if (import.meta.browser) {
 
   <ClientOnly>
     <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
-    <!-- <div v-if="!isLoginSuccess" class="h-full overflow-hidden relative" @click="showLogin = true"> -->
+      <!-- <div v-if="!isLoginSuccess" class="h-full overflow-hidden relative" @click="showLogin = true"> -->
       <!-- Disable animation until user decides to go to login  -->
       <LoginWindowsLoading :stopBlur="!showLogin">
-      <template #default>
-        <div class="h-full w-full relative">
+        <template #default>
+          <div class="h-full w-full relative">
 
-          <Transition name="fade">
-            <div v-if="!showLogin"
-              class="absolute select-none flex-col gap-4 h-full w-full flex items-center justify-center">
-              <LoginLockScreen />
-            </div>
-            <div v-else class="h-full w-full absolute flex justify-center">
-              <LazyLoginWindowsForm />
-            </div>
-          </Transition>
-        </div>
-      </template>
-    </LoginWindowsLoading>
-  </div>
-</ClientOnly>
+            <Transition name="fade">
+              <div v-if="!showLogin"
+                class="absolute select-none flex-col gap-4 h-full w-full flex items-center justify-center">
+                <LoginLockScreen />
+              </div>
+              <div v-else class="h-full w-full absolute flex justify-center">
+                <LazyLoginWindowsForm />
+              </div>
+            </Transition>
+          </div>
+        </template>
+      </LoginWindowsLoading>
+    </div>
+  </ClientOnly>
 
   <Transition name="fade">
-      <!-- <HomeScreen v-if="hasAssetLoaded" /> -->
-      <WindowsHomeScreen v-if="isLoginSuccess" />
+    <!-- <HomeScreen v-if="hasAssetLoaded" /> -->
+    <WindowsHomeScreen v-if="isLoginSuccess" @contextmenu.prevent="" />
   </Transition>
 </template>
 

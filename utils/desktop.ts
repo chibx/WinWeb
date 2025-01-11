@@ -1,217 +1,214 @@
+export const rClick = async ()=>([]);
+
 export const stubDesktopIcons: DesktopIcon[] = [
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/computer.svg',
         name: 'My Computer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/notepad.svg',
         name: 'Notepad',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/firefox.svg',
         name: 'Mozilla Firefox',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/chrome.svg',
         name: 'Google Chrome',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_store.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_edge.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/computer.svg',
         name: 'My Computer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/notepad.svg',
         name: 'Notepad',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/firefox.svg',
         name: 'Mozilla Firefox',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/chrome.svg',
         name: 'Google Chrome',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_store.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_edge.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/computer.svg',
         name: 'My Computer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/notepad.svg',
         name: 'Notepad',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/firefox.svg',
         name: 'Mozilla Firefox',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/chrome.svg',
         name: 'Google Chrome',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_store.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_edge.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/computer.svg',
         name: 'My Computer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/notepad.svg',
         name: 'Notepad',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/firefox.svg',
         name: 'Mozilla Firefox',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/chrome.svg',
         name: 'Google Chrome',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_store.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_edge.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/computer.svg',
         name: 'My Computer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/notepad.svg',
         name: 'Notepad',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/firefox.svg',
         name: 'Mozilla Firefox',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/chrome.svg',
         name: 'Google Chrome',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_store.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_edge.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
 ]
 
 
 export const stubTaskbarIcons: TaskBarIcon[] = [
     {
-        icon: '/icons/windows_11.svg',
-        name: 'Start',
-        rClick: async ()=>([])
-    },
-    {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/notepad.svg',
         name: 'Notepad',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/firefox.svg',
         name: 'Mozilla Firefox',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/chrome.svg',
         name: 'Google Chrome',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_store.svg',
         name: 'Microsoft Store',
-        rClick: async ()=>([])
+        rClick
     },
     {
         icon: '/icons/microsoft_edge.svg',
         name: 'Microsoft Edge',
-        rClick: async ()=>([])
+        rClick
     },
 ]
 

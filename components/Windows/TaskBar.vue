@@ -16,11 +16,6 @@ let initialXPos = 0;
 let isPointerDown = false
 let focusedTaskbarIcon: HTMLElement | null = null
 
-
-useEventListener(taskbarEl, 'contextmenu', (ev) => {
-	ev.preventDefault()
-})
-
 useEventListener(document, 'pointerdown', (ev) => {
 	if (ev.target && (ev.target as HTMLElement).closest('#taskbar-inner') !== null) {
 		isPointerDown = true
@@ -48,7 +43,8 @@ useEventListener(document, 'pointermove', (ev) => {
 watch(
 	() => desktop.config.taskbar.iconPosition,
 	async (newPos) => {
-		if (!innerBar.value) {
+		const innerBar = document.querySelector('#task-wrapper');
+		if (!innerBar) {
 			return;
 		}
 		const style = newPos === 'center' ?
@@ -62,7 +58,7 @@ watch(
 			}
 
 		animate(
-			innerBar.value,
+			innerBar,
 			{ ...style, opacity: [0.75, 0, 1] },
 			{
 				duration: 0.3, ease: "linear",
@@ -79,18 +75,22 @@ watch(
 
 <template>
 	<div ref="taskbar" id="taskbar"
-		class="fixed z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none">
+		class="fixed z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none" @contextmenu.prevent="">
 		<div class="w-full">
-			<div ref="taskbar-inner" id="taskbar-inner"
+			<div id="task-wrapper"
 				class="flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2"
 				:class="{ 'left-1/2 -translate-x-1/2': isCentered }">
-				<!-- <WindowsTaskBarIcon :active="false" name="Start" icon="/icons/windows_11.svg" />
-				<WindowsTaskBarIcon :active="false" name="File Explorer" icon="/icons/explorer.svg" />
-				<WindowsTaskBarIcon :active="false" name="Google Chrome" icon="/icons/chrome.svg" />
-				<WindowsTaskBarIcon :active="true" name="VLC Media Player" icon="/icons/vlc.svg" /> -->
 
-				<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
-					:icon="icon" :rClick="rClick" />
+				<WindowsTaskBarIcon name="Start"
+					icon="/icons/windows_11.svg" :rClick />
+
+					<WindowsTaskBarIcon name="Microsoft Copilot"
+					icon="/icons/microsoft-copilot.svg" :rClick />
+
+					<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center gap-0.5">
+						<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
+						:icon="icon" :rClick="rClick" />
+					</div>
 
 			</div>
 		</div>

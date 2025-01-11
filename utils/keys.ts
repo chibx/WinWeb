@@ -8,9 +8,11 @@ const TOTAL_USERS: InjectionKey<Ref<User[]>> = Symbol();
 const IS_ASSET_LOADED: InjectionKey<Ref<boolean>> = Symbol();
 const WINDOW_SIZE:InjectionKey<{width: number; height: number}> = Symbol();
 const DRAG_PANE_KEY: InjectionKey<DragPaneValidator> = Symbol()
-const DESTOP_ICON_SET: InjectionKey<Set<[Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean>]>> = Symbol()
+const DESKTOP_ICON_SET: InjectionKey<Set<[Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean>]>> = Symbol()
+const FOC_DESKTOP_ICON_SET: InjectionKey<Set<[Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean>]>> = Symbol()
 const BATTERY: InjectionKey<UseBatteryReturn> = Symbol()
+const KEYBOARD_KEYS: InjectionKey<{shift: boolean, ctrl: boolean}> = Symbol()
 
 
 
-export { IS_LOGIN_SUCCESS, SHOW_LOGIN, SELECTED_USER, TOTAL_USERS, IS_ASSET_LOADED, WINDOW_SIZE, DRAG_PANE_KEY, DESTOP_ICON_SET, BATTERY };
+export { IS_LOGIN_SUCCESS, SHOW_LOGIN, SELECTED_USER, TOTAL_USERS, IS_ASSET_LOADED, WINDOW_SIZE, DRAG_PANE_KEY, DESKTOP_ICON_SET, FOC_DESKTOP_ICON_SET, BATTERY, KEYBOARD_KEYS };

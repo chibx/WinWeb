@@ -4,7 +4,7 @@ const props = defineProps<TaskBarIcon>()
 </script>
 
 <template>
-  <div class="icon w-[45px] h-[45px] relative p-2.5 cursor-pointer" :aria-label="name" :title="name">
+  <div class="icon w-[45px] h-[45px] relative p-2.5 cursor-pointer" :aria-label="name" :title="name" @contextmenu.prevent="rClick">
     <img class="-mt-0.5 w-[25px] h-[25px]" :src="icon" :alt="name" draggable="false" />
 
     <div class="app-open-indicator" :class="[]"></div>

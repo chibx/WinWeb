@@ -22,13 +22,13 @@ const isMouseDown = ref(false)
 
 
 
-useEventListener(document, 'pointerdown', setCoords)
-useEventListener(document, 'pointerup', () => {
+useEventListener(document, 'mousedown', setCoords)
+useEventListener(document, 'mouseup', () => {
     isMouseDown.value = false;
     width.value = 0;
     height.value = 0;
 })
-useEventListener(document, 'pointermove', dragPane, { passive: true })
+useEventListener(document, 'mousemove', dragPane, { passive: true })
 
 function setCoords(e: PointerEvent) {
     if (e.button === 1 || !pointValidator(e)) { return }

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { ShallowRef } from "vue";
 import type { DesktopIconWithFocus, DragPaneCoords } from "~/types/desktop";
 
 const desktop = useDesktop();
@@ -8,22 +7,30 @@ const bg = await (await idb).get("backgrounds", lastBg.value);
 const background = useObjectUrl(bg?.data);
 const isPointerDown = ref(false);
 const homeEl = useTemplateRef('home-screen')
+const events = ['keydown', 'keyup'] as (keyof WindowEventMap)[]
+const keyboardKeys = reactive({
+	shift: useKeyModifier('Shift', { initial: false, events }),
+	ctrl: useKeyModifier('Control', { initial: false, events }),
+})
 
 const desktopIcons = new Set<DesktopIconWithFocus>();
 const focusedIcons = new Set<DesktopIconWithFocus>();
-provide(DESTOP_ICON_SET, desktopIcons);
+provide(DESKTOP_ICON_SET, desktopIcons);
+provide(FOC_DESKTOP_ICON_SET, focusedIcons);
+provide(KEYBOARD_KEYS, keyboardKeys)
 
 const validator = (ev: MouseEvent) => {
 	// console.time('res')
-    // Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener
-	const res = (ev.target as Element).closest('#desk-house') !== null && (ev.target as Element).closest('#taskbar') === null && ![...desktopIcons].some(([el]) => {
-		const element = unref(el);
-		if (!element) {
-			return;
-		}
-		const { left: cl, top: ct, width: cw, height: ch } = element.getBoundingClientRect();
-		return ev.clientX >= cl && ev.clientX <= cl + cw && ev.clientY >= ct && ev.clientY <= ct + ch;
-	});
+	// Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener
+	const res = (ev.target as Element).closest('#taskbar') === null && (ev.target as Element).closest('#desk-house') !== null  && (ev.target as Element).closest('.desktop-icon') === null 
+	// && ![...desktopIcons].some(([el]) => {
+	// 	const element = unref(el);
+	// 	if (!element) { 
+	// 		return;
+	// 	}
+	// 	const { left: cl, top: ct, width: cw, height: ch } = element.getBoundingClientRect();
+	//  return ev.clientX >= cl && ev.clientX <= cl + cw && ev.clientY >= ct && ev.clientY <= ct + ch;
+	// });
 	// console.timeEnd('res')
 	return res;
 };
@@ -56,35 +63,26 @@ function onDrag(_: MouseEvent, { height, left, top, width, x, y }: DragPaneCoord
 	// console.timeEnd('res')
 }
 
-useEventListener(homeEl, 'pointerdown', (ev) => {
+useEventListener(homeEl, 'mousedown', (ev) => {
 	const deskEl = (ev.target as HTMLElement).closest('.desktop-icon');
-	if (!deskEl) { desktopIcons.forEach(([, focused]) => {focused.value=false});return }
-
-	desktopIcons.forEach(([el, focused]) => { 
-		if(unref(el)===deskEl){
-        focused.value = true
+	const { shift, ctrl } = keyboardKeys;
+	const isKeyModPressed = ctrl || shift
+	if (!deskEl && !isKeyModPressed) { desktopIcons.forEach(([, focused]) => { focused.value = false }); return }
+	desktopIcons.forEach(([el, focused]) => {
+		if (el.value === deskEl) {
+			// TODO There is an illogical bug where the left click does not work but the right click unfocuses as expected 🤷🏼‍♂️
+		    if(isKeyModPressed && focused.value===true){
+               focused.value = false
+			}
+			else{
+				focused.value = true
+			}
 		}
-		else{
-			focused.value=false
+		else if(!isKeyModPressed) {
+			focused.value = false
 		}
 	});
-	isPointerDown.value=true
-})
-
-useEventListener(homeEl, 'pointermove', (ev) => {
-	// if(!isPointerDown.value){return}
-
-	// const deskEl = (ev.target as HTMLElement).closest('.desktop-icon');
-	// if (!deskEl) { desktopIcons.forEach(([, focused]) => {focused.value=false});return }
-
-	// desktopIcons.forEach(([el, focused]) => { 
-	// 	if(unref(el)===deskEl){
-    //     focused.value = true
-	// 	}
-	// 	else{
-	// 		focused.value=false
-	// 	}
-	// })
+	isPointerDown.value = true
 })
 
 onMounted(() => {
@@ -109,7 +107,8 @@ onMounted(() => {
 					<WindowsDesktopIcon name="Microsoft Store" icon="/icons/microsoft_store.svg"
 						:rClick="() => ({} as DesktopIcon['rClick'])" /> -->
 
-					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :name :icon :rClick ></WindowsDesktopIcon>
+					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :name :icon
+						:rClick></WindowsDesktopIcon>
 
 					<button style="background-color: black; padding: 20px;"
 						@click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
@@ -130,7 +129,5 @@ onMounted(() => {
 	z-index: 2;
 }
 
-:deep(.desk-house) {
-	
-}
+:deep(.desk-house) {}
 </style>

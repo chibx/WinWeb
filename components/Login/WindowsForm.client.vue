@@ -44,12 +44,13 @@ async function validatePassword() {
     password.value = ''
 }
 
-
 onMounted(() => {
     setTimeout(() => {
         focused.value = true
     }, 100)
 })
+
+
 </script>
 
 <template>
@@ -65,7 +66,7 @@ onMounted(() => {
         <!-- <div></div> -->
         <!-- <input type="text" class="password mt-5" v-model="password" placeholder="Enter your password" /> -->
         <div v-if="!isLoginSuccess">
-            <Transition name="lift" mode="out-in">
+            <Transition name="lift" mode="out-in" @after-enter="()=>passwordEl?.focus()">
                 <div v-if="isPasswordValid">
                     <div class="password relative">
                         <input ref="passwordEl" @keypress.enter="validatePassword" name="password"
