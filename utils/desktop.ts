@@ -1,6 +1,6 @@
-export const rClick = async ()=>([]);
+export const rClick = async () => ([]);
 
-export const stubDesktopIcons: DesktopIcon[] = [
+export const stubDesktopIcons: Ref<DesktopIcon[]> = shallowRef([
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
@@ -176,10 +176,10 @@ export const stubDesktopIcons: DesktopIcon[] = [
         name: 'Microsoft Store',
         rClick
     },
-]
+])
 
 
-export const stubTaskbarIcons: TaskBarIcon[] = [
+export const stubTaskbarIcons: Ref<TaskBarIcon[]> = shallowRef([
     {
         icon: '/icons/explorer.svg',
         name: 'File Explorer',
@@ -210,10 +210,10 @@ export const stubTaskbarIcons: TaskBarIcon[] = [
         name: 'Microsoft Edge',
         rClick
     },
-]
+])
 
 
-export function convertToGrid(desktopIcons: Set<DesktopIconWithFocus>): ((DesktopIconWithFocus | undefined)[] | undefined)[]{
-    
+export function convertToGrid(desktopIcons: Set<DesktopIconWithFocus>): ((DesktopIconWithFocus | undefined)[] | undefined)[] {
+
     return desktopIcons.size, []
 }

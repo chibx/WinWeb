@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { animate } from "motion";
 import { stubTaskbarIcons } from "~/utils/desktop";
-const ICON_SIZE = 45; // 45px
+const ICON_SIZE = 50; // 50px
 const SPACE_AFTER_RIGHT_BAR = 16; // 16px
 
 const desktop = useDesktop();
@@ -18,6 +18,7 @@ const taskbarDate = useDateFormat(now, "MM/DD/YYYY");
 
 let initialClientX = 0;
 let initialElX = 0;
+let taskbarIcons = -1;
 let isPointerDown = false;
 let focusedTaskbarIcon: HTMLElement | null = null;
 
@@ -30,6 +31,8 @@ useEventListener(document, "pointerdown", (ev) => {
 		isPointerDown = true;
 		initialClientX = ev.clientX;
 		focusedTaskbarIcon = (ev.target as HTMLElement).closest(".icon");
+		initialElX = focusedTaskbarIcon!.getBoundingClientRect().left;
+		taskbarIcons = Array.from(unref(innerBar)?.querySelectorAll('.icon') || []).findIndex((el) => el === focusedTaskbarIcon)
 	}
 });
 useEventListener(document, "pointerup", () => {
@@ -42,6 +45,7 @@ useEventListener(document, "pointermove", (ev) => {
 	if (!isPointerDown || !innerBarEl) {
 		return;
 	}
+	const taskbarIcons = Array.from(innerBarEl.querySelectorAll('.icon'))
 
 	const { clientX } = ev;
 	const maxClientX =
@@ -49,14 +53,14 @@ useEventListener(document, "pointermove", (ev) => {
 		(rightBar.value!.clientWidth + SPACE_AFTER_RIGHT_BAR);
 	const { left, width } = innerBarEl.getBoundingClientRect();
 	let resolvedPos = clientX - initialClientX;
+	const newLeft = initialElX + resolvedPos
 	if (focusedTaskbarIcon) {
 		// TODO: Fix the position reset when dragging taskbar icons
-		const { left: left$1 } = focusedTaskbarIcon.getBoundingClientRect();
-		if (left$1 < left) {
-			resolvedPos = left;
+		if (newLeft < left) {
+			resolvedPos = left - initialElX;
 		}
-		else if (left$1 + ICON_SIZE > left + width) {
-			resolvedPos = left + width;
+		else if (newLeft + ICON_SIZE > left + width) {
+			resolvedPos = left + width - initialElX - ICON_SIZE;
 		}
 		focusedTaskbarIcon.style.transform = `translateX(${resolvedPos}px)`;
 	}
@@ -91,9 +95,6 @@ watch(
 			{ ...style, opacity: [0.75, 0, 1] },
 			{
 				duration: 0.3,
-				ease: "linear",
-				onComplete() {
-				},
 			}
 		);
 	}
@@ -110,7 +111,7 @@ watch(
 
 				<WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :rClick />
 
-				<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center gap-0.5">
+				<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center">
 					<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
 						:icon="icon" :rClick="rClick" />
 				</div>

@@ -22,7 +22,7 @@ provide(KEYBOARD_KEYS, keyboardKeys)
 const validator = (ev: MouseEvent) => {
 	// console.time('res')
 	// Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener
-	const res = (ev.target as Element).closest('#taskbar') === null && (ev.target as Element).closest('#desk-house') !== null  && (ev.target as Element).closest('.desktop-icon') === null 
+	const res = (ev.target as Element).closest('#taskbar') === null && (ev.target as Element).closest('#desk-house') !== null && (ev.target as Element).closest('.desktop-icon') === null
 	// && ![...desktopIcons].some(([el]) => {
 	// 	const element = unref(el);
 	// 	if (!element) { 
@@ -71,14 +71,14 @@ useEventListener(homeEl, 'mousedown', (ev) => {
 	desktopIcons.forEach(([el, focused]) => {
 		if (el.value === deskEl) {
 			// TODO There is an illogical bug where the left click does not work but the right click unfocuses as expected 🤷🏼‍♂️
-		    if(isKeyModPressed && focused.value===true){
-               focused.value = false
+			if (isKeyModPressed && focused.value === true) {
+				focused.value = false
 			}
-			else{
+			else {
 				focused.value = true
 			}
 		}
-		else if(!isKeyModPressed) {
+		else if (!isKeyModPressed) {
 			focused.value = false
 		}
 	});
@@ -98,14 +98,6 @@ onMounted(() => {
 			:style="{ backgroundImage: background && `url(${background})` }">
 			<WindowsDragPane :canDrag="validator" :onMove="onDrag">
 				<div id="desk-house" class="h-full py-2.5 jsdjlj">
-					<!-- <WindowsDesktopIcon name="File Explorer" icon="/icons/explorer.svg"
-						:rClick="() => ({} as DesktopIcon['rClick'])" />
-					<WindowsDesktopIcon name="Google Chrome" icon="/icons/chrome.svg"
-						:rClick="() => ({} as DesktopIcon['rClick'])" />
-					<WindowsDesktopIcon name="Mozilla Firefox" icon="/icons/firefox.svg"
-						:rClick="() => ({} as DesktopIcon['rClick'])" />
-					<WindowsDesktopIcon name="Microsoft Store" icon="/icons/microsoft_store.svg"
-						:rClick="() => ({} as DesktopIcon['rClick'])" /> -->
 
 					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :name :icon
 						:rClick></WindowsDesktopIcon>
@@ -114,6 +106,7 @@ onMounted(() => {
 						@click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
 						Toggle pos
 					</button>
+
 				</div>
 			</WindowsDragPane>
 		</div>
