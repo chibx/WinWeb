@@ -18,52 +18,80 @@ const taskbarDate = useDateFormat(now, "MM/DD/YYYY");
 
 let initialClientX = 0;
 let initialElX = 0;
-let taskbarIcons = -1;
+let taskbarIconIndex = -1;
+let taskbarIcons: HTMLElement[] = [];
 let isPointerDown = false;
 let focusedTaskbarIcon: HTMLElement | null = null;
-
+let initialTranslateX = 0;
 
 useEventListener(document, "pointerdown", (ev) => {
-	if (
-		ev.target &&
-		(ev.target as HTMLElement).closest("#taskbar-inner") !== null
-	) {
-		isPointerDown = true;
-		initialClientX = ev.clientX;
+	if (ev.target && (ev.target as HTMLElement).closest("#taskbar-inner") !== null) {
 		focusedTaskbarIcon = (ev.target as HTMLElement).closest(".icon");
+		if (!focusedTaskbarIcon) return;
+		initialClientX = ev.clientX;
 		initialElX = focusedTaskbarIcon!.getBoundingClientRect().left;
-		taskbarIcons = Array.from(unref(innerBar)?.querySelectorAll('.icon') || []).findIndex((el) => el === focusedTaskbarIcon)
+		taskbarIconIndex = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []).findIndex((el) => el === focusedTaskbarIcon);
+		taskbarIcons = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []);
+		const domMatrix = new DOMMatrixReadOnly(getComputedStyle(focusedTaskbarIcon).transform);
+		initialTranslateX = domMatrix.m41;
+		focusedTaskbarIcon.classList.remove('moving');
+		isPointerDown = true;
 	}
 });
 useEventListener(document, "pointerup", () => {
 	isPointerDown = false;
+	focusedTaskbarIcon?.classList.add('moving');
 	focusedTaskbarIcon = null;
 });
 
 useEventListener(document, "pointermove", (ev) => {
 	const innerBarEl = unref(innerBar);
-	if (!isPointerDown || !innerBarEl) {
+	if (!isPointerDown || !innerBarEl || !focusedTaskbarIcon) {
 		return;
 	}
-	const taskbarIcons = Array.from(innerBarEl.querySelectorAll('.icon'))
 
 	const { clientX } = ev;
-	const maxClientX =
-		taskbarEl.value!.clientWidth -
-		(rightBar.value!.clientWidth + SPACE_AFTER_RIGHT_BAR);
-	const { left, width } = innerBarEl.getBoundingClientRect();
-	let resolvedPos = clientX - initialClientX;
-	const newLeft = initialElX + resolvedPos
-	if (focusedTaskbarIcon) {
-		// TODO: Fix the position reset when dragging taskbar icons
-		if (newLeft < left) {
-			resolvedPos = left - initialElX;
-		}
-		else if (newLeft + ICON_SIZE > left + width) {
-			resolvedPos = left + width - initialElX - ICON_SIZE;
-		}
-		focusedTaskbarIcon.style.transform = `translateX(${resolvedPos}px)`;
+	const { left: innerBarLeft, width: innerBarWidth } = innerBarEl.getBoundingClientRect();
+
+	// Translate x
+	let resolvedPos = clientX - initialClientX + initialTranslateX;
+	const newLeft = initialElX + resolvedPos;
+	// TODO: Fix the position reset when dragging taskbar icons
+	if (newLeft <= innerBarLeft) {
+		resolvedPos = innerBarLeft - newLeft + resolvedPos;
+	} else if (newLeft + ICON_SIZE > innerBarLeft + innerBarWidth) {
+		// resolvedPos = resolvedPos - ICON_SIZE - (newLeft - (innerBarLeft + innerBarWidth));
+		resolvedPos = (taskbarIcons.length - taskbarIconIndex - 1) * ICON_SIZE;
 	}
+	// --------------------------------------------------------
+
+	const isGoingLeft = clientX < initialClientX
+	const inferredLeft = (focusedTaskbarIcon.getBoundingClientRect().left - innerBarLeft)
+	// This is the index of the closest hovered icon based on position
+	const inferredIndex = Math.floor(inferredLeft / ICON_SIZE)
+	const pixelHovered = inferredLeft % ICON_SIZE
+
+	if (clientX < initialClientX) {
+		// console.log(inferredIndex, pixelHovered)
+		const el = taskbarIcons.at(inferredIndex);
+		if (el) {
+			const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41
+			if (pixelHovered > 30) {
+				el.style.transform = `translateX(${ICON_SIZE + curTranslateX}px)`
+			}
+		}
+	}
+	else if (clientX > initialClientX) {
+		const el = taskbarIcons.at(inferredIndex);
+		if (el) {
+			const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41
+			if (pixelHovered > 30) {
+				el.style.transform = `translateX(-${ICON_SIZE + curTranslateX}px)`
+			}
+		}
+	}
+
+	focusedTaskbarIcon.style.transform = `translateX(${resolvedPos}px)`;
 });
 
 watch(
@@ -76,17 +104,11 @@ watch(
 		const style =
 			newPos === "center"
 				? {
-					transform: [
-						"translate(0, -50%)",
-						"translate(-50%, -50%)",
-					],
+					transform: ["translate(0, -50%)", "translate(-50%, -50%)"],
 					left: ["0", "50%"],
 				}
 				: {
-					transform: [
-						"translate(-50%, -50%)",
-						"translate(0, -50%)",
-					],
+					transform: ["translate(-50%, -50%)", "translate(0, -50%)"],
 					left: ["50%", "0"],
 				};
 
@@ -130,12 +152,8 @@ watch(
 
 				<!-- :title="charging ? `${chargingTime} ${level * 100}%` : `${dischargingTime} ${level * 100}%`" -->
 				<div :title="`${level * 100}% left`">
-					<Icon :name="charging
-						? ICONS['battery-charging']
-						: level > 0.75
-							? ICONS['battery']
-							: ICONS['battery-half']
-						" />
+					<Icon
+						:name="charging ? ICONS['battery-charging'] : level > 0.75 ? ICONS['battery'] : ICONS['battery-half']" />
 				</div>
 
 				<div>

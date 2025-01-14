@@ -4,8 +4,8 @@ const props = defineProps<TaskBarIcon>()
 </script>
 
 <template>
-  <div class="icon w-[50px] h-[50px] relative p-2.5 cursor-pointer flex justify-center" :aria-label="name" :title="name"
-    @contextmenu.prevent="rClick">
+  <div class="icon moving w-[50px] h-[50px] relative p-2.5 cursor-pointer flex justify-center" :aria-label="name"
+    :title="name" @contextmenu.prevent="rClick">
     <img class="-mt-0.5 w-[25px] h-[25px]" :src="icon" :alt="name" draggable="false" />
 
     <div class="app-open-indicator" :class="[]"></div>
@@ -36,5 +36,9 @@ const props = defineProps<TaskBarIcon>()
 
 .app-open-indicator.active {
   transform: translateX(-50%);
+}
+
+.moving {
+  transition: transform 0.2s ease-in;
 }
 </style>

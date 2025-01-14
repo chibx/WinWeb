@@ -92,7 +92,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<div :style="desktop.desktopVars" ref="home">
+	<div :style="desktop.desktopVars" ref="home" class="text-white">
 		<div ref="home-screen"
 			class="home-screen select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
 			:style="{ backgroundImage: background && `url(${background})` }">

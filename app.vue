@@ -94,28 +94,26 @@ if (import.meta.browser) {
     <GettingWindowsReady v-if="gettingWindowsReady" />
   </Transition>
 
-  <ClientOnly>
-    <div v-if="!hideLogin" class="h-full overflow-hidden relative" @click="showLogin = true">
-      <!-- <div v-if="!isLoginSuccess" class="h-full overflow-hidden relative" @click="showLogin = true"> -->
-      <!-- Disable animation until user decides to go to login  -->
-      <LoginWindowsLoading :stopBlur="!showLogin">
-        <template #default>
-          <div class="h-full w-full relative">
+  <div v-if="!hideLogin" class="h-full overflow-hidden relative text-white" @click="showLogin = true">
+    <!-- <div v-if="!isLoginSuccess" class="h-full overflow-hidden relative" @click="showLogin = true"> -->
+    <!-- Disable animation until user decides to go to login  -->
+    <LoginWindowsLoading :stopBlur="!showLogin">
+      <template #default>
+        <div class="h-full w-full relative">
 
-            <Transition name="fade">
-              <div v-if="!showLogin"
-                class="absolute select-none flex-col gap-4 h-full w-full flex items-center justify-center">
-                <LoginLockScreen />
-              </div>
-              <div v-else class="h-full w-full absolute flex justify-center">
-                <LazyLoginWindowsForm />
-              </div>
-            </Transition>
-          </div>
-        </template>
-      </LoginWindowsLoading>
-    </div>
-  </ClientOnly>
+          <Transition name="fade">
+            <div v-if="!showLogin"
+              class="absolute select-none flex-col gap-4 h-full w-full flex items-center justify-center">
+              <LoginLockScreen />
+            </div>
+            <div v-else class="h-full w-full absolute flex justify-center">
+              <LazyLoginWindowsForm />
+            </div>
+          </Transition>
+        </div>
+      </template>
+    </LoginWindowsLoading>
+  </div>
 
   <Transition name="fade">
     <!-- <HomeScreen v-if="hasAssetLoaded" /> -->
