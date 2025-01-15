@@ -23,6 +23,8 @@ let taskbarIcons: HTMLElement[] = [];
 let isPointerDown = false;
 let focusedTaskbarIcon: HTMLElement | null = null;
 let initialTranslateX = 0;
+let translateIdx = 0
+
 
 useEventListener(document, "pointerdown", (ev) => {
 	if (ev.target && (ev.target as HTMLElement).closest("#taskbar-inner") !== null) {
@@ -31,6 +33,7 @@ useEventListener(document, "pointerdown", (ev) => {
 		initialClientX = ev.clientX;
 		initialElX = focusedTaskbarIcon!.getBoundingClientRect().left;
 		taskbarIconIndex = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []).findIndex((el) => el === focusedTaskbarIcon);
+		translateIdx = taskbarIconIndex;
 		taskbarIcons = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []);
 		const domMatrix = new DOMMatrixReadOnly(getComputedStyle(focusedTaskbarIcon).transform);
 		initialTranslateX = domMatrix.m41;
@@ -40,8 +43,37 @@ useEventListener(document, "pointerdown", (ev) => {
 });
 useEventListener(document, "pointerup", () => {
 	isPointerDown = false;
-	focusedTaskbarIcon?.classList.add('moving');
+	if (!focusedTaskbarIcon) return;
+	focusedTaskbarIcon.classList.add('moving');
+
+	let translate
+	if (translateIdx < taskbarIconIndex) {
+		translate = (taskbarIconIndex - translateIdx) * -ICON_SIZE
+	}
+	else if (translateIdx > taskbarIconIndex) {
+		translate = (translateIdx - taskbarIconIndex) * ICON_SIZE
+	}
+	else {
+		translate = taskbarIconIndex * ICON_SIZE
+	}
+	focusedTaskbarIcon.style.transform = `translateX(${translate}px)`
 	focusedTaskbarIcon = null;
+	// Update the state
+	const taskbarItems = stubTaskbarIcons.value.slice()
+	const focusedItem = taskbarItems.splice(taskbarIconIndex, 1);
+	taskbarItems.splice(translateIdx, 0, focusedItem[0])
+	taskbarIcons.forEach(el => {
+		el.classList.remove('moving')
+	})
+	nextTick().then(async () => {
+		taskbarIcons.forEach(async el => {
+			el.style.removeProperty('transform')
+			await delay(10)
+			el.classList.add('moving')
+		})
+		taskbarIcons = [];
+	})
+	stubTaskbarIcons.value = taskbarItems;
 });
 
 useEventListener(document, "pointermove", (ev) => {
@@ -57,36 +89,40 @@ useEventListener(document, "pointermove", (ev) => {
 	let resolvedPos = clientX - initialClientX + initialTranslateX;
 	const newLeft = initialElX + resolvedPos;
 	// TODO: Fix the position reset when dragging taskbar icons
-	if (newLeft <= innerBarLeft) {
-		resolvedPos = innerBarLeft - newLeft + resolvedPos;
+	if (newLeft < innerBarLeft) {
+		// resolvedPos = innerBarLeft - newLeft + resolvedPos;
+		resolvedPos = taskbarIconIndex * -ICON_SIZE;
 	} else if (newLeft + ICON_SIZE > innerBarLeft + innerBarWidth) {
 		// resolvedPos = resolvedPos - ICON_SIZE - (newLeft - (innerBarLeft + innerBarWidth));
 		resolvedPos = (taskbarIcons.length - taskbarIconIndex - 1) * ICON_SIZE;
 	}
 	// --------------------------------------------------------
 
-	const isGoingLeft = clientX < initialClientX
 	const inferredLeft = (focusedTaskbarIcon.getBoundingClientRect().left - innerBarLeft)
-	// This is the index of the closest hovered icon based on position
-	const inferredIndex = Math.floor(inferredLeft / ICON_SIZE)
-	const pixelHovered = inferredLeft % ICON_SIZE
 
-	if (clientX < initialClientX) {
-		// console.log(inferredIndex, pixelHovered)
-		const el = taskbarIcons.at(inferredIndex);
+	const correctLeft = translateIdx * ICON_SIZE;
+
+	if (inferredLeft < correctLeft - 30) {
+		const el = taskbarIcons.at(translateIdx !== 0 ? translateIdx - 1 : 0);
+		console.log(translateIdx)
+		console.log(el)
 		if (el) {
 			const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41
-			if (pixelHovered > 30) {
-				el.style.transform = `translateX(${ICON_SIZE + curTranslateX}px)`
+			el.style.transform = `translateX(${curTranslateX + ICON_SIZE}px)`;
+			if ((translateIdx) * ICON_SIZE - 30 <= focusedTaskbarIcon.getBoundingClientRect().left) {
+				translateIdx -= 1;
+				console.log('moving left: ', translateIdx)
 			}
 		}
 	}
-	else if (clientX > initialClientX) {
-		const el = taskbarIcons.at(inferredIndex);
+	else if (inferredLeft > correctLeft + 30) {
+		const el = taskbarIcons.at(translateIdx !== taskbarIcons.length - 1 ? translateIdx + 1 : taskbarIcons.length - 1);
 		if (el) {
 			const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41
-			if (pixelHovered > 30) {
-				el.style.transform = `translateX(-${ICON_SIZE + curTranslateX}px)`
+			el.style.transform = `translateX(${-ICON_SIZE + curTranslateX}px)`
+			if ((translateIdx * ICON_SIZE) + 30 < focusedTaskbarIcon.getBoundingClientRect().left) {
+				translateIdx += 1;
+				console.log('moving right: ', translateIdx)
 			}
 		}
 	}
@@ -134,8 +170,8 @@ watch(
 				<WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :rClick />
 
 				<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center">
-					<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
-						:icon="icon" :rClick="rClick" />
+					<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :name="name" :icon="icon"
+						:rClick="rClick" />
 				</div>
 			</div>
 		</div>
