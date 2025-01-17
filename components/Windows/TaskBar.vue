@@ -41,7 +41,6 @@ useEventListener(document, "pointerdown", (ev) => {
 useEventListener(document, "pointerup", () => {
 	isPointerDown = false;
 	if (!focusedTaskbarIcon) return;
-	focusedTaskbarIcon.classList.add("moving");
 
 	let translate;
 	if (translateIdx < taskbarIconIndex) {
