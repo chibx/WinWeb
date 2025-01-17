@@ -39,6 +39,6 @@ const props = defineProps<TaskBarIcon>()
 }
 
 .moving {
-  transition: transform 0.1s ease-out;
+  transition: transform 0.12s ease-out;
 }
 </style>

@@ -19,12 +19,11 @@ const taskbarDate = useDateFormat(now, "MM/DD/YYYY");
 let initialClientX = 0;
 let initialElX = 0;
 let taskbarIconIndex = -1;
-let taskbarIcons: HTMLElement[] = [];
+/** This is meant for virtual repositioning of translated elements */
+let virtualTaskbarIcons: HTMLElement[] = [];
 let isPointerDown = false;
 let focusedTaskbarIcon: HTMLElement | null = null;
-let initialTranslateX = 0;
-let translateIdx = 0
-
+let translateIdx = 0;
 
 useEventListener(document, "pointerdown", (ev) => {
 	if (ev.target && (ev.target as HTMLElement).closest("#taskbar-inner") !== null) {
@@ -34,50 +33,47 @@ useEventListener(document, "pointerdown", (ev) => {
 		initialElX = focusedTaskbarIcon!.getBoundingClientRect().left;
 		taskbarIconIndex = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []).findIndex((el) => el === focusedTaskbarIcon);
 		translateIdx = taskbarIconIndex;
-		taskbarIcons = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []);
-		const domMatrix = new DOMMatrixReadOnly(getComputedStyle(focusedTaskbarIcon).transform);
-		initialTranslateX = domMatrix.m41;
-		focusedTaskbarIcon.classList.remove('moving');
+		virtualTaskbarIcons = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []);
+		focusedTaskbarIcon.classList.remove("moving");
 		isPointerDown = true;
 	}
 });
 useEventListener(document, "pointerup", () => {
 	isPointerDown = false;
 	if (!focusedTaskbarIcon) return;
-	focusedTaskbarIcon.classList.add('moving');
+	focusedTaskbarIcon.classList.add("moving");
 
-	let translate
+	let translate;
 	if (translateIdx < taskbarIconIndex) {
-		translate = (taskbarIconIndex - translateIdx) * -ICON_SIZE
+		translate = (taskbarIconIndex - translateIdx) * -ICON_SIZE;
+	} else if (translateIdx > taskbarIconIndex) {
+		translate = (translateIdx - taskbarIconIndex) * ICON_SIZE;
+	} else {
+		translate = taskbarIconIndex * ICON_SIZE;
 	}
-	else if (translateIdx > taskbarIconIndex) {
-		translate = (translateIdx - taskbarIconIndex) * ICON_SIZE
-	}
-	else {
-		translate = taskbarIconIndex * ICON_SIZE
-	}
-	focusedTaskbarIcon.style.transform = `translateX(${translate}px)`
+	focusedTaskbarIcon.style.transform = `translateX(${translate}px)`;
 	focusedTaskbarIcon = null;
-	// Update the state
-	const taskbarItems = stubTaskbarIcons.value.slice()
+
+	// Update the reactive state
+	const taskbarItems = stubTaskbarIcons.value.slice();
 	const focusedItem = taskbarItems.splice(taskbarIconIndex, 1);
-	taskbarItems.splice(translateIdx, 0, focusedItem[0])
-	taskbarIcons.forEach(el => {
-		el.classList.remove('moving')
-	})
+	taskbarItems.splice(translateIdx, 0, focusedItem[0]);
+	virtualTaskbarIcons.forEach((el) => {
+		el.classList.remove("moving");
+	});
 	nextTick().then(async () => {
-		taskbarIcons.forEach(async el => {
-			el.style.removeProperty('transform')
-			await delay(10)
-			el.classList.add('moving')
-		})
-		taskbarIcons = [];
-	})
+		virtualTaskbarIcons.forEach(async (el) => {
+			el.style.removeProperty("transform");
+			await delay(10);
+			el.classList.add("moving");
+		});
+		virtualTaskbarIcons = [];
+	});
 	stubTaskbarIcons.value = taskbarItems;
 });
 
 useEventListener(document, "pointermove", (ev) => {
-	const innerBarEl = unref(innerBar);
+	const innerBarEl = unref(innerBar)
 	if (!isPointerDown || !innerBarEl || !focusedTaskbarIcon) {
 		return;
 	}
@@ -86,44 +82,34 @@ useEventListener(document, "pointermove", (ev) => {
 	const { left: innerBarLeft, width: innerBarWidth } = innerBarEl.getBoundingClientRect();
 
 	// Translate x
-	let resolvedPos = clientX - initialClientX + initialTranslateX;
+	let resolvedPos = clientX - initialClientX;
 	const newLeft = initialElX + resolvedPos;
-	// TODO: Fix the position reset when dragging taskbar icons
 	if (newLeft < innerBarLeft) {
-		// resolvedPos = innerBarLeft - newLeft + resolvedPos;
 		resolvedPos = taskbarIconIndex * -ICON_SIZE;
 	} else if (newLeft + ICON_SIZE > innerBarLeft + innerBarWidth) {
-		// resolvedPos = resolvedPos - ICON_SIZE - (newLeft - (innerBarLeft + innerBarWidth));
-		resolvedPos = (taskbarIcons.length - taskbarIconIndex - 1) * ICON_SIZE;
+		resolvedPos = (virtualTaskbarIcons.length - taskbarIconIndex - 1) * ICON_SIZE;
 	}
 	// --------------------------------------------------------
 
-	const inferredLeft = (focusedTaskbarIcon.getBoundingClientRect().left - innerBarLeft)
-
+	const inferredLeft = focusedTaskbarIcon.getBoundingClientRect().left - innerBarLeft;
 	const correctLeft = translateIdx * ICON_SIZE;
 
 	if (inferredLeft < correctLeft - 30) {
-		const el = taskbarIcons.at(translateIdx !== 0 ? translateIdx - 1 : 0);
-		console.log(translateIdx)
-		console.log(el)
+		const el = virtualTaskbarIcons.at(Math.max(0, translateIdx - 1));
 		if (el) {
 			const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41
 			el.style.transform = `translateX(${curTranslateX + ICON_SIZE}px)`;
-			if ((translateIdx) * ICON_SIZE - 30 <= focusedTaskbarIcon.getBoundingClientRect().left) {
-				translateIdx -= 1;
-				console.log('moving left: ', translateIdx)
-			}
+			virtualTaskbarIcons.splice(translateIdx - 1, 0, ...virtualTaskbarIcons.splice(translateIdx, 1))
+			translateIdx -= 1;
 		}
 	}
 	else if (inferredLeft > correctLeft + 30) {
-		const el = taskbarIcons.at(translateIdx !== taskbarIcons.length - 1 ? translateIdx + 1 : taskbarIcons.length - 1);
+		const el = virtualTaskbarIcons.at(Math.min(translateIdx + 1, virtualTaskbarIcons.length - 1));
 		if (el) {
 			const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41
 			el.style.transform = `translateX(${-ICON_SIZE + curTranslateX}px)`
-			if ((translateIdx * ICON_SIZE) + 30 < focusedTaskbarIcon.getBoundingClientRect().left) {
-				translateIdx += 1;
-				console.log('moving right: ', translateIdx)
-			}
+			virtualTaskbarIcons.splice(translateIdx + 1, 0, ...virtualTaskbarIcons.splice(translateIdx, 1))
+			translateIdx += 1;
 		}
 	}
 
