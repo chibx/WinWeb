@@ -1,16 +1,6 @@
 import { uid } from "uid";
 
-// export const defaultBgs = [
-//       '/backgrounds/bg_1.webp',
-//       '/backgrounds/background_2.webp',
-//       '/backgrounds/background_3.webp',
-//       '/backgrounds/background_4.webp',
-//       '/backgrounds/background_5.webp',
-//       '/backgrounds/background_6.webp',
-//       '/backgrounds/windows_11_logo.webp',
-// ]
-
-export const defaultBgs = Array.from({length: 12}).map((_, i)=> `/backgrounds/bg_${i+1}.webp`)
+export const defaultBgs = Array.from({ length: 7 }).map((_, i) => `/backgrounds/bg_${i + 1}.webp`)
 
 export const getUserBackgrounds = async (userId: string) => {
       const bgTx = await transaction('backgrounds');
@@ -41,7 +31,7 @@ export const getSystemBackgrounds = async (count?: number) => {
 }
 
 export const getAllBackgrounds = async (count?: number) => {
-      return (await idb).getAll('backgrounds',null, count)
+      return (await idb).getAll('backgrounds', null, count)
 }
 
 export const deleteBackground = async (id: string) => {

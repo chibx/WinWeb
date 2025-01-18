@@ -23,6 +23,11 @@ export type Background = {
 	data: Blob
 }
 
+export type ApplicationTable = {
+	cache: Record<string, Record<string, unknown>>;
+	[key: string]: Record<string, unknown>
+}
+
 export interface WinWebSchema extends DBSchema {
 	users: {
 		key: number;
@@ -32,6 +37,10 @@ export interface WinWebSchema extends DBSchema {
 			uid: string;
 		};
 	};
+	apps: {
+		key: string;
+		value: ApplicationTable
+	},
 	files: {
 		key: string;
 		value: {
