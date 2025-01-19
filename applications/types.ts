@@ -2,6 +2,10 @@ export type Application = {
     name: string,
     icon: string,
     instance: () => Promise<Component<ApplicationProps, ApplicationExpose>>
+    config: ApplicationConfig
+}
+
+export type ApplicationConfig = {
     install(): Promise<void> | void
     uninstall(): Promise<void> | void
     /** 
@@ -10,7 +14,6 @@ export type Application = {
     */
     canOpen(n: number, data: ApplicationProps['opener']): Promise<boolean> | boolean
 }
-
 
 export type ApplicationExpose = {
     minHeight: Ref<number>

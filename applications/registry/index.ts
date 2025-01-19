@@ -2,11 +2,13 @@ export default [
     {
         name: 'File Explorer',
         icon: '/icons/explorer.svg',
-        config: () => import('./File Explorer/index')
+        instance: () => import('./File Explorer/index.vue').then(a => a.default),
+        config: () => import('./File Explorer/config')
     },
     {
         name: 'Microsoft Store',
         icon: '/icons/microsoft_store.svg',
-        config: () => import('./Microsoft Store/index')
+        instance: () => import('./Microsoft Store/index.vue').then(a => a.default),
+        config: () => import('./Microsoft Store/config')
     }
 ]
