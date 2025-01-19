@@ -22,12 +22,12 @@ export type ApplicationExpose = {
 
 export type ApplicationProps = {
     /** This is null if the app is opened through the windows system (Taskbar or Start Menu) */
-    opener: {
+    opener?: {
         type: 'shortcut' | 'file' | 'app' | null
         name: string
         /** This is undefined when type is not file */
         path?: string
-    } | null,
+    },
 } & Record<string, unknown>
 
 
