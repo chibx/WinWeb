@@ -25,10 +25,10 @@ export type ApplicationProps = {
     opener: {
         type: 'shortcut' | 'file' | 'app' | null
         name: string
-        /** This is null when type is not file */
-        path: string | null
-    } | null
-}
+        /** This is undefined when type is not file */
+        path?: string
+    } | null,
+} & Record<string, unknown>
 
 
 export type OpenWindow = {
@@ -43,7 +43,8 @@ export type OpenWindow = {
         y: number
         width: number
         height: number
-    }
+    },
+    props: ApplicationProps
 }
 
 export type OpenWindowDescriptorMap = {

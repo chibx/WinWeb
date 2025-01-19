@@ -1,5 +1,5 @@
 import type { InjectionKey } from "vue"
-import type { OpenWindow, OpenWindowDescriptorMap } from "./types"
+import type { ApplicationProps, OpenWindow, OpenWindowDescriptorMap } from "./types"
 import { uid } from "uid"
 
 /** @internal */
@@ -8,8 +8,11 @@ export const APP_ID: InjectionKey<string> = Symbol()
 export const openWindows = shallowRef<OpenWindow[]>([])
 
 
-/** @param name Application name */
-export function createWindowObject(name: string) {
+/** 
+ * @param name Application name 
+ * @param opener Data about the resource that called the app 
+*/
+export function createWindowObject(name: string, opener: ApplicationProps['opener']) {
     const obj = {} as OpenWindow;
 
     return Object.defineProperties(obj, {
@@ -30,6 +33,12 @@ export function createWindowObject(name: string) {
                 y: 0
             })
         },
+        props: {
+            writable: false,
+            value: {
+                opener
+            }
+        },
         isActive: {
             value: shallowRef(true)
         },
@@ -38,7 +47,7 @@ export function createWindowObject(name: string) {
         },
         zIndex: {
             value: shallowRef(openWindows.value.length)
-        }
+        },
     } as OpenWindowDescriptorMap)
 }
 
