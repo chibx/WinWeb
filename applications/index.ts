@@ -1,5 +1,17 @@
-import type { OpenWindow } from "./types";
+import type { Application, OpenWindow } from "./types";
 import { APP_ID, openWindows } from "./utils"
+
+let registry: Application[];
+
+export async function loadApplicationRegistry() {
+    if (registry) return registry;
+    try {
+        registry = await import('./registry/index').then(c => c.default);
+    } catch {
+        // TODO Write Error
+    }
+}
+
 
 export async function openApp() {
 

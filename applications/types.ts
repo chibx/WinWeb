@@ -1,8 +1,8 @@
 export type Application = {
     name: string,
     icon: string,
-    instance: () => Promise<Component<ApplicationProps, ApplicationExpose>>
-    config: ApplicationConfig
+    instance: () => Promise<{ default: Component<ApplicationProps, ApplicationExpose> }>
+    config: () => Promise<{ default: ApplicationConfig }>
 }
 
 export type ApplicationConfig = {

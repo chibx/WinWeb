@@ -2,7 +2,8 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 
 export const useDesktop = defineStore("desktop", () => {
     const taskbarIcons = reactive<TaskBarIcon[]>([]);
-    const desktopIcons = ref<[][]>([])
+    const desktopIcons = ref<[][]>([]);
+    // TODO Implement a background ref for this store
     const config = reactive<DesktopConfig>({
         taskbar: {
             position: 'bottom',

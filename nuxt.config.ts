@@ -100,7 +100,7 @@ export default defineNuxtConfig({
 			// }),
 		],
 		esbuild: {
-			target: "es2020",
+			target: "es2022",
 		},
 	},
 });
