@@ -1,48 +1,53 @@
 import type { Application, ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from "./types";
 import { APP_ID, createWindowObject, openWindows } from "./utils"
+import registry from "./registry/index";
 
-let registry: Application[] | undefined;
-const installedApps: Set<string> = new Set()
+const installedApps: Set<string> = reactive(new Set())
 
-export async function loadApplicationRegistry() {
-    if (registry) return registry;
-    try {
-        registry = await import('./registry/index').then(c => c.default);
-    } catch {
-        // TODO Write Error
+// Install apps found in the installed field in the application IDB table
+try {
+    const uid = useUser().currentUser?.uid;
+    if (!uid) { throw Error('User is null') }
+    const appTable = await idb.get('apps', IDBKeyRange.only(uid));
+    if (appTable) {
+        (appTable.installedApps as string[]).forEach(e => installedApps.add(e))
+
+        const promises = registry.filter(e => installedApps.has(e.name)).map(app => {
+            return new Promise((res) => {
+                return initializeApp(app).then(() => (app.config as ApplicationConfig).install()).then(res)
+            })
+        })
+
+        await Promise.all(promises)
     }
+} catch {
+    // TODO Error this
 }
+// -------------------------------------------------------------------------
 
 export function getAppRegistry() {
     return registry
 }
 
-export function getInstalledApps() {
+export async function getInstalledApps() {
     return registry?.filter(el => installedApps.has(el.name)) || []
 }
 
 export async function openApp(name: string, data: ApplicationProps = {}) {
-    await loadApplicationRegistry().catch()
-    const $app = registry?.find(app => app.name === name);
+    const $app = registry.find(app => app.name === name);
     if (!$app) return false // |Application not found|
 
     // Initialize once
-    if ($app.config instanceof Function) {
-        $app.config = await $app.config().then(c => c.default) as ApplicationConfig
-    }
-
-    if ($app.instance instanceof Function) {
-        $app.instance = await ($app.instance as () => Promise<{ default: SpecialComponent }>)().then(c => c.default)
-    }
+    await initializeApp($app)
 
     if (!installedApps.has($app.name)) {
-        await $app.config.install()
+        await ($app.config as ApplicationConfig).install()
         installedApps.add($app.name)
     }
 
     const windows = openWindows.value;
     const numberOfInstances = windows.filter(e => e.name === $app.name).length
-    const canOpen = $app.config.canOpen(numberOfInstances, data['opener']);
+    const canOpen = ($app.config as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
     if (!canOpen) {
         // TODO Consider throwing an error
         return false
@@ -51,6 +56,19 @@ export async function openApp(name: string, data: ApplicationProps = {}) {
     windows.push(createWindowObject(name, data))
     openWindows.value = windows;
     // TODO Maybe I should just test for any nextTick issue
+}
+
+async function initializeApp($app: Application) {
+    const promises: Promise<unknown>[] = []
+    if ($app.config instanceof Function) {
+        promises.push($app.config().then(c => $app.config = c.default))
+    }
+
+    if ($app.instance instanceof Function) {
+        promises.push(($app.instance as () => Promise<{ default: SpecialComponent }>)().then(c => $app.instance = c.default))
+    }
+    // TODO Write error case later
+    await Promise.all(promises)
 }
 
 export function useAppAction() {
