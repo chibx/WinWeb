@@ -1,15 +1,7 @@
 import {
 	openDB,
-	// type IDBPDatabase,
-	type IDBPTransaction,
-	type StoreNames,
 } from "idb";
 import type { WinWebSchema } from "../../types/idb";
-
-// export let idb: IDBPDatabase<WinWebSchema>;
-
-//TODO: Watch this
-const stores: Array<StoreNames<WinWebSchema>> = ["files", "users"];
 
 export const idb = await openDB<WinWebSchema>("winweb", 1, {
 	upgrade(database) {
@@ -31,44 +23,19 @@ export const idb = await openDB<WinWebSchema>("winweb", 1, {
 			keyPath: "uid",
 		});
 		backgrounds.createIndex("user", "user", { unique: false });
+
+		// Application Data Related
+		database.createObjectStore("apps", {
+			keyPath: 'userId'
+		});
+
+		// Desktop Data Related
+		database.createObjectStore("desktop", {
+			keyPath: 'userId'
+		});
 	},
 });
 
-
-export function delay(number: number) {
-	return new Promise<void>((resolve) => {
-		setTimeout(resolve, number);
-	});
-}
-
-export async function transaction<
-	M extends "readonly" | "readwrite" = "readonly"
->(
-	store?: StoreNames<WinWebSchema> | ArrayLike<StoreNames<WinWebSchema>>,
-	mode?: M
-): Promise<
-	M extends "readonly"
-	? IDBPTransaction<
-		WinWebSchema,
-		ArrayLike<StoreNames<WinWebSchema>>,
-		"readonly"
-	>
-	: IDBTransactionWithWrite
-> {
-	return idb.transaction<ArrayLike<StoreNames<WinWebSchema>>, M>(
-		store ? (Array.isArray(store) ? store : [store]) : stores,
-		mode
-	) as M extends "readonly"
-		? IDBPTransaction<WinWebSchema, ArrayLike<StoreNames<WinWebSchema>>, M>
-		: IDBTransactionWithWrite;
-}
-
-export function pad(str: string | number) {
-	return ("" + str).padStart(2, "0");
-}
-
 export async function isDBAvalaible() {
-	const db = idb;
-
-	return db.count('users').then(a => a > 0);
+	return idb.count('users').then(a => a > 0);
 }

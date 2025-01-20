@@ -2,6 +2,7 @@
 // import type { ComponentOptionsMixin, ComputedOptions, DefineComponent, Directive, EmitsOptions, MethodOptions, PublicProps, SlotsType } from "vue"
 
 import type { DefineComponent } from "vue"
+import type { TaskBarMenu } from "~/types/desktop"
 
 export type Application = {
     name: string,
@@ -24,6 +25,7 @@ export type ApplicationConfig = {
        @param data Information about what caused the request to open
     */
     canOpen(n: number, data: ApplicationProps['opener']): Promise<boolean> | boolean
+    onRightClick(): Promise<TaskBarMenu[]>
 }
 
 export type ApplicationExpose = {

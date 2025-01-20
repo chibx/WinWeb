@@ -3,7 +3,7 @@ import { uid } from "uid";
 export const defaultBgs = Array.from({ length: 7 }).map((_, i) => `/backgrounds/bg_${i + 1}.webp`)
 
 export const getUserBackgrounds = async (userId: string) => {
-      const bgTx = await transaction('backgrounds');
+      const bgTx = idb.transaction('backgrounds');
       let cursor = await bgTx.objectStore('backgrounds').openCursor();
       const backgrounds: Background[] = [];
       while (cursor) {
@@ -17,7 +17,7 @@ export const getUserBackgrounds = async (userId: string) => {
 }
 
 export const getSystemBackgrounds = async (count?: number) => {
-      const bgTx = await transaction('backgrounds');
+      const bgTx = idb.transaction('backgrounds');
       let cursor = await bgTx.objectStore('backgrounds').openCursor();
       const backgrounds: Background[] = [];
       while (cursor) {
@@ -31,15 +31,15 @@ export const getSystemBackgrounds = async (count?: number) => {
 }
 
 export const getAllBackgrounds = async (count?: number) => {
-      return (await idb).getAll('backgrounds', null, count)
+      return idb.getAll('backgrounds', null, count)
 }
 
 export const deleteBackground = async (id: string) => {
-      return (await idb).delete('backgrounds', id)
+      return idb.delete('backgrounds', id)
 }
 
 export const addBackground = async (background: Omit<Background, 'uid'>) => {
-      return (await idb).add('backgrounds', {
+      return idb.add('backgrounds', {
             uid: uid(),
             ...background
       })

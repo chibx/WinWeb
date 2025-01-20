@@ -6,7 +6,7 @@ export const useUser = defineStore("user", () => {
 
 
 	async function deleteUser(id: string) {
-		const tx = (await idb).transaction("users", "readwrite");
+		const tx = idb.transaction("users", "readwrite");
 		const store = tx.objectStore("users");
 		const totalUsers = await store.count();
 		if (totalUsers <= 1) {
@@ -16,10 +16,8 @@ export const useUser = defineStore("user", () => {
 				throw Error("Cannot delete only user");
 			}
 		}
-		store.delete(IDBKeyRange.only(id));
-		await tx.done;
-		// if (currentUser.value?.uid === id && currentUser.value.isCurrent) {
-		// } 
+		await store.delete(IDBKeyRange.only(id));
+		return tx.done;
 	}
 
 
@@ -27,14 +25,20 @@ export const useUser = defineStore("user", () => {
 		if (!currentUser.value || currentUser.value.uid === id) {
 			throw Error("Invalid action during user change");
 		}
-		const tx = (await idb).transaction("users", "readwrite");
+		const tx = idb.transaction("users", "readwrite");
 		const store = tx.objectStore("users");
 		const newUser = await store.get(IDBKeyRange.only(id));
-		if (!newUser) return;
+		const curUser = await store.get(IDBKeyRange.only(currentUser.value.uid));
+		if (!newUser || !curUser) return;
+		curUser.isCurrent = false;
 		newUser.isCurrent = true;
-		store.put(newUser);
-		// const oldUser = currentUser.value;
-		await tx.done;
+		await Promise.all([
+			tx.done,
+			store.put(curUser),
+			store.put(newUser),
+		])
+
+		isLoggedIn.value = false;
 	}
 
 	return {

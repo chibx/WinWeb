@@ -45,7 +45,7 @@ export type Windows = {
 
 }
 
-type TaskBarMenu = {
+export type TaskBarMenu = {
     group: string;
     fields: TaskBarMenuField[]
 }
@@ -56,7 +56,7 @@ type TaskBarMenuField = {
     onclick(): void
 }
 
-type DesktopIconMenu = {
+export type DesktopIconMenu = {
     name: string;
     onclick?(): void;
     children?: DesktopIconMenu[]

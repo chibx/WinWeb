@@ -6,4 +6,5 @@ export default {
     canOpen() {
         return true
     },
+    onRightClick: rClick
 } satisfies ApplicationConfig
