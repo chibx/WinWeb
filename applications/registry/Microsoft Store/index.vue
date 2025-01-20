@@ -6,6 +6,7 @@ const rect: ApplicationExpose = {
     minHeight: ref(0),
     minWidth: ref(0)
 }
+defineExpose(rect)
 </script>
 
 <template>

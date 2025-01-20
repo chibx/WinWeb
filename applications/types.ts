@@ -1,9 +1,20 @@
+// import type { ComponentPropsOptions, ExtractPropTypes, EmitsToProps, ComponentProvideOptions } from "@vue/runtime-core"
+// import type { ComponentOptionsMixin, ComputedOptions, DefineComponent, Directive, EmitsOptions, MethodOptions, PublicProps, SlotsType } from "vue"
+
+import type { DefineComponent } from "vue"
+
 export type Application = {
     name: string,
     icon: string,
-    instance: () => Promise<{ default: Component<ApplicationProps, ApplicationExpose> }>
-    config: () => Promise<{ default: ApplicationConfig }>
+    instance: (() => Promise<{ default: SpecialComponent }>) | SpecialComponent
+    config: (() => Promise<{ default: ApplicationConfig }>) | ApplicationConfig
 }
+
+
+// interface SpecialComponent extends DefineComponent<ApplicationProps, ApplicationExpose, {}, {}, {}, {}, {}, {}, string, {}, {}, {}, {}, {}, {}, string, {}> { }
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type SpecialComponent = DefineComponent<ApplicationProps, ApplicationExpose, {}, {}, {}>
+
 
 export type ApplicationConfig = {
     install(): Promise<void> | void

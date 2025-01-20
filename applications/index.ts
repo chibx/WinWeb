@@ -1,7 +1,8 @@
-import type { Application, OpenWindow } from "./types";
-import { APP_ID, openWindows } from "./utils"
+import type { Application, ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from "./types";
+import { APP_ID, createWindowObject, openWindows } from "./utils"
 
-let registry: Application[];
+let registry: Application[] | undefined;
+const installedApps: Set<string> = new Set()
 
 export async function loadApplicationRegistry() {
     if (registry) return registry;
@@ -12,9 +13,44 @@ export async function loadApplicationRegistry() {
     }
 }
 
+export function getAppRegistry() {
+    return registry
+}
 
-export async function openApp() {
+export function getInstalledApps() {
+    return registry?.filter(el => installedApps.has(el.name)) || []
+}
 
+export async function openApp(name: string, data: ApplicationProps = {}) {
+    await loadApplicationRegistry().catch()
+    const $app = registry?.find(app => app.name === name);
+    if (!$app) return false // |Application not found|
+
+    // Initialize once
+    if ($app.config instanceof Function) {
+        $app.config = await $app.config().then(c => c.default) as ApplicationConfig
+    }
+
+    if ($app.instance instanceof Function) {
+        $app.instance = await ($app.instance as () => Promise<{ default: SpecialComponent }>)().then(c => c.default)
+    }
+
+    if (!installedApps.has($app.name)) {
+        await $app.config.install()
+        installedApps.add($app.name)
+    }
+
+    const windows = openWindows.value;
+    const numberOfInstances = windows.filter(e => e.name === $app.name).length
+    const canOpen = $app.config.canOpen(numberOfInstances, data['opener']);
+    if (!canOpen) {
+        // TODO Consider throwing an error
+        return false
+    }
+
+    windows.push(createWindowObject(name, data))
+    openWindows.value = windows;
+    // TODO Maybe I should just test for any nextTick issue
 }
 
 export function useAppAction() {
@@ -45,14 +81,14 @@ export function useApp() {
 
 
 /** This return the record of all open windows  */
-export function useOpenWindows() {
+export function getAppWindows() {
     return openWindows.value
 }
 
 /** This gives a list of open apps by name avoid duplicate  */
 export function getOpenApps() {
     const set = new Set<string>();
-    const windows = useOpenWindows();
+    const windows = getAppWindows();
 
     windows.forEach(el => {
         set.add(el.name)

@@ -12,7 +12,7 @@ export const openWindows = shallowRef<OpenWindow[]>([])
  * @param name Application name 
  * @param opener Data about the resource that called the app 
 */
-export function createWindowObject(name: string, opener: ApplicationProps['opener']) {
+export function createWindowObject(name: string, props: ApplicationProps) {
     const obj = {} as OpenWindow;
 
     return Object.defineProperties(obj, {
@@ -35,9 +35,7 @@ export function createWindowObject(name: string, opener: ApplicationProps['opene
         },
         props: {
             writable: false,
-            value: {
-                opener
-            }
+            value: props
         },
         isActive: {
             value: shallowRef(true)

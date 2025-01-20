@@ -12,5 +12,5 @@ export default [
         icon: '/icons/microsoft_store.svg',
         instance: () => import('./Microsoft Store/index.vue'),
         config: () => import('./Microsoft Store/config')
-    },
+    }
 ] satisfies Application[]

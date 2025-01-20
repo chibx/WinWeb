@@ -99,8 +99,8 @@ export default defineNuxtConfig({
 			// 	svgo: false,
 			// }),
 		],
-		esbuild: {
-			target: "es2022",
+		build: {
+			target: 'esnext'
 		},
 	},
 });

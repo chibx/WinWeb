@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { DesktopIconWithFocus, DragPaneCoords } from "~/types/desktop";
+import TaskBar from "./TaskBar.vue";
 
 const desktop = useDesktop();
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0].uid);
@@ -88,6 +89,7 @@ useEventListener(homeEl, 'mousedown', (ev) => {
 onMounted(() => {
 	const audio = new Audio("/audio/startup.mp3");
 	audio.play();
+	console.log(TaskBar, 0)
 });
 </script>
 
