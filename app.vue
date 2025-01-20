@@ -28,14 +28,12 @@ useHead({
 const gettingWindowsReady = ref(true)
 const showLogin = ref(false);
 const isLoginSuccess = ref(false);
-const hasAssetLoaded = ref(false);
 const totalUsers = ref<User[]>([]);
 const dimensions = reactive(useWindowSize());
 const battery = useBattery()
 
 provide(IS_LOGIN_SUCCESS, isLoginSuccess);
 provide(WINDOW_SIZE, dimensions);
-provide(IS_ASSET_LOADED, hasAssetLoaded);
 provide(SHOW_LOGIN, showLogin);
 provide(TOTAL_USERS, totalUsers);
 provide(BATTERY, battery)
@@ -48,7 +46,7 @@ const hideLogin = asyncComputed(async () => {
     await delay(1000)
   }
   return res
-})
+});
 
 // const HomeScreen = defineAsyncComponent({
 //   loader: async () => {
@@ -56,37 +54,28 @@ const hideLogin = asyncComputed(async () => {
 //   }
 // })
 
-if (import.meta.browser) {
-  (async function () {
-    try {
-      let users: User[] = [];
-      const isDBValid = await isDBAvalaible()
-      if (!isDBValid || isFirstTime.value !== false) {
-        localStorage.clear();
-        await refreshDB().catch(console.error);
-        await preloadBackgrounds()
-        users = await getUsers();
-        isFirstTime.value = false;
-      }
-      else {
-        users = await getUsers();
-        // TODO change this
-        userStore.$patch({ currentUser: users.find((user) => user.isCurrent == true) });
-      }
-      totalUsers.value = users;
-    } catch { }
+(async function () {
+  try {
+    let users: User[] = [];
+    const isDBValid = await isDBAvalaible()
+    if (!isDBValid || isFirstTime.value !== false) {
+      localStorage.clear();
+      await refreshDB().catch(console.error);
+      await preloadBackgrounds()
+      users = await getUsers();
+      isFirstTime.value = false;
+    }
+    else {
+      users = await getUsers();
+      // TODO change this
+      userStore.$patch({ currentUser: users.find((user) => user.isCurrent == true) });
+    }
+    totalUsers.value = users;
+  } catch { }
 
-    await delay(2000);
-    gettingWindowsReady.value = false;
-  })()
-}
-
-// watch(isLoginSuccess, (newVal) => {
-//   if (newVal && !hasAssetLoaded.value) {
-//     // TODO THIS INTERNAL METHOD COULD CHANGE ANYTIME
-//     HomeScreen?.__asyncLoader?.();
-//   }
-// })
+  await delay(2000);
+  gettingWindowsReady.value = false;
+})()
 </script>
 
 <template>
@@ -95,7 +84,6 @@ if (import.meta.browser) {
   </Transition>
 
   <div v-if="!hideLogin" class="h-full overflow-hidden relative text-white" @click="showLogin = true">
-    <!-- <div v-if="!isLoginSuccess" class="h-full overflow-hidden relative" @click="showLogin = true"> -->
     <!-- Disable animation until user decides to go to login  -->
     <LoginWindowsLoading :stopBlur="!showLogin">
       <template #default>
@@ -116,7 +104,6 @@ if (import.meta.browser) {
   </div>
 
   <Transition name="fade">
-    <!-- <HomeScreen v-if="hasAssetLoaded" /> -->
     <WindowsHomeScreen v-if="isLoginSuccess" @contextmenu.prevent="" />
   </Transition>
 </template>

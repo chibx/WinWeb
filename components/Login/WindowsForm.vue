@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import type { User } from '~/types/idb';
-import { addUser, deleteAllUsers } from '~/utils/idb/users';
-import { delay } from '~/utils/idb';
 
 // TODO: Remove this
 // await delay(5000);
@@ -15,7 +12,6 @@ const password = ref("");
 const totalUsers = inject(TOTAL_USERS)!;
 const showLogin = inject(SHOW_LOGIN)!;
 const isLoginSuccess = inject(IS_LOGIN_SUCCESS)!;
-const isAssetsLoaded = inject(IS_ASSET_LOADED)!;
 const { currentUser: selectedUser } = storeToRefs(userStore)
 useEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -62,11 +58,11 @@ onMounted(() => {
 
     <div class="w-[600px] flex flex-col relative mt-40 gap-5 items-center">
         <ProfileIcon class="login-profile w-[200px] h-[200px]" :src="selectedUser?.avatar" />
-        <span class="segoe text-white text-3xl">{{ selectedUser?.fullName }}</span>
+        <span class="segoe text-white text-3xl">{{ selectedUser?.userName }}</span>
         <!-- <div></div> -->
         <!-- <input type="text" class="password mt-5" v-model="password" placeholder="Enter your password" /> -->
         <div v-if="!isLoginSuccess">
-            <Transition name="lift" mode="out-in" @after-enter="()=>passwordEl?.focus()">
+            <Transition name="lift" mode="out-in" @after-enter="() => passwordEl?.focus()">
                 <div v-if="isPasswordValid">
                     <div class="password relative">
                         <input ref="passwordEl" @keypress.enter="validatePassword" name="password"
@@ -82,7 +78,7 @@ onMounted(() => {
                             <Icon :name="isPasswordVisible ? ICONS['eye-closed'] : ICONS['eye-open']" size="25" />
                         </button>
                     </div>
-                    <div v-if="selectedUser?.uid == 'default'" class="text-center mt-2.5">
+                    <div v-if="selectedUser?.userName == 'User'" class="text-center mt-2.5">
                         Your default password is {{ selectedUser?.password }}
                     </div>
                 </div>
@@ -97,7 +93,7 @@ onMounted(() => {
 
             </Transition>
         </div>
-        <div v-else-if="!isAssetsLoaded" class="mt-5 flex flex-col items-center justify-center">
+        <div v-else class="mt-5 flex flex-col items-center justify-center">
             <div class="text-center font-medium segoe tracking-wider text-3xl">Please Wait</div>
             <Icon :name="ICONS['spinner']" size="50" class="mt-6" />
         </div>
