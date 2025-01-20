@@ -25,19 +25,6 @@ let isPointerDown = false;
 let focusedTaskbarIcon: HTMLElement | null = null;
 let translateIdx = 0;
 
-// console.log('Ref: ', ref([{ b: 20, c: 40 }]))
-// console.log('Reactive: ', reactive([{ b: 20, c: 40 }]))
-// console.log('ShallowReactive: ', shallowReactive([{ b: 20, c: 40 }]))
-// console.log('ShallowRef: ', shallowRef([{ b: 20, c: 40 }]))
-
-console.log('StubTaskbar', stubTaskbarIcons)
-
-onMounted(() => {
-	console.log('StubTaskbar2', stubTaskbarIcons)
-})
-
-
-
 useEventListener(document, "pointerdown", (ev) => {
 	if (ev.target && (ev.target as HTMLElement).closest("#taskbar-inner") !== null) {
 		focusedTaskbarIcon = (ev.target as HTMLElement).closest(".icon");
@@ -80,7 +67,6 @@ useEventListener(document, "pointerup", () => {
 			el.classList.add("moving");
 		});
 		virtualTaskbarIcons = [];
-		console.log('StubTaskbar3', stubTaskbarIcons)
 
 	});
 	stubTaskbarIcons.value = taskbarItems;
