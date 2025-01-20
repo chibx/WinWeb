@@ -12,6 +12,9 @@ export default defineNuxtConfig({
 			exclude: [],
 		},
 		head: {
+			htmlAttrs: {
+				lang: 'en'
+			},
 			charset: "utf-8",
 			meta: [
 				{
@@ -20,17 +23,35 @@ export default defineNuxtConfig({
 					content: "#0F3877",
 				},
 				{ name: "color-scheme", content: "light dark" },
+				{ name: "description", content: "The closest Windows OS can be on the web" },
+				{ name: "keywords", content: "Windows 11, Windows OS, WinWeb, Windows on Web" },
+				{ name: "twitter:image", content: "/icons/windows_11.svg" },
+				{ name: "twitter:image:alt", content: "WinWeb" },
 				{
 					name: "viewport",
-					content:
-						"viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no",
+					content: "viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0",
 				},
-				{ name: "format-detection", content: "telephone=no" },
-				{ name: "msapplication-tap-highlight", content: "no" },
 				{ name: "mobile-web-app-capable", content: "yes" },
-				{ name: "apple-mobile-web-app-title", content: "winweb" },
 			],
-			// link: [{ rel: "icon", type: "image/png", href: "/icon.png" }],
+			link: [
+				{
+					rel: 'icon',
+					href: '/icons/windows_11.svg',
+				},
+				{
+					rel: "preconnect",
+					href: "https://fonts.googleapis.com"
+				},
+				{
+					rel: "preconnect",
+					href: "https://fonts.gstatic.com",
+					crossorigin: "anonymous"
+				},
+				{
+					href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Gothic+A1:wght@400;700&family=Poppins:wght@400;500;700&family=Roboto:wght@500;700&display=swap",
+					rel: "stylesheet"
+				}
+			],
 			title: "WinWeb",
 			base: { href: "/" },
 		},
@@ -73,7 +94,7 @@ export default defineNuxtConfig({
 		manifest: {
 			name: "WinWeb",
 			short_name: "WinWeb",
-			description: "The closest Windows 11 can be on the web",
+			description: "The closest Window OS can be on the web",
 			theme_color: "#ffffff",
 			icons: [],
 			display: "minimal-ui",
@@ -92,6 +113,7 @@ export default defineNuxtConfig({
 				target: "node18",
 			},
 		},
+		preset: 'vercel-static'
 	},
 	vite: {
 		plugins: [
@@ -100,7 +122,7 @@ export default defineNuxtConfig({
 			// }),
 		],
 		build: {
-			target: 'esnext'
+			target: 'es2022'
 		},
 	},
 });

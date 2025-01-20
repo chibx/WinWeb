@@ -1,30 +1,6 @@
 <script setup lang="ts">
 import { BATTERY } from './utils/keys';
 
-
-useHead({
-  link: [
-    {
-      rel: 'icon',
-      href: '/icons/windows_11.svg',
-    },
-    {
-      rel: "preconnect",
-      href: "https://fonts.googleapis.com"
-    },
-    {
-      rel: "preconnect",
-      href: "https://fonts.gstatic.com",
-      crossorigin: "anonymous"
-    },
-    {
-      href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Gothic+A1:wght@400;700&family=Poppins:wght@400;500;700&family=Roboto:wght@500;700&display=swap",
-      rel: "stylesheet"
-    }
-  ]
-})
-
-
 const gettingWindowsReady = ref(true)
 const showLogin = ref(false);
 const isLoginSuccess = ref(false);
