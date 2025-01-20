@@ -26,9 +26,7 @@ export const idb = await openDB<WinWebSchema>("winweb", 1, {
 		backgrounds.createIndex("user", "user", { unique: false });
 
 		// Application Data Related
-		database.createObjectStore("apps", {
-			keyPath: 'userId'
-		});
+		database.createObjectStore("apps");
 
 		// Desktop Data Related
 		database.createObjectStore("desktop", {
@@ -71,7 +69,7 @@ export async function refreshDB() {
 		users.put(defaultUser),
 		apps.put({
 			installedApps: defaultApps
-		}),
+		}, defaultUser.uid),
 		tx.done
 	])
 
