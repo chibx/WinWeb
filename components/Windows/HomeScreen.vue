@@ -121,6 +121,4 @@ onMounted(() => {
 	background-size: cover;
 	z-index: 2;
 }
-
-:deep(.desk-house) {}
 </style>
