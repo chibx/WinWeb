@@ -6,7 +6,7 @@ defineProps<{
 const GROUP_HEIGHT = 48;
 
 const isClosed = ref(true)
-const selectedUser = inject<Ref<User>>('selectedUser')
+const selectedUser = inject<Ref<User>>(SELECTED_USER)
 const userGroup = useTemplateRef('user-group')
 const userGroupContainer = useTemplateRef('user-group-container')
 onClickOutside(userGroupContainer, () => isClosed.value = true)
@@ -24,7 +24,7 @@ watch(isClosed, (newVal) => {
     const el = userGroup.value;
     if (newVal) {
         // el.style.height = '0px'
-        el.style.transform = `translateY(${el.scrollHeight/2}px) scaleY(0)`;
+        el.style.transform = `translateY(${el.scrollHeight / 2}px) scaleY(0)`;
         return
     }
     el.style.transform = `translateY(0px) scaleY(1)`;
@@ -32,25 +32,29 @@ watch(isClosed, (newVal) => {
 </script>
 
 <template>
-        <div class="w-[200px]" ref="user-group-container">
-            <div ref="user-group" :style="`--group-height: ${(users.length * GROUP_HEIGHT)/2}px`" class="user-group glass overflow-y-scroll h-fit max-h-[200px]">
-                <button v-for="user in users"
-                    class="w-full h-fit transition duration-150 flex items-center gap-2.5 px-2.5 py-3 cursor-pointer"
-                    @click="selectUser(user)">
-                    <ProfileIcon class="icon w-[20px] h-[20px]" :src="user.avatar" />
-                    <span :title="selectedUser?.userName" class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ user.userName }}</span>
-                </button>
-            </div>
-            <div class="current-user-block cursor-pointer flex items-center justify-between gap-2.5 px-2.5 py-2.5"
-                @click="isClosed = !isClosed">
-                <div class="flex items-center gap-2.5">
-                    <ProfileIcon class="w-[20px] h-[20px]" :src="selectedUser?.avatar" />
-                    <span :title="selectedUser?.userName" class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ selectedUser?.userName }}</span>
-                </div>
-                <Icon role="button" :name="ICONS['chevron-down']" class="transition duration-500"
-                    :class="{ 'rotate-180': isClosed }" :aria-label="isClosed ? 'Expand' : 'Collapse'" />
-            </div>
+    <div class="w-[200px]" ref="user-group-container">
+        <div ref="user-group" :style="`--group-height: ${(users.length * GROUP_HEIGHT) / 2}px`"
+            class="user-group glass overflow-y-scroll h-fit max-h-[200px]">
+            <button v-for="user in users"
+                class="w-full h-fit transition duration-150 flex items-center gap-2.5 px-2.5 py-3 cursor-pointer"
+                @click="selectUser(user)">
+                <ProfileIcon class="icon w-[20px] h-[20px]" :src="user.avatar" />
+                <span :title="selectedUser?.userName"
+                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ user.userName }}</span>
+            </button>
         </div>
+        <div class="current-user-block cursor-pointer flex items-center justify-between gap-2.5 px-2.5 py-2.5"
+            @click="isClosed = !isClosed">
+            <div class="flex items-center gap-2.5">
+                <ProfileIcon class="w-[20px] h-[20px]" :src="selectedUser?.avatar" />
+                <span :title="selectedUser?.userName"
+                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ selectedUser?.userName
+                    }}</span>
+            </div>
+            <Icon role="button" :name="ICONS['chevron-down']" class="transition duration-500"
+                :class="{ 'rotate-180': isClosed }" :aria-label="isClosed ? 'Expand' : 'Collapse'" />
+        </div>
+    </div>
 </template>
 
 <style scoped>

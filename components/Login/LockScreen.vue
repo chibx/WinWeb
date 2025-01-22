@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-const now = useNow();
+import { showLogin } from '~/utils/utils';
 
-const showLogin = inject(SHOW_LOGIN)!
+const now = useNow();
 const time = useDateFormat(now, 'HH:mm');
 const dateStr = useDateFormat(now, 'dddd, MMM DD YYYY');
 

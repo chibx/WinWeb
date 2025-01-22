@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { BATTERY } from './utils/keys';
+import { isLoginSuccess, totalUsers, showLogin } from './utils/utils';
 
 const gettingWindowsReady = ref(true)
-const showLogin = ref(false);
-const isLoginSuccess = ref(false);
-const totalUsers = ref<User[]>([]);
 const dimensions = reactive(useWindowSize());
 const battery = useBattery()
 
-provide(IS_LOGIN_SUCCESS, isLoginSuccess);
 provide(WINDOW_SIZE, dimensions);
-provide(SHOW_LOGIN, showLogin);
-provide(TOTAL_USERS, totalUsers);
 provide(BATTERY, battery)
 
 const userStore = useUser();
@@ -23,6 +18,11 @@ const hideLogin = asyncComputed(async () => {
   }
   return res
 });
+
+function $showLogin() {
+  // Had to use a function to update this state because TS wouldn't stop yelling `Cannot assign to 'showLogin' because it is a read-only property.`
+  showLogin.value = true
+}
 
 // const HomeScreen = defineAsyncComponent({
 //   loader: async () => {
@@ -59,7 +59,7 @@ const hideLogin = asyncComputed(async () => {
     <GettingWindowsReady v-if="gettingWindowsReady" />
   </Transition>
 
-  <div v-if="!hideLogin" class="h-full overflow-hidden relative text-white" @click="showLogin = true">
+  <div v-if="!hideLogin" class="h-full overflow-hidden relative text-white" @click="$showLogin">
     <!-- Disable animation until user decides to go to login  -->
     <LoginWindowsLoading :stopBlur="!showLogin">
       <template #default>

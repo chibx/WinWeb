@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { showLogin, isLoginSuccess, totalUsers } from '~/utils/utils';
+
 
 // TODO: Remove this
 // await delay(5000);
@@ -9,9 +11,7 @@ const isPasswordVisible = ref(false)
 const isPasswordValid = ref(true);
 const isValidating = ref(false)
 const password = ref("");
-const totalUsers = inject(TOTAL_USERS)!;
-const showLogin = inject(SHOW_LOGIN)!;
-const isLoginSuccess = inject(IS_LOGIN_SUCCESS)!;
+
 const { currentUser: selectedUser } = storeToRefs(userStore)
 useEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -19,7 +19,8 @@ useEventListener('keydown', (e) => {
     }
 })
 
-provide('selectedUser', selectedUser);
+/** AvailableUsers.vue */
+provide(SELECTED_USER, selectedUser);
 watch(selectedUser, () => {
     focused.value = true
 })

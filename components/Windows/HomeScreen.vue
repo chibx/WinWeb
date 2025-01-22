@@ -1,23 +1,13 @@
 <script lang="ts" setup>
-import type { DesktopIconWithFocus, DragPaneCoords } from "~/types/desktop";
+import type { DragPaneCoords } from "~/types/desktop";
+import { desktopIcons, keyboardKeys } from "~/utils/utils";
 
 const desktop = useDesktop();
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0].uid);
-const bg = await (await idb).get("backgrounds", lastBg.value);
+const bg = await idb.get("backgrounds", lastBg.value);
 const background = useObjectUrl(bg?.data);
 const isPointerDown = ref(false);
 const homeEl = useTemplateRef('home-screen')
-const events = ['keydown', 'keyup'] as (keyof WindowEventMap)[]
-const keyboardKeys = reactive({
-	shift: useKeyModifier('Shift', { initial: false, events }),
-	ctrl: useKeyModifier('Control', { initial: false, events }),
-})
-
-const desktopIcons = new Set<DesktopIconWithFocus>();
-const focusedIcons = new Set<DesktopIconWithFocus>();
-provide(DESKTOP_ICON_SET, desktopIcons);
-provide(FOC_DESKTOP_ICON_SET, focusedIcons);
-provide(KEYBOARD_KEYS, keyboardKeys)
 
 const validator = (ev: MouseEvent) => {
 	// console.time('res')

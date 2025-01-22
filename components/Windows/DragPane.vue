@@ -15,10 +15,6 @@ const top = ref<number>()
 const width = ref<number>()
 const height = ref<number>()
 const isMouseDown = ref(false)
-// let mouseUpStop: (() => void) | undefined
-// provide(DRAG_PANE_KEY, (func) => {
-//     pointValidator = func
-// })
 
 
 
@@ -66,7 +62,7 @@ function dragPane(e: MouseEvent) {
     <div class="drag-pane absolute z-[900]" ref="dragEl"
         :style="{ width: width && `${width}px`, height: height && `${height}px`, left: `${left}px`, top: `${top}px` }">
     </div>
-   
+
     <slot />
 </template>
 
