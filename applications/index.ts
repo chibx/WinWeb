@@ -21,7 +21,7 @@ try {
         await Promise.all(promises)
     }
 } catch {
-    // TODO Error this
+    // TODO Handle this error
 }
 // -------------------------------------------------------------------------
 

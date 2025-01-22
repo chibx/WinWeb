@@ -38,6 +38,8 @@ export const useUser = defineStore("user", () => {
 			store.put(newUser),
 		])
 
+		// TODO Handle Error
+
 		isLoggedIn.value = false;
 	}
 
