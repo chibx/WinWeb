@@ -30,10 +30,10 @@ export function getAppRegistry() {
 }
 
 export async function getInstalledApps() {
-    return registry?.filter(el => installedApps.has(el.name)) || []
+    return registry.filter(el => installedApps.has(el.name)) || []
 }
 
-export async function openApp(name: string, data: ApplicationProps = {}) {
+export async function openApp(name: string, data = {} as ApplicationProps) {
     const $app = registry.find(app => app.name === name);
     if (!$app) return false // |Application not found|
 
@@ -47,13 +47,14 @@ export async function openApp(name: string, data: ApplicationProps = {}) {
 
     const windows = openWindows.value;
     const numberOfInstances = windows.filter(e => e.name === $app.name).length
-    const canOpen = ($app.config as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
+    // TODO Handle case of multiple files
+    const canOpen = await ($app.config as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
     if (!canOpen) {
         // TODO Consider throwing an error
         return false
     }
 
-    windows.push(createWindowObject(name, data))
+    windows.push(createWindowObject(name, { ...data, manual: canOpen.manual || false }))
     openWindows.value = windows;
     // TODO Maybe I should just test for any nextTick issue
 }

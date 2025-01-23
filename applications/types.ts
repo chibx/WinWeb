@@ -24,7 +24,7 @@ export type ApplicationConfig = {
        @param n Number of instance windows open 
        @param data Information about what caused the request to open
     */
-    canOpen(n: number, data: ApplicationProps['opener']): Promise<boolean> | boolean
+    canOpen(n: number, data: ApplicationProps['opener']): Promise<false | { manual: boolean }>
     onRightClick(): Promise<TaskBarMenu[]>
 }
 
@@ -41,6 +41,9 @@ export type ApplicationProps = {
         /** This is undefined when type is not file */
         path?: string
     },
+
+    /** Defaults to true */
+    manual: boolean
 } & Record<string, unknown>
 
 
