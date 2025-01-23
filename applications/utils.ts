@@ -38,13 +38,13 @@ export function createWindowObject(name: string, props: ApplicationProps) {
             value: props
         },
         isActive: {
-            value: shallowRef(true)
+            value: ref(true)
         },
         isMinimized: {
-            value: shallowRef(false)
+            value: ref(false)
         },
         zIndex: {
-            value: shallowRef(openWindows.value.length)
+            value: ref(openWindows.value.length)
         },
     } as OpenWindowDescriptorMap)
 }
