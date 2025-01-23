@@ -6,9 +6,9 @@ const SPACE_AFTER_RIGHT_BAR = 16; // 16px
 
 const desktop = useDesktop();
 
-const taskbarEl = useTemplateRef("taskbar");
+// const taskbarEl = useTemplateRef("taskbar");
 const innerBar = useTemplateRef("taskbar-inner");
-const rightBar = useTemplateRef("taskbar-right");
+// const rightBar = useTemplateRef("taskbar-right");
 
 const isCentered = computed(() => desktop.config.taskbar.iconPosition === "center");
 const { charging, level } = inject(BATTERY)!;
