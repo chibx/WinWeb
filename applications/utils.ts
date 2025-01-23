@@ -14,11 +14,12 @@ export const openWindows = shallowRef<OpenWindow[]>([])
 */
 export function createWindowObject(name: string, props: ApplicationProps & { manual: boolean }) {
     const obj = {} as OpenWindow;
+    const { height, width } = dimensions
 
     return Object.defineProperties(obj, {
         id: {
             writable: false,
-            value: uid()
+            value: uid(15)
         },
         name: {
             writable: false,
@@ -27,10 +28,10 @@ export function createWindowObject(name: string, props: ApplicationProps & { man
         coords: {
             // TODO Change dimensions
             value: reactive({
-                height: 0,
-                width: 0,
-                x: 0,
-                y: 0
+                height: height * 0.6,
+                width: width * 0.7,
+                x: width * 0.15,
+                y: height * 0.3
             })
         },
         props: {
@@ -44,6 +45,9 @@ export function createWindowObject(name: string, props: ApplicationProps & { man
             value: ref(true)
         },
         isMinimized: {
+            value: ref(false)
+        },
+        isMaximized: {
             value: ref(false)
         },
         zIndex: {
