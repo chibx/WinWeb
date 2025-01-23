@@ -49,7 +49,7 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
     const numberOfInstances = windows.filter(e => e.name === $app.name).length
     // TODO Handle case of multiple files
     const canOpen = await ($app.config as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
-    if (!canOpen) {
+    if (!canOpen.success) {
         // TODO Consider throwing an error
         return false
     }
