@@ -47,7 +47,7 @@ export type ApplicationProps = {
 export type OpenWindow = {
     id: string
     name: string
-    zIndex: number
+    zIndex: Ref<number>
     isActive: Ref<boolean>
     isMinimized: Ref<boolean>
     /** Coordinate and size of the width */
