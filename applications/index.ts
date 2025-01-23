@@ -59,7 +59,7 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
     }
 
     windows.push(createWindowObject(name, { ...data, manual: canOpen.manual || false }))
-    openWindows.value = windows;
+    openWindows.value = windows.slice();
     // TODO Maybe I should just test for any nextTick issue
 }
 
@@ -70,7 +70,7 @@ async function initializeApp($app: Application) {
     }
 
     if ($app.instance instanceof Function) {
-        promises.push(($app.instance as () => Promise<SpecialComponent>)().then(c => $app.instance = c.default))
+        promises.push(($app.instance as () => Promise<SpecialComponent>)().then(c => $app.instance = c))
     }
     // TODO Write error case later
     await Promise.all(promises)
