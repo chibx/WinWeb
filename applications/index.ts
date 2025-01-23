@@ -38,6 +38,9 @@ export async function getInstalledApps() {
 }
 
 export async function openApp(name: string, data = {} as ApplicationProps) {
+    const windows = openWindows.value;
+    // This is to enable the developer to focus on a small set of windows 
+    if (import.meta.dev && windows.length >= 4) return false
     const $app = registry.find(app => app.name === name);
     if (!$app) return false // |Application not found|
 
@@ -49,7 +52,6 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
         installedApps.add($app.name)
     }
 
-    const windows = openWindows.value;
     const numberOfInstances = windows.filter(e => e.name === $app.name).length
     // TODO Handle case of multiple files
     const canOpen = await ($app.config as unknown as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
@@ -61,6 +63,7 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
     windows.push(createWindowObject(name, { ...data, manual: canOpen.manual || false }))
     openWindows.value = windows.slice();
     // TODO Maybe I should just test for any nextTick issue
+    return true
 }
 
 async function initializeApp($app: Application) {
