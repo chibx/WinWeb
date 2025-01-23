@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { animate } from "motion";
 import { stubTaskbarIcons } from "~/utils/desktop";
+import { battery } from "~/utils/utils";
 const ICON_SIZE = 50; // 50px
 const SPACE_AFTER_RIGHT_BAR = 16; // 16px
 
@@ -11,7 +12,7 @@ const innerBar = useTemplateRef("taskbar-inner");
 // const rightBar = useTemplateRef("taskbar-right");
 
 const isCentered = computed(() => desktop.config.taskbar.iconPosition === "center");
-const { charging, level } = inject(BATTERY)!;
+const { charging, level } = battery;
 const now = useNow();
 const taskbarTime = useDateFormat(now, "h:mm A");
 const taskbarDate = useDateFormat(now, "MM/DD/YYYY");

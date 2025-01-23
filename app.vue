@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { BATTERY } from './utils/keys';
 import { isLoginSuccess, totalUsers, showLogin } from './utils/utils';
 
 const gettingWindowsReady = ref(true)
-const dimensions = reactive(useWindowSize());
-const battery = useBattery()
-
-provide(WINDOW_SIZE, dimensions);
-provide(BATTERY, battery)
 
 const userStore = useUser();
 const isFirstTime = useLocalStorage('first-time', true)

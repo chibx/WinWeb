@@ -1,14 +1,12 @@
-import type { UseBatteryReturn } from "@vueuse/core";
 import type { InjectionKey } from "vue";
+import type { FunctionHandler } from "./utils";
 
 const SELECTED_USER: InjectionKey<Ref<User | null>> = Symbol();
-const WINDOW_SIZE: InjectionKey<{ width: number; height: number }> = Symbol();
-const BATTERY: InjectionKey<UseBatteryReturn> = Symbol()
+const CLOSE_HANDLER: InjectionKey<FunctionHandler> = Symbol()
 
 
 
 export {
-    BATTERY,
-    WINDOW_SIZE,
+    CLOSE_HANDLER,
     SELECTED_USER,
 };
