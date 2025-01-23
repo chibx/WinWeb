@@ -105,13 +105,13 @@ export function useApp() {
 
 /** This return the record of all open windows  */
 export function getAppWindows() {
-    return openWindows.value
+    return openWindows
 }
 
 /** This gives a list of open apps by name avoid duplicate  */
 export function getOpenApps() {
     const set = new Set<string>();
-    const windows = getAppWindows();
+    const windows = getAppWindows().value;
 
     windows.forEach(el => {
         set.add(el.name)
