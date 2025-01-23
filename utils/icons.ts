@@ -15,5 +15,9 @@ export const ICONS = {
     'volume-off': 'i-bi:volume-mute',
     'volume-low': 'i-bi:volume-down',
     'volume-high': 'i-bi:volume-up',
-    'notification': 'i-material-symbols:notifications-outline-rounded'
+    'notification': 'i-material-symbols:notifications-outline-rounded',
+    'minimize': 'i-codicon:chrome-minimize',
+    'maximize': 'i-material-symbols:chrome-maximize-outline-sharp',
+    'restore': 'i-cil:window-restore',
+    'close': 'i-material-symbols:close'
 } as const
