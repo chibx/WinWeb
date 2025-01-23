@@ -15,16 +15,16 @@ export type Application = {
 // interface SpecialComponent extends DefineComponent<ApplicationProps, ApplicationExpose, {}, {}, {}, {}, {}, {}, string, {}, {}, {}, {}, {}, {}, string, {}> { }
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type SpecialComponent = DefineComponent<ApplicationProps, ApplicationExpose, {}, {}, {}>
-
+export type PromiseOrNot<T> = Promise<T> | T
 
 export type ApplicationConfig = {
-    install(): Promise<void> | void
-    uninstall(): Promise<void> | void
+    install(): PromiseOrNot<void>
+    uninstall(): PromiseOrNot<void>
     /** 
        @param n Number of instance windows open 
        @param data Information about what caused the request to open
     */
-    canOpen(n: number, data: ApplicationProps['opener']): Promise<{ success: boolean, manual?: boolean }>
+    canOpen(n: number, data: ApplicationProps['opener']): PromiseOrNot<{ success: boolean, manual?: boolean }>
     onRightClick(): Promise<TaskBarMenu[]>
 }
 

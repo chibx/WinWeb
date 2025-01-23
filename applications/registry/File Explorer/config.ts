@@ -4,7 +4,9 @@ export default {
     install() { },
     uninstall() { },
     canOpen() {
-        return true
+        return {
+            success: true
+        }
     },
     onRightClick: rClick
 } satisfies ApplicationConfig

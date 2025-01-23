@@ -14,7 +14,7 @@ try {
 
         const promises = registry.filter(e => installedApps.has(e.name)).map(app => {
             return new Promise((res) => {
-                return initializeApp(app).then(() => (app.config as ApplicationConfig).install()).then(res)
+                return initializeApp(app).then(() => (app.config as unknown as ApplicationConfig).install()).then(res)
             })
         })
 
@@ -41,14 +41,14 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
     await initializeApp($app)
 
     if (!installedApps.has($app.name)) {
-        await ($app.config as ApplicationConfig).install()
+        await ($app.config as unknown as ApplicationConfig).install()
         installedApps.add($app.name)
     }
 
     const windows = openWindows.value;
     const numberOfInstances = windows.filter(e => e.name === $app.name).length
     // TODO Handle case of multiple files
-    const canOpen = await ($app.config as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
+    const canOpen = await ($app.config as unknown as ApplicationConfig).canOpen(numberOfInstances, data['opener']);
     if (!canOpen.success) {
         // TODO Consider throwing an error
         return false

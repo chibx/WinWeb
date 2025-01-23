@@ -13,4 +13,4 @@ export default [
         instance: () => import('./Microsoft Store/index.vue'),
         config: () => import('./Microsoft Store/config')
     }
-] as Application[]
+] satisfies Application[]
