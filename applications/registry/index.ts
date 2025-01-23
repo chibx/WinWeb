@@ -4,13 +4,21 @@ export default [
     {
         name: 'File Explorer',
         icon: '/icons/explorer.svg',
-        instance: () => import('./File Explorer/index.vue'),
-        config: () => import('./File Explorer/config')
+        instance: () => defy(import('./File Explorer/index.vue')),
+        config: () => defy(import('./File Explorer/config')),
     },
     {
         name: 'Microsoft Store',
         icon: '/icons/microsoft_store.svg',
-        instance: () => import('./Microsoft Store/index.vue'),
-        config: () => import('./Microsoft Store/config')
+        instance: () => defy(import('./Microsoft Store/index.vue')),
+        config: () => defy(import('./Microsoft Store/config'))
     }
 ] satisfies Application[]
+
+/** defaultify  */
+type ExtractDefaultImportType<T extends Promise<{ default: unknown }>> = Promise<Awaited<T>['default']>;
+
+async function defy<T extends Promise<{ default: unknown }>>(prom: T): ExtractDefaultImportType<T> {
+    const c = await prom;
+    return c.default;
+}

@@ -7,8 +7,8 @@ import type { TaskBarMenu } from "~/types/desktop"
 export type Application = {
     name: string,
     icon: string,
-    instance: (() => Promise<{ default: SpecialComponent }>) | SpecialComponent
-    config: (() => Promise<{ default: ApplicationConfig }>) | ApplicationConfig
+    instance: (() => Promise<SpecialComponent>) | SpecialComponent
+    config: (() => Promise<ApplicationConfig>) | ApplicationConfig
 }
 
 

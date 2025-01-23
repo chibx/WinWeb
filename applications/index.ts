@@ -29,6 +29,10 @@ export function getAppRegistry() {
     return registry
 }
 
+export function getAppByName(name: string) {
+    return registry.find(app => app.name === name)
+}
+
 export async function getInstalledApps() {
     return registry.filter(el => installedApps.has(el.name)) || []
 }
@@ -62,11 +66,11 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
 async function initializeApp($app: Application) {
     const promises: Promise<unknown>[] = []
     if ($app.config instanceof Function) {
-        promises.push($app.config().then(c => $app.config = c.default))
+        promises.push($app.config().then(c => $app.config = c))
     }
 
     if ($app.instance instanceof Function) {
-        promises.push(($app.instance as () => Promise<{ default: SpecialComponent }>)().then(c => $app.instance = c.default))
+        promises.push(($app.instance as () => Promise<SpecialComponent>)().then(c => $app.instance = c.default))
     }
     // TODO Write error case later
     await Promise.all(promises)
