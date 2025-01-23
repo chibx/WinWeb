@@ -41,7 +41,7 @@ export type ApplicationProps = {
         /** This is undefined when type is not file */
         path?: string
     },
-} & Record<string, unknown>
+}
 
 
 export type OpenWindow = {
