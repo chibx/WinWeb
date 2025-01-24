@@ -1,6 +1,8 @@
 import type { ApplicationProps, OpenWindow, OpenWindowDescriptorMap } from "./types"
 import { uid } from "uid"
 
+const TASKBAR_HEIGHT = 50;
+
 export const openWindows = shallowRef<OpenWindow[]>([])
 
 /** 
@@ -21,12 +23,11 @@ export function createWindowObject(name: string, props: ApplicationProps) {
             value: name
         },
         coords: {
-            // TODO Change dimensions
             value: reactive({
-                height: height * 0.6,
+                height: (height - TASKBAR_HEIGHT) * 0.8,
                 width: width * 0.7,
                 x: width * 0.15,
-                y: height * 0.2
+                y: (height - TASKBAR_HEIGHT) * 0.1
             })
         },
         props: {
