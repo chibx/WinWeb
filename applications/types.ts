@@ -24,7 +24,7 @@ export type ApplicationConfig = {
        @param n Number of instance windows open 
        @param data Information about what caused the request to open
     */
-    canOpen(n: number, data: ApplicationProps['opener']): PromiseOrNot<{ success: boolean, manual?: boolean }>
+    canOpen(n: number, data: ApplicationProps['opener']): PromiseOrNot<{ success: boolean }>
     onRightClick(): Promise<TaskBarMenu[]>
 }
 
@@ -58,11 +58,6 @@ export type OpenWindow = {
         width: number
         height: number
     },
-    /** This is a field used to determin if the app needs the default menubar
-     *  
-     * Defaults to false
-     */
-    manual: boolean
     props: ApplicationProps
 }
 

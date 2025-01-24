@@ -37,7 +37,7 @@ export async function getInstalledApps() {
     return registry.filter(el => installedApps.has(el.name)) || []
 }
 
-export async function openApp(name: string, data = {} as ApplicationProps) {
+export async function openApp(name: string, data: ApplicationProps = {}) {
     const windows = openWindows.value;
     // This is to enable the developer to focus on a small set of windows 
     if (import.meta.dev && windows.length >= 4) return false
@@ -60,7 +60,7 @@ export async function openApp(name: string, data = {} as ApplicationProps) {
         return false
     }
 
-    windows.push(createWindowObject(name, { ...data, manual: canOpen.manual || false }))
+    windows.push(createWindowObject(name, { ...data }))
     openWindows.value = windows.slice();
     // TODO Maybe I should just test for any nextTick issue
     return true
