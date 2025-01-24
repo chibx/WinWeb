@@ -83,16 +83,19 @@ export function useAppAction() {
     const appWindow = useApp()
     if (!appWindow) return;
     return {
-        minimize() {
-            appWindow.isMinimized.value = true
-        },
         focus() {
+            blurWindows()
             appWindow.isActive.value = true
         },
         close() {
             openWindows.value = openWindows.value.filter(el => el.id !== appWindow.id);
         },
     }
+}
+
+/** This is used to blur the windows in order of the way they were opened and focused */
+function blurWindows() {
+
 }
 
 export function useAppId() {
