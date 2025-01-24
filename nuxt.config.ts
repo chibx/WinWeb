@@ -113,7 +113,7 @@ export default defineNuxtConfig({
 				target: "node18",
 			},
 		},
-		preset: 'vercel-static'
+		preset: process.env.VERCEL_ENV ? 'vercel-static' : 'static'
 	},
 	vite: {
 		plugins: [

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { getAppWindows } from "~/applications/index";
 import type { DragPaneCoords } from "~/types/desktop";
 import { desktopIcons, keyboardKeys } from "~/utils/utils";
 
@@ -8,6 +9,7 @@ const bg = await idb.get("backgrounds", lastBg.value);
 const background = useObjectUrl(bg?.data);
 const isPointerDown = ref(false);
 const homeEl = useTemplateRef('home-screen')
+const openWindows = getAppWindows()
 
 const validator = (ev: MouseEvent) => {
 	// console.time('res')
@@ -101,6 +103,13 @@ onMounted(() => {
 			</WindowsDragPane>
 		</div>
 
+
+		<ApplicationWindowWrapper
+			v-for="{ id, coords, isActive, isMinimized, manual, name, props, zIndex, isMaximized } in openWindows"
+			:id="id" :name="name" :coords="coords" :zIndex="zIndex" :isActive="isActive" :isMinimized="isMinimized"
+			:isMaximized="isMaximized" :manual="manual" :props="props" :key="id" />
+
+
 		<WindowsTaskBar />
 	</div>
 </template>
@@ -109,6 +118,6 @@ onMounted(() => {
 .home-screen {
 	background-repeat: no-repeat;
 	background-size: cover;
-	z-index: 2;
+	/* z-index: 1; */
 }
 </style>
