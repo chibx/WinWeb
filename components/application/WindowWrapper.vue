@@ -1,20 +1,20 @@
 <script lang="ts" setup>
 import { uid } from 'uid';
 import { getAppRegistry, getAppWindows } from '~/applications';
-import MenuBar from '@/components/application/MenuBar.vue';
+import MenuBar from '~/applications/components/MenuBar.vue';
 import type { ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from '~/applications/types';
-import { APP_ID } from '~/applications/utils';
 
 const props = defineProps<OpenWindow>()
 const menubarTheme = reactive({})
-provide(APP_ID, props.id)
-provide(WINDOW_PROPS, props)
 const registry = getAppRegistry()
 const openWindows = getAppWindows()
 const $app = registry.find(app => app.name === props.name)!
 const instance = ($app?.instance as unknown as SpecialComponent)
 const [listener, closeHandler] = createHandler();
+provide(APP_ID, props.id)
+provide(WINDOW_PROPS, props)
 provide(CLOSE_HANDLER, closeHandler)
+provide(CLOSE_REQUEST, requestClose)
 
 
 async function requestClose() {
@@ -32,9 +32,8 @@ async function requestClose() {
 </script>
 
 <template>
-    <div class="window flex flex-col"
+    <div class="window"
         :style="{ height: `${coords.height}px`, width: `${coords.width}px`, top: `${coords.y}px`, left: `${coords.x}px`, zIndex: 1 }">
-        <MenuBar v-if="!manual" />
         <component class="w-full" :is="instance" />
     </div>
 </template>
@@ -43,6 +42,6 @@ async function requestClose() {
 .window {
     position: fixed;
     background-color: white;
-    cursor: n-resize;
+    /* cursor: n-resize; */
 }
 </style>

@@ -2,6 +2,7 @@
 import { useAppAction, useApp } from '@/applications/index'
 const appWindow = useApp()
 const appAction = useAppAction()
+const requestClose = inject(CLOSE_REQUEST)
 </script>
 
 <template>
@@ -10,7 +11,7 @@ const appAction = useAppAction()
             <span>
                 <Icon :name="ICONS['minimize']" size="20" />
             </span>
-            <span>
+            <span @click="appWindow.isMaximized = !appWindow?.isMaximized">
                 <Icon :name="appWindow.isMaximized ? ICONS['restore'] : ICONS['maximize']" size="20" />
             </span>
             <span class="close">
