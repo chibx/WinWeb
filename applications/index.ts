@@ -1,6 +1,7 @@
 import type { Application, ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from "./types";
-import { APP_ID, createWindowObject, openWindows } from "./utils"
+import { createWindowObject, openWindows } from "./utils"
 import registry from "./registry/index";
+import { APP_ID } from "~/utils/keys";
 
 const installedApps: Set<string> = reactive(new Set())
 

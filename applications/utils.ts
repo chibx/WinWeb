@@ -1,12 +1,7 @@
-import type { InjectionKey } from "vue"
 import type { ApplicationProps, OpenWindow, OpenWindowDescriptorMap } from "./types"
 import { uid } from "uid"
 
-/** @internal */
-export const APP_ID: InjectionKey<string> = Symbol()
-
 export const openWindows = shallowRef<OpenWindow[]>([])
-
 
 /** 
  * @param name Application name 
