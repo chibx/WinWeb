@@ -4,13 +4,14 @@ export default [
     {
         name: 'File Explorer',
         icon: '/icons/explorer.svg',
-        instance: () => defy(import('./File Explorer/index.vue')),
+        // instance: import.meta.dev ? FileExplorer : () => defy(import('./File Explorer/index.vue')),
+        instance: defineAsyncComponent(() => import('./File Explorer/index.vue')),
         config: () => defy(import('./File Explorer/config')),
     },
     {
         name: 'Microsoft Store',
         icon: '/icons/microsoft_store.svg',
-        instance: () => defy(import('./Microsoft Store/index.vue')),
+        instance: defineAsyncComponent(() => import('./Microsoft Store/index.vue')),
         config: () => defy(import('./Microsoft Store/config'))
     }
 ] satisfies Application[]

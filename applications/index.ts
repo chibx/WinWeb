@@ -1,4 +1,4 @@
-import type { Application, ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from "./types";
+import type { Application, ApplicationConfig, ApplicationProps, OpenWindow } from "./types";
 import { createWindowObject, openWindows } from "./utils"
 import registry from "./registry/index";
 import { APP_ID } from "~/utils/keys";
@@ -73,9 +73,6 @@ async function initializeApp($app: Application) {
         promises.push($app.config().then(c => $app.config = c))
     }
 
-    if ($app.instance instanceof Function) {
-        promises.push(($app.instance as () => Promise<SpecialComponent>)().then(c => $app.instance = c))
-    }
     // TODO Write error case later
     await Promise.all(promises)
 }
