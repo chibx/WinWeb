@@ -105,9 +105,9 @@ onMounted(() => {
 
 
 		<ApplicationWindowWrapper
-			v-for="{ id, coords, isActive, isMinimized, manual, name, props, zIndex, isMaximized } in openWindows"
-			:id="id" :name="name" :coords="coords" :zIndex="zIndex" :isActive="isActive" :isMinimized="isMinimized"
-			:isMaximized="isMaximized" :manual="manual" :props="props" :key="id" />
+			v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows" :id="id"
+			:name="name" :coords="coords" :zIndex="zIndex" :isActive="isActive" :isMinimized="isMinimized"
+			:isMaximized="isMaximized" :props="props" :key="id" />
 
 
 		<WindowsTaskBar />
