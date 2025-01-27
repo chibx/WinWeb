@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import svgLoader from "vite-svg-loader";
+import tailwindcss from '@tailwindcss/vite'
+
 const sw = process.env.SW === "true";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -65,12 +67,11 @@ export default defineNuxtConfig({
 		// "@primevue/nuxt-module",
 		"@vite-pwa/nuxt",
 		"@vueuse/nuxt",
-		"@nuxtjs/tailwindcss",
 	],
 	icon: {
 		mode: "svg",
 	},
-	css: ["~/assets/css/main.css"],
+	css: ["~/assets/css/main.css", '~/assets/css/tailwind.css'],
 	// primevue: {
 	// 	components: {
 	// 		prefix: "Prime",
@@ -117,9 +118,7 @@ export default defineNuxtConfig({
 	},
 	vite: {
 		plugins: [
-			// svgLoader({
-			// 	svgo: false,
-			// }),
+			tailwindcss()
 		],
 		build: {
 			target: 'es2022'
