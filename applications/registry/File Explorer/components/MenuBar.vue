@@ -14,7 +14,7 @@ const requestClose = inject(CLOSE_REQUEST)
             <span @click="appWindow.isMaximized = !appWindow?.isMaximized">
                 <Icon :name="appWindow.isMaximized ? ICONS['restore'] : ICONS['maximize']" size="20" />
             </span>
-            <span class="close">
+            <span class="close" @click="appAction?.close()">
                 <Icon :name="ICONS['close']" size="20" />
             </span>
         </div>

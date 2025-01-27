@@ -39,7 +39,7 @@ useEventListener(document, "pointerdown", (ev) => {
 		isPointerDown = true;
 	}
 });
-useEventListener(document, "pointerup", () => {
+useEventListener(document, "pointerup", async () => {
 	isPointerDown = false;
 	if (!focusedTaskbarIcon) return;
 
@@ -58,19 +58,15 @@ useEventListener(document, "pointerup", () => {
 	const taskbarItems = stubTaskbarIcons.value.slice();
 	const focusedItem = taskbarItems.splice(taskbarIconIndex, 1);
 	taskbarItems.splice(translateIdx, 0, focusedItem[0]);
-	virtualTaskbarIcons.forEach((el) => {
-		el.classList.remove("moving");
-	});
-	nextTick().then(async () => {
-		virtualTaskbarIcons.forEach(async (el) => {
-			el.style.removeProperty("transform");
-			await delay(10);
-			el.classList.add("moving");
-		});
-		virtualTaskbarIcons = [];
-
-	});
 	stubTaskbarIcons.value = taskbarItems;
+	await nextTick();
+	virtualTaskbarIcons.forEach(async (el) => {
+		el.classList.remove("moving");
+		el.style.removeProperty("transform");
+		await delay(10);
+		el.classList.add("moving");
+	});
+	virtualTaskbarIcons = [];
 });
 
 useEventListener(document, "pointermove", (ev) => {
@@ -157,8 +153,8 @@ watch(
 				<WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :rClick />
 
 				<div ref="taskbar-inner" id="taskbar-inner" class="flex items-center">
-					<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :name="name" :icon="icon"
-						:rClick="rClick" />
+					<WindowsTaskBarIcon v-for="{ icon, name, rClick } in stubTaskbarIcons" :key="name" :name="name"
+						:icon="icon" :rClick="rClick" />
 				</div>
 			</div>
 		</div>
