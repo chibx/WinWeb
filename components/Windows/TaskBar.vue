@@ -195,7 +195,6 @@ watch(
 
 <style scoped>
 #taskbar {
-	background: #1b0027;
 	background: var(--taskbar-bg);
 	transition: 0.15s linear;
 	min-height: 50px;
