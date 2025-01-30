@@ -113,41 +113,48 @@ useEventListener(document, "pointermove", (ev) => {
 	focusedTaskbarIcon.style.transform = `translateX(${resolvedPos}px)`;
 });
 
-watch(
-	() => desktop.config.taskbar.iconPosition,
-	async (newPos) => {
-		const innerBar = document.querySelector("#task-wrapper");
-		if (!innerBar) {
-			return;
-		}
-		const style =
-			newPos === "center"
-				? {
-					transform: ["translate(0, -50%)", "translate(-50%, -50%)"],
-					left: ["0", "50%"],
-				}
-				: {
-					transform: ["translate(-50%, -50%)", "translate(0, -50%)"],
-					left: ["50%", "0"],
-				};
-
-		animate(
-			innerBar,
-			{ ...style, opacity: [0.75, 0, 1] },
-			{
-				duration: 0.3,
+function animateBar(dur = 0) {
+	const taskbarWrapEl = document.querySelector("#task-wrapper");
+	if (!taskbarWrapEl) {
+		return;
+	}
+	const style =
+		isCentered.value
+			? {
+				transform: ["translateX(0)", "translateX(-50%)"],
+				left: ["0", "50%"],
 			}
-		);
+			: {
+				transform: ["translateX(-50%)", "translateX(0)"],
+				left: ["50%", "0"],
+			};
+
+	animate(
+		taskbarWrapEl,
+		{ ...style, opacity: [0.75, 0, 1] },
+		{
+			duration: dur,
+		}
+	);
+}
+
+watch(
+	isCentered,
+	async () => {
+		animateBar(0.3)
 	}
 );
+
+onMounted(() => {
+	animateBar()
+})
 </script>
 
 <template>
 	<div ref="taskbar" id="taskbar"
 		class="fixed z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none" @contextmenu.prevent="">
 		<div class="w-full">
-			<div id="task-wrapper" class="flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2"
-				:class="{ 'left-1/2 -translate-x-1/2': isCentered }">
+			<div id="task-wrapper" class="h-full pl-2.5 flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2">
 				<WindowsTaskBarIcon name="Start" icon="/icons/windows_11.svg" :rClick />
 
 				<WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :rClick />
@@ -197,7 +204,7 @@ watch(
 #taskbar {
 	background: var(--taskbar-bg);
 	transition: 0.15s linear;
-	min-height: 50px;
+	min-height: 55px;
 	z-index: 3;
 }
 
