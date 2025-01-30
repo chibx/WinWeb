@@ -2,7 +2,7 @@
 // import svgLoader from "vite-svg-loader";
 import tailwindcss from '@tailwindcss/vite'
 
-const sw = process.env.SW === "true";
+// const sw = process.env.SW === "true";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -65,7 +65,7 @@ export default defineNuxtConfig({
 		"@pinia/nuxt",
 		"@nuxt/icon",
 		// "@primevue/nuxt-module",
-		"@vite-pwa/nuxt",
+		// "@vite-pwa/nuxt",
 		"@vueuse/nuxt",
 	],
 	icon: {
@@ -90,24 +90,24 @@ export default defineNuxtConfig({
 			comments: false,
 		},
 	},
-	pwa: {
-		registerWebManifestInRouteRules: false,
-		manifest: {
-			name: "WinWeb",
-			short_name: "WinWeb",
-			description: "The closest Window OS can be on the web",
-			theme_color: "#ffffff",
-			icons: [],
-			display: "minimal-ui",
-		},
-		registerType: "autoUpdate",
-		strategies: sw ? "injectManifest" : "generateSW",
-		srcDir: sw ? "service-worker" : undefined,
-		filename: sw ? "sw.ts" : undefined,
-		client: {
-			installPrompt: true,
-		},
-	},
+	// pwa: {
+	// 	registerWebManifestInRouteRules: false,
+	// 	manifest: {
+	// 		name: "WinWeb",
+	// 		short_name: "WinWeb",
+	// 		description: "The closest Window OS can be on the web",
+	// 		theme_color: "#ffffff",
+	// 		icons: [],
+	// 		display: "minimal-ui",
+	// 	},
+	// 	registerType: "autoUpdate",
+	// 	strategies: sw ? "injectManifest" : "generateSW",
+	// 	srcDir: sw ? "service-worker" : undefined,
+	// 	filename: sw ? "sw.ts" : undefined,
+	// 	client: {
+	// 		installPrompt: true,
+	// 	},
+	// },
 	nitro: {
 		esbuild: {
 			options: {
