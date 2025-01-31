@@ -19,5 +19,6 @@ export const ICONS = {
     'minimize': 'i-codicon:chrome-minimize',
     'maximize': 'i-material-symbols:chrome-maximize-outline-sharp',
     'restore': 'i-cil:window-restore',
-    'close': 'i-material-symbols:close'
+    'close': 'i-material-symbols:close',
+    'plus-r': 'material-symbols:add-2-rounded'
 } as const

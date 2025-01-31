@@ -41,7 +41,6 @@ async function requestClose() {
 <style scoped>
 .window {
     position: fixed;
-    background-color: white;
     /* cursor: n-resize; */
 }
 </style>
