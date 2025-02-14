@@ -5,9 +5,13 @@ import type { DefineComponent } from "vue"
 import type { TaskBarMenu } from "~/types/desktop"
 
 export type Application = {
+    /** Name of the Application */
     name: string,
+    /** Icon */
     icon: string,
+    /** Component Instance */
     instance: SpecialComponent
+    /** Config */
     config: (() => Promise<ApplicationConfig>) | ApplicationConfig
 }
 
