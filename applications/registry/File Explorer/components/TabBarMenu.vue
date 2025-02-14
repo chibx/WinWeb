@@ -26,7 +26,6 @@ async function closeTab(key: string) {
   // Transfer active tab to another tab
   const len = tabs.length;
   if (key === tabKey.value && len > 0) {
-    console.log('yo')
     // Activate the tab at the same index if there are still tabs to the left 
     // i.e index 5 becomes 4 when 4 leaves
     const item = tabs.at((index <= len - 1) ? index : index - 1)
@@ -36,10 +35,6 @@ async function closeTab(key: string) {
     }
   }
 }
-
-watch(tabKey, (n) => {
-  console.log(n)
-})
 
 function addTabs() {
   const entry = {
