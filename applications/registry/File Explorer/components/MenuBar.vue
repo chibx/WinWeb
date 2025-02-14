@@ -10,10 +10,10 @@ const requestClose = inject(CLOSE_REQUEST)
     <div class="w-full flex justify-between">
         <FileExplorerTabBar />
         <div class="menubar-controls text-white">
-            <span class="hover:bg-gray-800">
+            <span class="hover:bg-gray-800" @click="appWindow!.isMinimized.value = true">
                 <Icon :name="ICONS['minimize']" size="20" />
             </span>
-            <span class="hover:bg-gray-800" @click="appWindow.isMaximized.value = !appWindow?.isMaximized.value">
+            <span class="hover:bg-gray-800" @click="appWindow.isMaximized.value = appWindow?.isMaximized.value">
                 <Icon :name="appWindow.isMaximized ? ICONS['restore'] : ICONS['maximize']" size="20" />
             </span>
             <span class="close" @click="requestClose">
