@@ -9,8 +9,9 @@ const hasInstance = computed(() => {
 </script>
 
 <template>
-  <div class="icon moving w-[50px] h-[50px] relative p-2.5 cursor-pointer flex justify-center" @click="openApp(name)"
-    :aria-label="name" :title="name" @contextmenu.prevent="rClick">
+  <div class="icon moving w-[50px] h-[50px] relative p-2.5 cursor-pointer flex justify-center" 
+       :data-name="name" @click="openApp(name)" 
+       :aria-label="name" :title="name" @contextmenu.prevent="rClick">
     <img class="-mt-0.5 w-[25px] h-[25px]" :src="icon" :alt="name" draggable="false" />
 
     <div class="app-open-indicator" :class="{ 'active': hasInstance }"></div>

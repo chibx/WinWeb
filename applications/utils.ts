@@ -50,3 +50,8 @@ export function createWindowObject(name: string, props: ApplicationProps) {
 }
 
 
+export function getTaskIconX(appName: string) {
+    const taskbarIconEl = document.querySelector(`#task-wrapper [data-name="${appName}"]`)
+
+    return taskbarIconEl?.getBoundingClientRect().left
+}

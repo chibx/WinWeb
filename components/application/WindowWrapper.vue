@@ -4,6 +4,7 @@ import { uid } from 'uid';
 import { getAppByName, getAppRegistry, getAppWindows, useApp } from '~/applications';
 import MenuBar from '~/applications/components/MenuBar.vue';
 import type { ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from '~/applications/types';
+import { getTaskIconX } from '~/applications/utils';
 
 const props = defineProps<OpenWindow>()
 const menubarTheme = reactive({})
@@ -34,15 +35,24 @@ async function requestClose() {
 }
 
 if (currentWindow) {
-    const { isMaximized, isMinimized, coords } = currentWindow;
+    const { name, coords, isMaximized, isMinimized } = currentWindow;
 
     watch(isMinimized, (newVal, _, onCleanup) => {
         console.log('wassup')
 
         if (!appWindowEl.value) return;
+        const appTaskIconX = getTaskIconX(name)
+        const inBounds = appTaskIconX && (appTaskIconX > coords.x) && appTaskIconX < (coords.x + coords.width)
         const animation = animate(appWindowEl.value, {
-            transform: ['scale(1)', 'scale(0)'],
-        }, { duration: 0.5 })
+            transform: [`scale(1)`, `scale(0) translateY(100%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`],
+            opacity: [1, 0]
+        }, {
+            duration: 0.5,
+            ease: 'easeOut',
+            opacity: {
+                duration: 0.2
+            }
+        })
 
         onCleanup(animation.stop)
     })
