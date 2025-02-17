@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { animate } from "motion";
+import type { RendererNode } from "vue";
 import { getAppWindows } from "~/applications/index";
 import type { DragPaneCoords } from "~/types/desktop";
 import { desktopIcons, keyboardKeys } from "~/utils/utils";
@@ -12,18 +14,9 @@ const homeEl = useTemplateRef('home-screen')
 const openWindows = getAppWindows()
 
 const validator = (ev: MouseEvent) => {
-	// console.time('res')
 	// Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener
 	const res = (ev.target as Element).closest('#taskbar') === null && (ev.target as Element).closest('#desk-house') !== null && (ev.target as Element).closest('.desktop-icon') === null
-	// && ![...desktopIcons].some(([el]) => {
-	// 	const element = unref(el);
-	// 	if (!element) { 
-	// 		return;
-	// 	}
-	// 	const { left: cl, top: ct, width: cw, height: ch } = element.getBoundingClientRect();
-	//  return ev.clientX >= cl && ev.clientX <= cl + cw && ev.clientY >= ct && ev.clientY <= ct + ch;
-	// });
-	// console.timeEnd('res')
+
 	return res;
 };
 
@@ -91,9 +84,9 @@ onMounted(() => {
 			<WindowsDragPane :canDrag="validator" :onMove="onDrag">
 				<div id="desk-house" class="h-full py-2.5 jsdjlj">
 
+
 					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :name :icon
 						:rClick></WindowsDesktopIcon>
-
 					<button style="background-color: black; padding: 20px;"
 						@click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
 						Toggle pos
@@ -103,12 +96,14 @@ onMounted(() => {
 			</WindowsDragPane>
 		</div>
 
+		<TransitionGroup :css="false">
 
-		<ApplicationWindowWrapper
-			v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows" :id="id"
-			:name="name" :coords="coords" :zIndex="zIndex" :isActive="isActive" :isMinimized="isMinimized"
-			:isMaximized="isMaximized" :props="props" :key="id" />
+			<ApplicationWindowWrapper
+				v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows" :id="id"
+				:name="name" :coords="coords" :zIndex="zIndex" :isActive="isActive" :isMinimized="isMinimized"
+				:isMaximized="isMaximized" :props="props" :key="id" />
 
+		</TransitionGroup>
 
 		<WindowsTaskBar />
 	</div>

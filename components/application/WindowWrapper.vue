@@ -10,8 +10,6 @@ import { getTaskIconX, TASKBAR_HEIGHT } from '~/applications/utils';
 const props = defineProps<OpenWindow>()
 const menubarTheme = reactive({})
 const appWindowEl = useTemplateRef('window')
-
-const registry = getAppRegistry()
 const openWindows = getAppWindows()
 const currentWindow = openWindows.value.find(el => el.id === props.id)!
 const { name, coords, isMaximized, isMinimized } = currentWindow;
@@ -22,6 +20,7 @@ provide(APP_ID, props.id)
 provide(WINDOW_PROPS, props)
 provide(CLOSE_HANDLER, closeHandler)
 provide(CLOSE_REQUEST, requestClose)
+provide(APP_EL, appWindowEl)
 
 async function requestClose() {
     let res: boolean = true
@@ -32,6 +31,12 @@ async function requestClose() {
     }
 
     if (res) {
+        if (appWindowEl.value) {
+            await animate(appWindowEl.value, {
+                transform: ['scale(1)', 'scale(0.75)'],
+                opacity: 0,
+            }, { duration: 0.2 })
+        }
         openWindows.value = openWindows.value.filter(el => el.id !== props.id)
     }
 }

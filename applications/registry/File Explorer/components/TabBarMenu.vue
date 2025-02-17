@@ -2,9 +2,11 @@
 import { useAppAction } from '~/applications';
 import { TABS, TAB_KEY, getEndName, inferFolderIcon } from '../utils';
 import { uid } from 'uid';
+import { animate } from 'motion';
 
 const tabs = inject(TABS)!
 const tabKey = inject(TAB_KEY)!
+const appWindowEl = inject(APP_EL)!
 const tabsWrapper = useTemplateRef('tabs-wrapper')
 const appAction = useAppAction()
 
@@ -13,8 +15,12 @@ function tabWheel(e: WheelEvent) {
   tabsWrapEl.scrollBy({ left: e.deltaY, behavior: 'smooth' })
 }
 
-watch(() => tabs.length, (newVal) => {
+watch(() => tabs.length, async (newVal) => {
   if (newVal === 0) {
+    await animate(appWindowEl.value!, {
+      transform: ['scale(1)', 'scale(0.75)'],
+      opacity: 0,
+    }, { duration: 0.2 })
     appAction?.close()
   }
 })
@@ -22,7 +28,9 @@ watch(() => tabs.length, (newVal) => {
 async function closeTab(key: string) {
   const index = tabs.findIndex((e) => e.key === key);
   if (index === -1) { return }
-  const old = tabs.splice(index, 1)
+
+  tabs.splice(index, 1)
+
   // Transfer active tab to another tab
   const len = tabs.length;
   if (key === tabKey.value && len > 0) {
@@ -31,7 +39,6 @@ async function closeTab(key: string) {
     const item = tabs.at((index <= len - 1) ? index : index - 1)
     if (item) {
       tabKey.value = item.key
-      console.log(old[0].key, tabs.find((e) => e.key === item.key)?.key, tabKey.value)
     }
   }
 }
