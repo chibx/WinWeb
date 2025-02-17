@@ -49,7 +49,6 @@ watch(isMinimized, (newVal, _, onCleanup) => {
     const inBounds = appTaskIconX && (appTaskIconX > coords.x) && appTaskIconX < (coords.x + coords.width)
     const { width, height } = screenDimensions;
     const { pushX, pushY } = pushCoords(width, height)
-    const { transform } = getComputedStyle(appWindowEl.value)
     const animation = animate(appWindowEl.value, {
         transform: newVal ?
             ['scale(1)', `scale(0) translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`]
@@ -69,13 +68,9 @@ watch(isMinimized, (newVal, _, onCleanup) => {
 // The maximize animation implementation
 watch(isMaximized, (newVal, _, onCleanup) => {
     if (!appWindowEl.value) return;
-    console.log('max')
 
     const { width, height } = screenDimensions;
     const { pushX, pushY } = pushCoords(width, height)
-
-    const { transform } = getComputedStyle(appWindowEl.value)
-    console.log(transform)
 
     const animation = animate(appWindowEl.value, {
         transform: newVal ?
