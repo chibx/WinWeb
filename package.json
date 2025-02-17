@@ -13,7 +13,7 @@
   "dependencies": {
     "@nuxt/icon": "^1.10.3",
     "@pinia/nuxt": "^0.10.1",
-    "@unhead/vue": "^2.0.0-alpha.16",
+    "@unhead/vue": "^1.11.19",
     "@vite-pwa/nuxt": "^0.10.6",
     "@vueuse/components": "^12.7.0",
     "@vueuse/core": "^12.7.0",
