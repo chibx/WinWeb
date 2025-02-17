@@ -43,16 +43,32 @@ if (currentWindow) {
         if (!appWindowEl.value) return;
         const appTaskIconX = getTaskIconX(name)
         const inBounds = appTaskIconX && (appTaskIconX > coords.x) && appTaskIconX < (coords.x + coords.width)
-        const animation = animate(appWindowEl.value, {
-            transform: [`scale(1)`, `scale(0) translateY(100%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`],
-            opacity: [1, 0]
-        }, {
-            duration: 0.5,
-            ease: 'easeOut',
-            opacity: {
-                duration: 0.2
-            }
-        })
+        let animation;
+
+        if (newVal) {
+            animation = animate(appWindowEl.value, {
+                transform: [`scale(1)`, `scale(0) translateY(100%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`],
+                opacity: [1, 0]
+            }, {
+                duration: 0.5,
+                ease: 'easeOut',
+                opacity: {
+                    duration: 0.2
+                }
+            })
+        }
+        else {
+            animation = animate(appWindowEl.value, {
+                transform: `scale(1)`,
+                opacity: 1
+            }, {
+                duration: 0.5,
+                ease: 'easeOut',
+                opacity: {
+                    duration: 0.2
+                }
+            })
+        }
 
         onCleanup(animation.stop)
     })
