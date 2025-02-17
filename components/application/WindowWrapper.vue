@@ -12,7 +12,8 @@ const appWindowEl = useTemplateRef('window')
 
 const registry = getAppRegistry()
 const openWindows = getAppWindows()
-const currentWindow = openWindows.value.find(el => el.id === props.id)
+const currentWindow = openWindows.value.find(el => el.id === props.id)!
+const { name, coords, isMaximized, isMinimized } = currentWindow;
 const $app = getAppByName(props.name)
 const instance = ($app?.instance as unknown as SpecialComponent)
 const [listener, closeHandler] = createHandler();
@@ -34,45 +35,26 @@ async function requestClose() {
     }
 }
 
-if (currentWindow) {
-    const { name, coords, isMaximized, isMinimized } = currentWindow;
+watch(isMinimized, (newVal, _, onCleanup) => {
+    if (!appWindowEl.value) return;
 
-    watch(isMinimized, (newVal, _, onCleanup) => {
-        console.log('wassup')
-
-        if (!appWindowEl.value) return;
-        const appTaskIconX = getTaskIconX(name)
-        const inBounds = appTaskIconX && (appTaskIconX > coords.x) && appTaskIconX < (coords.x + coords.width)
-        let animation;
-
-        if (newVal) {
-            animation = animate(appWindowEl.value, {
-                transform: [`scale(1)`, `scale(0) translateY(100%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`],
-                opacity: [1, 0]
-            }, {
-                duration: 0.5,
-                ease: 'easeOut',
-                opacity: {
-                    duration: 0.2
-                }
-            })
+    const appTaskIconX = getTaskIconX(name)
+    const inBounds = appTaskIconX && (appTaskIconX > coords.x) && appTaskIconX < (coords.x + coords.width)
+    const animation = animate(appWindowEl.value, {
+        transform: newVal ?
+            [`scale(1)`, `scale(0) translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`]
+            : `scale(1)`,
+        opacity: newVal ? 0 : 1
+    }, {
+        duration: 0.35,
+        ease: newVal ? 'easeIn' : 'easeOut',
+        opacity: {
+            duration: 0.3
         }
-        else {
-            animation = animate(appWindowEl.value, {
-                transform: `scale(1)`,
-                opacity: 1
-            }, {
-                duration: 0.5,
-                ease: 'easeOut',
-                opacity: {
-                    duration: 0.2
-                }
-            })
-        }
-
-        onCleanup(animation.stop)
     })
-}
+
+    onCleanup(animation.stop)
+})
 </script>
 
 <template>
