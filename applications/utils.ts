@@ -1,7 +1,7 @@
 import type { ApplicationProps, OpenWindow, OpenWindowDescriptorMap } from "./types"
 import { uid } from "uid"
 
-const TASKBAR_HEIGHT = 50;
+export const TASKBAR_HEIGHT = 50;
 
 export const openWindows = shallowRef<OpenWindow[]>([])
 
