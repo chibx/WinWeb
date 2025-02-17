@@ -11,7 +11,7 @@ export const openWindows = shallowRef<OpenWindow[]>([])
 */
 export function createWindowObject(name: string, props: ApplicationProps) {
     const obj = {} as OpenWindow;
-    const { height, width } = dimensions
+    const { height, width } = screenDimensions
 
     return Object.defineProperties(obj, {
         id: {

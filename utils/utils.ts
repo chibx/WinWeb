@@ -6,7 +6,7 @@ export const totalUsers = ref<User[]>([]);
 export const desktopIcons = new Set<DesktopIconWithFocus>();
 export const focusedIcons = new Set<DesktopIconWithFocus>();
 export const events = ['keydown', 'keyup'] as (keyof WindowEventMap)[]
-export const dimensions = reactive(useWindowSize());
+export const screenDimensions = reactive(useWindowSize());
 export const battery = useBattery()
 export const keyboardKeys = reactive({
     shift: useKeyModifier('Shift', { initial: false, events }),
