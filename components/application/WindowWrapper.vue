@@ -4,8 +4,9 @@ import { uid } from 'uid';
 import { getAppByName, getAppRegistry, getAppWindows, useApp } from '~/applications';
 import MenuBar from '~/applications/components/MenuBar.vue';
 import type { ApplicationConfig, ApplicationProps, OpenWindow, SpecialComponent } from '~/applications/types';
-import { getTaskIconX } from '~/applications/utils';
+import { getTaskIconX, TASKBAR_HEIGHT } from '~/applications/utils';
 
+// TODO: TASKBAR
 const props = defineProps<OpenWindow>()
 const menubarTheme = reactive({})
 const appWindowEl = useTemplateRef('window')
@@ -35,26 +36,64 @@ async function requestClose() {
     }
 }
 
+// The minimize animation implementation
 watch(isMinimized, (newVal, _, onCleanup) => {
     if (!appWindowEl.value) return;
 
     const appTaskIconX = getTaskIconX(name)
     const inBounds = appTaskIconX && (appTaskIconX > coords.x) && appTaskIconX < (coords.x + coords.width)
+    const { width, height } = screenDimensions;
+    const { pushX, pushY } = pushCoords(width, height)
+    const { transform } = getComputedStyle(appWindowEl.value)
     const animation = animate(appWindowEl.value, {
         transform: newVal ?
-            [`scale(1)`, `scale(0) translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`]
-            : `scale(1)`,
+            ['scale(1)', `scale(0) translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''}`]
+            : [`translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ''} scale(0.5)`, isMaximized.value ? `scaleX(${width / (coords.width + pushX)}) scaleY(${(height) / (coords.height + pushY)})` : `scale(1)`],
         opacity: newVal ? 0 : 1
     }, {
-        duration: 0.35,
-        ease: newVal ? 'easeIn' : 'easeOut',
+        duration: newVal ? 0.35 : 0.2,
+        ease: 'linear',
         opacity: {
-            duration: 0.3
+            duration: 0.2,
         }
     })
 
     onCleanup(animation.stop)
 })
+
+// The maximize animation implementation
+watch(isMaximized, (newVal, _, onCleanup) => {
+    if (!appWindowEl.value) return;
+    console.log('max')
+
+    const { width, height } = screenDimensions;
+    const { pushX, pushY } = pushCoords(width, height)
+
+    const { transform } = getComputedStyle(appWindowEl.value)
+    console.log(transform)
+
+    const animation = animate(appWindowEl.value, {
+        transform: newVal ?
+            ['scale(1)', `scaleX(${width / (coords.width + pushX)}) scaleY(${height / (coords.height + pushY)})`]
+            : `scale(1)`,
+    }, {
+        duration: 0.1,
+        ease: 'linear',
+    })
+
+    onCleanup(animation.stop)
+})
+
+function pushCoords(width: number, height: number) {
+    // PushX and PushY are the amount pixels we would translate the app window to centralize the window on the X and Y coordinate
+    const pushX = ((width - coords.width) / 2) - coords.x
+    const pushY = ((height + TASKBAR_HEIGHT - coords.height) / 2) - coords.y
+
+    return {
+        pushX,
+        pushY
+    }
+}
 </script>
 
 <template>
