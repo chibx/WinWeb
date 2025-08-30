@@ -15,14 +15,9 @@ const hideLogin = asyncComputed(async () => {
 
 function $showLogin() {
   // Had to use a function to update this state because TS wouldn't stop yelling `Cannot assign to 'showLogin' because it is a read-only property.`
+  // Can't just do `showLogin = true`
   showLogin.value = true
 }
-
-// const HomeScreen = defineAsyncComponent({
-//   loader: async () => {
-//     return delay(1500).then(() => import('@/components/Windows/HomeScreen.client.vue').then(res => (hasAssetLoaded.value = true, res.default)))
-//   }
-// })
 
 (async function () {
   try {
@@ -122,7 +117,7 @@ body,
   font-family: "Gothic A1", serif;
 }
 
-.bebas {
+/* .bebas {
   font-family: "Bebas Neue", serif;
-}
+} */
 </style>
