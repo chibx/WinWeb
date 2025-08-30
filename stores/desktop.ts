@@ -11,9 +11,10 @@ export const useDesktop = defineStore("desktop", () => {
         taskbar: {
             position: "bottom",
             iconPosition: "center",
+            shouldHide: false,
+            // TODO Make these two accept an array of value [r, g, b, a]
             bgColor: "#1b0027",
             iconHoverColor: "#ffffff41",
-            shouldHide: false,
         },
     });
     const desktopVars = computed(() => {
