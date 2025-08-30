@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { CSSProperties } from "vue";
 import type { StartMenuProps } from "~/types/desktop";
+import { mat2Color } from "~/utils/utils";
 
 const props = defineProps<StartMenuProps>();
 
@@ -22,7 +23,7 @@ const bgStyles = computed<CSSProperties>(() => {
     const [r, g, b] = startMenuStyles.bgColor;
 
     return {
-        backgroundColor: `rgba(${r}, ${g}, ${b}, ${startMenuStyles.opacity / 100})`,
+        backgroundColor: mat2Color(r, g, b, startMenuStyles.opacity),
     };
 });
 
