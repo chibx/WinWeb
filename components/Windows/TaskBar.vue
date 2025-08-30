@@ -57,7 +57,7 @@ useEventListener(document, "pointerup", async () => {
 	// Update the reactive state
 	const taskbarItems = stubTaskbarIcons.value.slice();
 	const focusedItem = taskbarItems.splice(taskbarIconIndex, 1);
-	taskbarItems.splice(translateIdx, 0, focusedItem[0]);
+	taskbarItems.splice(translateIdx, 0, focusedItem[0]!);
 	stubTaskbarIcons.value = taskbarItems;
 	await nextTick();
 	virtualTaskbarIcons.forEach(async (el) => {
@@ -113,6 +113,7 @@ useEventListener(document, "pointermove", (ev) => {
 	focusedTaskbarIcon.style.transform = `translateX(${resolvedPos}px)`;
 });
 
+// TODO Handle positioning the taskbar on different screens
 function animateBar(dur = 0) {
 	const taskbarWrapEl = document.querySelector("#task-wrapper");
 	if (!taskbarWrapEl) {
@@ -155,7 +156,7 @@ onMounted(() => {
 		class="fixed z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none" @contextmenu.prevent="">
 		<div class="w-full">
 			<div id="task-wrapper" class="h-full pl-2.5 flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2">
-				<WindowsTaskBarIcon name="Start" icon="/icons/windows_11.svg" :rClick />
+				<WindowsTaskBarIcon class="windows-start-icon" name="Start" icon="/icons/windows_11.svg" :rClick />
 
 				<WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :rClick />
 
