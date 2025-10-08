@@ -1,54 +1,50 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import { showLogin, isLoginSuccess, totalUsers } from '~/utils/utils';
-
+import { storeToRefs } from "pinia";
+import { showLogin, isLoginSuccess, totalUsers } from "~/utils/utils";
 
 // TODO: Remove this
 // await delay(5000);
 const userStore = useUser();
-const passwordEl = useTemplateRef('passwordEl');
+const passwordEl = useTemplateRef("passwordEl");
 const { focused } = useFocus(passwordEl);
-const isPasswordVisible = ref(false)
+const isPasswordVisible = ref(false);
 const isPasswordValid = ref(true);
-const isValidating = ref(false)
+const isValidating = ref(false);
 const password = ref("");
 
-const { currentUser: selectedUser } = storeToRefs(userStore)
-useEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        showLogin.value = false
+const { currentUser: selectedUser } = storeToRefs(userStore);
+useEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        showLogin.value = false;
     }
-})
+});
 
 /** AvailableUsers.vue */
 provide(SELECTED_USER, selectedUser);
 watch(selectedUser, () => {
-    focused.value = true
-})
+    focused.value = true;
+});
 
 async function validatePassword() {
-    if (isValidating.value) return
+    if (isValidating.value) return;
     isValidating.value = true;
     const userPassword = selectedUser.value?.password;
     await delay(1000);
-    password.value === userPassword;
     isValidating.value = false;
 
     if (password.value === userPassword) {
-        isLoginSuccess.value = true
-        return
+        isLoginSuccess.value = true;
+        return;
     }
-    isPasswordValid.value = false
-    password.value = ''
+    isPasswordValid.value = false;
+    password.value = "";
 }
 
 onMounted(() => {
     setTimeout(() => {
-        focused.value = true
-    }, 100)
-})
-
-
+        focused.value = true;
+    }, 100);
+});
 </script>
 
 <template>
@@ -56,7 +52,6 @@ onMounted(() => {
         @click="showLogin = false">
         <Icon class="text-white" :name="ICONS['arrow-left']" size="40" />
     </button> -->
-
 
     <div class="w-[600px] flex flex-col relative mt-40 gap-5 items-center">
         <ProfileIcon class="login-profile w-[200px] h-[200px]" :src="selectedUser?.avatar" />
@@ -67,16 +62,29 @@ onMounted(() => {
             <Transition name="lift" mode="out-in" @after-enter="() => passwordEl?.focus()">
                 <div v-if="isPasswordValid">
                     <div class="password relative">
-                        <input ref="passwordEl" @keypress.enter="validatePassword" name="password"
-                            label="Login Password" v-model="password" :type="isPasswordVisible ? 'text' : 'password'"
-                            placeholder="Enter your password" />
+                        <input
+                            ref="passwordEl"
+                            v-model="password"
+                            name="password"
+                            label="Login Password"
+                            :type="isPasswordVisible ? 'text' : 'password'"
+                            placeholder="Enter your password"
+                            @keypress.enter="validatePassword"
+                        />
 
-                        <Icon v-if="isValidating" class="absolute top-1/2 -translate-y-1/2 right-3.5"
-                            :name="ICONS['circle']" size="25" />
-                        <button v-else class="absolute top-1/2 -translate-y-1/2 right-3.5"
+                        <Icon
+                            v-if="isValidating"
+                            class="absolute top-1/2 -translate-y-1/2 right-3.5"
+                            :name="ICONS['circle']"
+                            size="25"
+                        />
+                        <button
+                            v-else
+                            class="absolute top-1/2 -translate-y-1/2 right-3.5"
                             :aria-label="isPasswordVisible ? 'Hide Password' : 'Show Password'"
                             :title="isPasswordVisible ? 'Hide Password' : 'Show Password'"
-                            @click="isPasswordVisible = !isPasswordVisible">
+                            @click="isPasswordVisible = !isPasswordVisible"
+                        >
                             <Icon :name="isPasswordVisible ? ICONS['eye-closed'] : ICONS['eye-open']" size="25" />
                         </button>
                     </div>
@@ -84,15 +92,16 @@ onMounted(() => {
                         Your default password is {{ selectedUser?.password }}
                     </div>
                 </div>
-                <div v-else
-                    class="password-error h-full w-[600px] flex flex-col relative gap-5 items-center justify-center text-center">
+                <div
+                    v-else
+                    class="password-error h-full w-[600px] flex flex-col relative gap-5 items-center justify-center text-center"
+                >
                     <div>
-                        <div>The password you put is incorrect! </div>
+                        <div>The password you put is incorrect!</div>
                         <div>Please try again</div>
                     </div>
                     <button @click="isPasswordValid = true">Try again</button>
                 </div>
-
             </Transition>
         </div>
         <div v-else class="mt-5 flex flex-col items-center justify-center">
@@ -101,9 +110,7 @@ onMounted(() => {
         </div>
 
         <!-- svg-spinners:8-dots-rotate -->
-
     </div>
-
 
     <LoginAvailableUsers v-if="!isLoginSuccess" :users="totalUsers" class="fixed left-2.5 bottom-7" />
     <!-- <DotLoader style="--uib-size: 50px;" /> -->
@@ -159,7 +166,6 @@ onMounted(() => {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-
     .lift-enter-active,
     .lift-leave-active {
         transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
@@ -170,6 +176,5 @@ onMounted(() => {
 .lift-leave-to {
     opacity: 0;
     transform: translateY(10px);
-
 }
 </style>

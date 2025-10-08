@@ -1,30 +1,29 @@
 <script lang="ts" setup>
 const props = defineProps<{
-    users: User[]
-}>()
+    users: User[];
+}>();
 
 const GROUP_HEIGHT = 50;
 const MAX_TO_200PX = 4;
 
-const isClosed = ref(true)
-const selectedUser = inject<Ref<User>>(SELECTED_USER)
-const userGroup = useTemplateRef('user-group')
-const userGroupContainer = useTemplateRef('user-group-container')
-let translateY = 0
+const isClosed = ref(true);
+const selectedUser = inject<Ref<User>>(SELECTED_USER);
+const userGroup = useTemplateRef("user-group");
+const userGroupContainer = useTemplateRef("user-group-container");
+let translateY = 0;
 
 if (props.users.length < MAX_TO_200PX) {
-    translateY = props.users.length * GROUP_HEIGHT / 2
-}
-else {
-    translateY = MAX_TO_200PX * GROUP_HEIGHT / 2
+    translateY = (props.users.length * GROUP_HEIGHT) / 2;
+} else {
+    translateY = (MAX_TO_200PX * GROUP_HEIGHT) / 2;
 }
 
-onClickOutside(userGroupContainer, () => isClosed.value = true)
+onClickOutside(userGroupContainer, () => (isClosed.value = true));
 
 function selectUser(user: User) {
-    if (!selectedUser) return
-    selectedUser.value = user
-    isClosed.value = true
+    if (!selectedUser) return;
+    selectedUser.value = user;
+    isClosed.value = true;
 }
 
 watch(isClosed, (newVal) => {
@@ -32,34 +31,52 @@ watch(isClosed, (newVal) => {
     const el = userGroup.value;
     if (newVal) {
         el.style.transform = `translateY(${translateY}px) scaleY(0)`;
-        return
+        return;
     }
     el.style.transform = `translateY(0px) scaleY(1)`;
-})
+});
 </script>
 
 <template>
-    <div class="w-[200px] select-none" ref="user-group-container">
-        <div ref="user-group" :style="{ '--group-height': `${translateY}px` }"
-            class="user-group glass overflow-y-scroll h-fit max-h-[200px]">
-            <button v-for="user in users"
+    <div ref="user-group-container" class="w-[200px] select-none">
+        <div
+            ref="user-group"
+            :style="{ '--group-height': `${translateY}px` }"
+            class="user-group glass overflow-y-scroll h-fit max-h-[200px]"
+        >
+            <button
+                v-for="user in users"
+                :key="user.uid"
                 class="w-full h-fit transition duration-150 flex items-center gap-2.5 px-2.5 py-3 cursor-pointer"
-                @click="selectUser(user)">
+                @click="selectUser(user)"
+            >
                 <ProfileIcon class="icon w-[20px] h-[20px]" :src="user.avatar" />
-                <span :title="selectedUser?.userName"
-                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ user.userName }}</span>
+                <span
+                    :title="selectedUser?.userName"
+                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap"
+                    >{{ user.userName }}</span
+                >
             </button>
         </div>
-        <div class="current-user-block cursor-pointer flex items-center justify-between gap-2.5 px-2.5 py-2.5"
-            @click="isClosed = !isClosed">
+        <div
+            class="current-user-block cursor-pointer flex items-center justify-between gap-2.5 px-2.5 py-2.5"
+            @click="isClosed = !isClosed"
+        >
             <div class="flex items-center gap-2.5">
                 <ProfileIcon class="w-[20px] h-[20px]" :src="selectedUser?.avatar" />
-                <span :title="selectedUser?.userName"
-                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap">{{ selectedUser?.userName
-                    }}</span>
+                <span
+                    :title="selectedUser?.userName"
+                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap"
+                    >{{ selectedUser?.userName }}</span
+                >
             </div>
-            <Icon role="button" :name="ICONS['chevron-down']" class="transition duration-500"
-                :class="{ 'rotate-180': isClosed }" :aria-label="isClosed ? 'Expand' : 'Collapse'" />
+            <Icon
+                role="button"
+                :name="ICONS['chevron-down']"
+                class="transition duration-500"
+                :class="{ 'rotate-180': isClosed }"
+                :aria-label="isClosed ? 'Expand' : 'Collapse'"
+            />
         </div>
     </div>
 </template>
