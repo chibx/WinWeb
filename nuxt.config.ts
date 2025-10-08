@@ -50,7 +50,6 @@ export default defineNuxtConfig({
                     crossorigin: "anonymous",
                 },
                 {
-                    // href: "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Gothic+A1:wght@400;700&family=Poppins:wght@400;500;700&family=Roboto:wght@500;700&display=swap",
                     href: "https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&family=Poppins:wght@400;500;700&family=Roboto:wght@500;700&display=swap",
                     rel: "stylesheet",
                 },
@@ -65,32 +64,12 @@ export default defineNuxtConfig({
     modules: [
         "@pinia/nuxt",
         "@nuxt/icon",
-        // "@primevue/nuxt-module",
         // "@vite-pwa/nuxt",
-        "@vueuse/nuxt",
     ],
     icon: {
         mode: "svg",
     },
     css: ["~/assets/css/main.css", "~/assets/css/tailwind.css"],
-    // primevue: {
-    // 	components: {
-    // 		prefix: "Prime",
-    // 	},
-    // 	composables: {
-    // 		exclude: "*",
-    // 	},
-    // 	directives: {
-    // 		prefix: "p",
-    // 		include: ["Ripple", "Tooltip"] /* Used as v-pripple and v-ptooltip */,
-    // 	},
-    // 	// usePrimeVue: false,
-    // },
-    vue: {
-        compilerOptions: {
-            comments: false,
-        },
-    },
     // pwa: {
     // 	registerWebManifestInRouteRules: false,
     // 	manifest: {
@@ -109,14 +88,6 @@ export default defineNuxtConfig({
     // 		installPrompt: true,
     // 	},
     // },
-    nitro: {
-        esbuild: {
-            options: {
-                target: "node18",
-            },
-        },
-        preset: process.env.VERCEL_ENV ? "vercel-static" : "static",
-    },
     vite: {
         plugins: [tailwindcss()],
         build: {
