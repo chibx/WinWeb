@@ -72,6 +72,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/icon",
     "@vueuse/nuxt",
+    "@nuxt/eslint",
     // "@vite-pwa/nuxt",
   ],
   icon: {
