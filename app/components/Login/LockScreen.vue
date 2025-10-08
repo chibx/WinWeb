@@ -14,9 +14,9 @@ useEventListener('keydown', (e) => {
 </script>
 
 <template>
-    <div class="h-full text-white flex flex-col gap-2.5 items-center pt-10 segoe">
+    <div class="h-full text-white flex flex-col gap-2.5 items-center pt-10 gothic-a1">
         <div class="text-9xl font-bold">{{ time }}</div>
-        <div class="text-2xl">{{ dateStr }}</div>
+        <div class="text-2xl tracking-widest roboto">{{ dateStr }}</div>
     </div>
 </template>
 

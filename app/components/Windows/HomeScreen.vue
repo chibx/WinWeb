@@ -6,8 +6,8 @@ import type { DragPaneCoords } from "~/types/desktop";
 import { desktopIcons, keyboardKeys } from "~/utils/utils";
 
 const desktop = useDesktop();
-const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0].uid);
-const bg = await idb.get("backgrounds", lastBg.value);
+const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0]?.uid);
+const bg = await idb.get("backgrounds", lastBg.value || "");
 const background = useObjectUrl(bg?.data);
 const isPointerDown = ref(false);
 const homeEl = useTemplateRef('home-screen')
@@ -70,16 +70,21 @@ useEventListener(homeEl, 'mousedown', (ev) => {
 	isPointerDown.value = true
 })
 
+function toggleTaskbarPos() {
+	desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'
+}
+
 onMounted(() => {
 	const audio = new Audio("/audio/startup.mp3");
 	audio.play();
 });
+
 </script>
 
 <template>
 	<div :style="desktop.desktopVars" ref="home" class="text-white">
-		<div ref="home-screen"
-			class="home-screen select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
+		<div ref="home-screen" id="home-screen"
+			class="select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
 			:style="{ backgroundImage: background && `url(${background})` }">
 			<WindowsDragPane :canDrag="validator" :onMove="onDrag">
 				<div id="desk-house" class="h-full py-2.5 jsdjlj">
@@ -87,8 +92,7 @@ onMounted(() => {
 
 					<WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :name :icon
 						:rClick></WindowsDesktopIcon>
-					<button style="background-color: black; padding: 20px;"
-						@click="desktop.config.taskbar.iconPosition = (desktop.config.taskbar.iconPosition == 'center') ? 'left' : 'center'">
+					<button style="background-color: black; padding: 20px;" @click="toggleTaskbarPos">
 						Toggle pos
 					</button>
 
@@ -105,12 +109,13 @@ onMounted(() => {
 
 		</TransitionGroup>
 
+		<WindowsStartMenu open />
 		<WindowsTaskBar />
 	</div>
 </template>
 
 <style scoped>
-.home-screen {
+#home-screen {
 	background-repeat: no-repeat;
 	background-size: cover;
 	/* z-index: 1; */

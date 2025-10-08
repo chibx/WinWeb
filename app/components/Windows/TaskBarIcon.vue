@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { TaskBarIcon } from '#build/imports';
-import { openApp, getAppWindows } from '~/applications';
+import { getAppWindows, openApp } from '~/applications';
 const props = defineProps<TaskBarIcon>()
 const openWindows = getAppWindows();
 const openInstances = computed(() => {
@@ -11,10 +11,10 @@ function iconClick() {
   const numOfInstances = openInstances.value.length;
   if (numOfInstances > 0) {
     if (numOfInstances === 1) {
-      openInstances.value[0].isMinimized.value = false
+      openInstances.value[0]!.isMinimized.value = false
     }
     else {
-
+      // TODO: Do something
     }
   }
   else {
