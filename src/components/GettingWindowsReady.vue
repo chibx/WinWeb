@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-    import { Icon } from "@iconify/vue";
-    import { ICONS } from "@/utils/icons";
+import { Icon } from "@iconify/vue";
+import { ICONS } from "@/utils/icons";
 </script>
 <template>
     <div
@@ -19,11 +19,11 @@
 </template>
 
 <style scoped>
-    .ready {
-        background-color: #020018;
-    }
+.ready {
+    background-color: #020018;
+}
 
-    .windows {
-        margin-top: 100px;
-    }
+.windows {
+    margin-top: 100px;
+}
 </style>

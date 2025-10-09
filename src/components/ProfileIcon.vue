@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-    import { useObjectUrl } from "@vueuse/core";
-    const props = defineProps<{
-        src?: ArrayBuffer | null;
-        // height?: string,
-        // width?: string
-    }>();
+import { useObjectUrl } from "@vueuse/core";
+const props = defineProps<{
+    src?: ArrayBuffer | null;
+    // height?: string,
+    // width?: string
+}>();
 
-    const imgSrc = useObjectUrl(props.src ? new Blob([props.src]) : undefined);
+const imgSrc = useObjectUrl(props.src ? new Blob([props.src]) : undefined);
 </script>
 
 <template>

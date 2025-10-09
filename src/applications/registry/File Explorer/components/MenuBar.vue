@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-    import { Icon } from "@iconify/vue";
-    import FileExplorerTabBar from "./TabBarMenu.vue";
-    import { useAppAction, useApp } from "@/applications/index";
-    import { inject } from "vue";
-    import { CLOSE_REQUEST } from "@/utils/keys";
-    import { ICONS } from "@/utils/icons";
-    const appWindow = useApp()!;
-    const appAction = useAppAction();
-    const requestClose = inject(CLOSE_REQUEST);
+import { Icon } from "@iconify/vue";
+import FileExplorerTabBar from "./TabBarMenu.vue";
+import { useAppAction, useApp } from "@/applications/index";
+import { inject } from "vue";
+import { CLOSE_REQUEST } from "@/utils/keys";
+import { ICONS } from "@/utils/icons";
+const appWindow = useApp()!;
+const appAction = useAppAction();
+const requestClose = inject(CLOSE_REQUEST);
 </script>
 
 <template>
@@ -34,21 +34,21 @@
 </template>
 
 <style scoped>
-    .menubar-controls span {
-        padding: 10px 10px;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        transition: 0.12s cubic-bezier(0.19, 1, 0.22, 1);
-    }
+.menubar-controls span {
+    padding: 10px 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.12s cubic-bezier(0.19, 1, 0.22, 1);
+}
 
-    .menubar-controls span.close {
-        padding: 10px 15px;
-        transition: 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
-    }
+.menubar-controls span.close {
+    padding: 10px 15px;
+    transition: 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
 
-    .menubar-controls span.close:hover {
-        color: white;
-        background-color: red;
-    }
+.menubar-controls span.close:hover {
+    color: white;
+    background-color: red;
+}
 </style>

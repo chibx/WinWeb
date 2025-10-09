@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    defineProps<{ stopBlur?: boolean }>();
+defineProps<{ stopBlur?: boolean }>();
 </script>
 
 <template>
@@ -18,7 +18,7 @@
 </template>
 
 <style scoped>
-    .blur-transition {
-        transition: 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-    }
+.blur-transition {
+    transition: 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
 </style>

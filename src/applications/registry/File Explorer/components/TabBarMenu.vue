@@ -1,77 +1,77 @@
 <script lang="ts" setup>
-    import { useAppAction } from "@/applications";
-    import { TABS, TAB_KEY, getEndName, inferFolderIcon } from "../utils";
-    import { uid } from "uid";
-    import { animate } from "motion";
-    import { APP_EL } from "@/utils/keys";
-    import { inject, useTemplateRef, unref, watch } from "vue";
-    import { ICONS } from "@/utils/icons";
+import { useAppAction } from "@/applications";
+import { TABS, TAB_KEY, getEndName, inferFolderIcon } from "../utils";
+import { uid } from "uid";
+import { animate } from "motion";
+import { APP_EL } from "@/utils/keys";
+import { inject, useTemplateRef, unref, watch } from "vue";
+import { ICONS } from "@/utils/icons";
 
-    const tabs = inject(TABS)!;
-    const tabKey = inject(TAB_KEY)!;
-    const appWindowEl = inject(APP_EL)!;
-    const tabsWrapper = useTemplateRef("tabs-wrapper");
-    const appAction = useAppAction();
+const tabs = inject(TABS)!;
+const tabKey = inject(TAB_KEY)!;
+const appWindowEl = inject(APP_EL)!;
+const tabsWrapper = useTemplateRef("tabs-wrapper");
+const appAction = useAppAction();
 
-    function tabWheel(e: WheelEvent) {
-        const tabsWrapEl = unref(tabsWrapper)!;
-        tabsWrapEl.scrollBy({ left: e.deltaY, behavior: "smooth" });
-    }
+function tabWheel(e: WheelEvent) {
+    const tabsWrapEl = unref(tabsWrapper)!;
+    tabsWrapEl.scrollBy({ left: e.deltaY, behavior: "smooth" });
+}
 
-    watch(
-        () => tabs.length,
-        async (newVal) => {
-            if (newVal === 0) {
-                await animate(
-                    appWindowEl.value!,
-                    {
-                        transform: ["scale(1)", "scale(0.75)"],
-                        opacity: 0,
-                    },
-                    { duration: 0.2 },
-                );
-                appAction?.close();
-            }
-        },
-    );
-
-    async function closeTab(key: string) {
-        const index = tabs.findIndex((e) => e.key === key);
-        if (index === -1) {
-            return;
+watch(
+    () => tabs.length,
+    async (newVal) => {
+        if (newVal === 0) {
+            await animate(
+                appWindowEl.value!,
+                {
+                    transform: ["scale(1)", "scale(0.75)"],
+                    opacity: 0,
+                },
+                { duration: 0.2 },
+            );
+            appAction?.close();
         }
+    },
+);
 
-        tabs.splice(index, 1);
+async function closeTab(key: string) {
+    const index = tabs.findIndex((e) => e.key === key);
+    if (index === -1) {
+        return;
+    }
 
-        // Transfer active tab to another tab
-        const len = tabs.length;
-        if (key === tabKey.value && len > 0) {
-            // Activate the tab at the same index if there are still tabs to the left
-            // i.e index 5 becomes 4 when 4 leaves
-            const item = tabs.at(index <= len - 1 ? index : index - 1);
-            if (item) {
-                tabKey.value = item.key;
-            }
+    tabs.splice(index, 1);
+
+    // Transfer active tab to another tab
+    const len = tabs.length;
+    if (key === tabKey.value && len > 0) {
+        // Activate the tab at the same index if there are still tabs to the left
+        // i.e index 5 becomes 4 when 4 leaves
+        const item = tabs.at(index <= len - 1 ? index : index - 1);
+        if (item) {
+            tabKey.value = item.key;
         }
     }
+}
 
-    function addTabs() {
-        const entry = {
-            key: uid(),
-            path: "Home",
-        };
+function addTabs() {
+    const entry = {
+        key: uid(),
+        path: "Home",
+    };
 
-        tabs.push(entry);
-        tabKey.value = entry.key;
+    tabs.push(entry);
+    tabKey.value = entry.key;
+}
+
+function changeTabFocus(e: MouseEvent, key: string) {
+    const el = (e.target as HTMLElement)?.closest(".close");
+    if (el) {
+        return;
     }
-
-    function changeTabFocus(e: MouseEvent, key: string) {
-        const el = (e.target as HTMLElement)?.closest(".close");
-        if (el) {
-            return;
-        }
-        tabKey.value = key;
-    }
+    tabKey.value = key;
+}
 </script>
 
 <template>
@@ -120,19 +120,19 @@
 </template>
 
 <style scoped>
-    .tabs-wrapper {
-        scrollbar-width: none;
-    }
+.tabs-wrapper {
+    scrollbar-width: none;
+}
 
-    .file-exp-tab {
-        background-color: transparent;
-    }
+.file-exp-tab {
+    background-color: transparent;
+}
 
-    .file-exp-tab:not(.active) {
-        box-shadow: inset 0 -10px 20px rgba(0, 15, 83, 0.534);
-    }
+.file-exp-tab:not(.active) {
+    box-shadow: inset 0 -10px 20px rgba(0, 15, 83, 0.534);
+}
 
-    .active {
-        background-color: rgb(77, 77, 117);
-    }
+.active {
+    background-color: rgb(77, 77, 117);
+}
 </style>

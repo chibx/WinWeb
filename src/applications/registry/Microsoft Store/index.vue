@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-    import { ref } from "vue";
-    import type { ApplicationExpose, ApplicationProps } from "@/applications/types";
+import { ref } from "vue";
+import type { ApplicationExpose, ApplicationProps } from "@/applications/types";
 
-    const props = defineProps<ApplicationProps>();
-    const rect: ApplicationExpose = {
-        minHeight: ref(0),
-        minWidth: ref(0),
-    };
-    defineExpose(rect);
+const props = defineProps<ApplicationProps>();
+const rect: ApplicationExpose = {
+    minHeight: ref(0),
+    minWidth: ref(0),
+};
+defineExpose(rect);
 </script>
 
 <template>

@@ -1,70 +1,67 @@
 <script lang="ts" setup>
-    import ProfileIcon from "@/components/ProfileIcon.vue";
-    import type { User } from "@/types/idb";
-    import { ICONS } from "@/utils/icons";
-    import { SELECTED_USER } from "@/utils/keys";
-    import { Icon } from "@iconify/vue";
-    import { onClickOutside } from "@vueuse/core";
-    import { ref, inject, type Ref, useTemplateRef, watch } from "vue";
+import ProfileIcon from "@/components/ProfileIcon.vue";
+import type { User } from "@/types/idb";
+import { ICONS } from "@/utils/icons";
+import { SELECTED_USER } from "@/utils/keys";
+import { Icon } from "@iconify/vue";
+import { onClickOutside } from "@vueuse/core";
+import { animate } from "motion";
+import { ref, inject, type Ref, useTemplateRef, watch } from "vue";
 
-    const props = defineProps<{
-        users: User[];
-    }>();
+const props = defineProps<{
+    users: User[];
+}>();
 
-    const GROUP_HEIGHT = 50;
-    const MAX_TO_200PX = 4;
+const GROUP_HEIGHT = 50;
 
-    const isClosed = ref(true);
-    const selectedUser = inject<Ref<User>>(SELECTED_USER);
-    const userGroup = useTemplateRef("user-group");
-    const userGroupContainer = useTemplateRef("user-group-container");
-    let translateY = 0;
+const isClosed = ref(true);
+const selectedUser = inject<Ref<User>>(SELECTED_USER);
+const userGroup = useTemplateRef("user-list");
+const userGroupContainer = useTemplateRef("user-group-container");
+let translateY = Math.min(props.users.length, 4) * GROUP_HEIGHT;
 
-    if (props.users.length < MAX_TO_200PX) {
-        translateY = (props.users.length * GROUP_HEIGHT) / 2;
-    } else {
-        translateY = (MAX_TO_200PX * GROUP_HEIGHT) / 2;
+onClickOutside(userGroupContainer, () => (isClosed.value = true));
+
+function selectUser(user: User) {
+    if (!selectedUser) return;
+    selectedUser.value = user;
+    isClosed.value = true;
+}
+
+watch(isClosed, (newVal) => {
+    if (!userGroup.value) return;
+    const el = userGroup.value;
+    if (newVal) {
+        animate(el!, { y: translateY }, { duration: 0.2 });
+        return;
     }
-
-    onClickOutside(userGroupContainer, () => (isClosed.value = true));
-
-    function selectUser(user: User) {
-        if (!selectedUser) return;
-        selectedUser.value = user;
-        isClosed.value = true;
-    }
-
-    watch(isClosed, (newVal) => {
-        if (!userGroup.value) return;
-        const el = userGroup.value;
-        if (newVal) {
-            el.style.transform = `translateY(${translateY}px) scaleY(0)`;
-            return;
-        }
-        el.style.transform = `translateY(0px) scaleY(1)`;
-    });
+    animate(el!, { y: 0 }, { duration: 0.2 });
+});
 </script>
 
 <template>
     <div ref="user-group-container" class="w-[200px] select-none">
-        <div
-            ref="user-group"
-            :style="{ '--group-height': `${translateY}px` }"
-            class="user-group glass overflow-y-scroll h-fit max-h-[200px]"
-        >
-            <button
-                v-for="user in users"
-                :key="user.uid"
-                class="w-full h-fit transition duration-150 flex items-center gap-2.5 px-2.5 py-3 cursor-pointer"
-                @click="selectUser(user)"
+        <div class="overflow-hidden w-full">
+            <div
+                ref="user-list"
+                :style="{ transform: `translateY(${translateY}px)` }"
+                class="user-group glass overflow-y-scroll h-fit max-h-[200px]"
             >
-                <ProfileIcon class="icon w-[20px] h-[20px]" :src="user.avatar" />
-                <span
-                    :title="selectedUser?.userName"
-                    class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap"
-                    >{{ user.userName }}</span
+                <!-- :style="{ '--group-height': `${translateY}px` }"  -->
+                <button
+                    v-for="user in users"
+                    :key="user.uid"
+                    class="w-full h-fit transition duration-150 flex items-center gap-2.5 px-2.5 py-3 cursor-pointer"
+                    @click="selectUser(user)"
                 >
-            </button>
+                    <ProfileIcon class="icon w-[20px] h-[20px]" :src="user.avatar" />
+                    <span
+                        :title="selectedUser?.userName"
+                        class="overflow-x-hidden max-w-[120px] text-ellipsis whitespace-nowrap"
+                        >{{ user.userName }}</span
+                    >
+                </button>
+            </div>
         </div>
         <div
             class="current-user-block cursor-pointer flex items-center justify-between gap-2.5 px-2.5 py-2.5"
@@ -90,44 +87,38 @@
 </template>
 
 <style scoped>
+.user-group {
+    background-color: rgba(255, 255, 255, 0.123);
+}
+
+.user-group button:hover {
+    background-color: rgba(255, 255, 255, 0.308);
+}
+
+.icon :deep(.svg-bg) {
+    background-color: rgba(0, 3, 39, 0.25);
+}
+
+.current-user-block :deep(.svg-bg) {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-reduced-motion: no-preference) {
     .user-group {
-        background-color: rgba(255, 255, 255, 0.123);
-        transform: translateY(var(--group-height)) scaleY(0);
-        /* height: 0px; */
+        transition: all 0.2s;
     }
+}
 
-    .user-group button:hover {
-        background-color: rgba(255, 255, 255, 0.308);
-    }
+.user-group::-webkit-scrollbar {
+    appearance: none;
+    width: 2px;
+}
 
-    .icon :deep(.svg-bg) {
-        background-color: rgba(0, 3, 39, 0.25);
-    }
+.glass {
+    background-color: rgba(255, 255, 255, 0.308);
+}
 
-    .current-user-block :deep(.svg-bg) {
-        background-color: rgba(255, 255, 255, 0.25);
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-        .user-group {
-            transition: all 0.3s;
-        }
-    }
-
-    .user-group::-webkit-scrollbar {
-        appearance: none;
-        width: 2px;
-    }
-
-    .glass {
-        background-color: rgba(255, 255, 255, 0.308);
-    }
-
-    .current-user-block {
-        background-color: rgba(202, 202, 202, 0.295);
-    }
-
-    /* .user-group button{
-    padding: 10px 5px
-} */
+.current-user-block {
+    background-color: rgba(202, 202, 202, 0.295);
+}
 </style>

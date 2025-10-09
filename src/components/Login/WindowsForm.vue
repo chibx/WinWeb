@@ -1,58 +1,58 @@
 <script lang="ts" setup>
-    import { Icon } from "@iconify/vue";
-    import ProfileIcon from "@/components/ProfileIcon.vue";
-    import LoginAvailableUsers from "@/components/Login/AvailableUsers.vue";
+import { Icon } from "@iconify/vue";
+import ProfileIcon from "@/components/ProfileIcon.vue";
+import LoginAvailableUsers from "@/components/Login/AvailableUsers.vue";
 
-    import { storeToRefs } from "pinia";
-    import { showLogin, isLoginSuccess, totalUsers, delay } from "@/utils/utils";
-    import { useUser } from "@/stores/user";
+import { storeToRefs } from "pinia";
+import { showLogin, isLoginSuccess, totalUsers, delay } from "@/utils/utils";
+import { useUser } from "@/stores/user";
 
-    import { SELECTED_USER } from "@/utils/keys";
-    import { useFocus, useEventListener } from "@vueuse/core";
-    import { useTemplateRef, ref, provide, watch, onMounted } from "vue";
-    import { ICONS } from "@/utils/icons";
+import { SELECTED_USER } from "@/utils/keys";
+import { useFocus, useEventListener } from "@vueuse/core";
+import { useTemplateRef, ref, provide, watch, onMounted } from "vue";
+import { ICONS } from "@/utils/icons";
 
-    const userStore = useUser();
-    const passwordEl = useTemplateRef("passwordEl");
-    const { focused } = useFocus(passwordEl);
-    const isPasswordVisible = ref(false);
-    const isPasswordValid = ref(true);
-    const isValidating = ref(false);
-    const password = ref("");
+const userStore = useUser();
+const passwordEl = useTemplateRef("passwordEl");
+const { focused } = useFocus(passwordEl);
+const isPasswordVisible = ref(false);
+const isPasswordValid = ref(true);
+const isValidating = ref(false);
+const password = ref("");
 
-    const { currentUser: selectedUser } = storeToRefs(userStore);
-    useEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            showLogin.value = false;
-        }
-    });
-
-    /** AvailableUsers.vue */
-    provide(SELECTED_USER, selectedUser);
-    watch(selectedUser, () => {
-        focused.value = true;
-    });
-
-    async function validatePassword() {
-        if (isValidating.value) return;
-        isValidating.value = true;
-        const userPassword = selectedUser.value?.password;
-        await delay(1000);
-        isValidating.value = false;
-
-        if (password.value === userPassword) {
-            isLoginSuccess.value = true;
-            return;
-        }
-        isPasswordValid.value = false;
-        password.value = "";
+const { currentUser: selectedUser } = storeToRefs(userStore);
+useEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        showLogin.value = false;
     }
+});
 
-    onMounted(() => {
-        setTimeout(() => {
-            focused.value = true;
-        }, 100);
-    });
+/** AvailableUsers.vue */
+provide(SELECTED_USER, selectedUser);
+watch(selectedUser, () => {
+    focused.value = true;
+});
+
+async function validatePassword() {
+    if (isValidating.value) return;
+    isValidating.value = true;
+    const userPassword = selectedUser.value?.password;
+    await delay(1000);
+    isValidating.value = false;
+
+    if (password.value === userPassword) {
+        isLoginSuccess.value = true;
+        return;
+    }
+    isPasswordValid.value = false;
+    password.value = "";
+}
+
+onMounted(() => {
+    setTimeout(() => {
+        focused.value = true;
+    }, 100);
+});
 </script>
 
 <template>
@@ -63,7 +63,7 @@
 
     <div class="w-[600px] flex flex-col relative mt-40 gap-5 items-center">
         <ProfileIcon class="login-profile w-[200px] h-[200px]" :src="selectedUser?.avatar" />
-        <span class="segoe text-white text-3xl">{{ selectedUser?.userName }}</span>
+        <span class="poppins text-white text-3xl">{{ selectedUser?.userName }}</span>
         <!-- <div></div> -->
         <!-- <input type="text" class="password mt-5" v-model="password" placeholder="Enter your password" /> -->
         <div v-if="!isLoginSuccess">
@@ -101,7 +101,10 @@
                             />
                         </button>
                     </div>
-                    <div v-if="selectedUser?.userName == 'User'" class="text-center mt-2.5">
+                    <div
+                        v-if="selectedUser?.userName == 'User'"
+                        class="roboto font-light tracking-wide text-center mt-2.5"
+                    >
                         Your default password is {{ selectedUser?.password }}
                     </div>
                 </div>
@@ -134,64 +137,64 @@
 </template>
 
 <style scoped>
-    .password {
-        color: black;
-        width: 400px;
-    }
+.password {
+    color: black;
+    width: 400px;
+}
 
-    .password input {
-        width: 100%;
-        padding: 7px 5px;
-        border-radius: 5px 5px 0 0;
-        outline: none;
-        border-bottom: 1px solid white;
-        color: rgb(255, 255, 255);
-        background-color: rgba(0, 0, 0, 0.096);
-        letter-spacing: 1px;
-    }
+.password input {
+    width: 100%;
+    padding: 7px 5px;
+    border-radius: 5px 5px 0 0;
+    outline: none;
+    border-bottom: 1px solid white;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.096);
+    letter-spacing: 1px;
+}
 
-    .password input::placeholder {
-        color: white;
-    }
+.password input::placeholder {
+    color: white;
+}
 
-    .password input:focus {
-        background-color: rgb(0, 3, 39);
-    }
+.password input:focus {
+    background-color: rgb(0, 3, 39);
+}
 
-    .password :deep(svg) {
-        color: white;
-        opacity: 1;
-    }
+.password :deep(svg) {
+    color: white;
+    opacity: 1;
+}
 
-    .login-profile :deep(.svg-bg) {
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.2);
-        /* background-image: linear-gradient(to bottom, rgba(0, 3, 39, 0.25) 0%, rgba(85, 85, 85, 0.2) 82%, rgba(255, 255, 255, 0.2) 97%); */
-    }
+.login-profile :deep(.svg-bg) {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    /* background-image: linear-gradient(to bottom, rgba(0, 3, 39, 0.25) 0%, rgba(85, 85, 85, 0.2) 82%, rgba(255, 255, 255, 0.2) 97%); */
+}
 
-    .password-error button {
-        background-color: rgba(0, 0, 0, 0.212);
-        color: white;
-        outline: 2px solid rgb(255, 255, 255);
-        /* border: 1px solid rgb(199, 199, 199); */
-        padding: 10px 25px;
-        border-radius: 5px;
-    }
+.password-error button {
+    background-color: rgba(0, 0, 0, 0.212);
+    color: white;
+    outline: 2px solid rgb(255, 255, 255);
+    /* border: 1px solid rgb(199, 199, 199); */
+    padding: 10px 25px;
+    border-radius: 5px;
+}
 
-    .password-error button:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+.password-error button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
 
-    @media (prefers-reduced-motion: no-preference) {
-        .lift-enter-active,
-        .lift-leave-active {
-            transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
-        }
+@media (prefers-reduced-motion: no-preference) {
+    .lift-enter-active,
+    .lift-leave-active {
+        transition: all 0.2s cubic-bezier(0.55, 0, 0.1, 1);
     }
+}
 
-    .lift-enter-from,
-    .lift-leave-to {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+.lift-enter-from,
+.lift-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}
 </style>

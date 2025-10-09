@@ -1,29 +1,29 @@
 <script lang="ts" setup>
-    import type { DesktopIcon, DesktopIconWithFocus } from "@/types/desktop";
-    import { ref, useTemplateRef, watchEffect, onMounted, onBeforeUnmount } from "vue";
-    import { desktopIcons, focusedIcons } from "@/utils/utils";
-    const props = defineProps<DesktopIcon>();
-    const hasFocus = ref(false);
-    const appEl = useTemplateRef("app-icon");
-    const desktopIconInfo = [appEl, hasFocus] as DesktopIconWithFocus;
+import type { DesktopIcon, DesktopIconWithFocus } from "@/types/desktop";
+import { ref, useTemplateRef, watchEffect, onMounted, onBeforeUnmount } from "vue";
+import { desktopIcons, focusedIcons } from "@/utils/utils";
+const props = defineProps<DesktopIcon>();
+const hasFocus = ref(false);
+const appEl = useTemplateRef("app-icon");
+const desktopIconInfo = [appEl, hasFocus] as DesktopIconWithFocus;
 
-    watchEffect(() => {
-        if (hasFocus.value) {
-            focusedIcons?.add(desktopIconInfo);
-        } else {
-            focusedIcons?.delete(desktopIconInfo);
-        }
-    });
-
-    onMounted(() => {
-        desktopIcons?.add(desktopIconInfo);
-    });
-
-    onBeforeUnmount(() => {
-        // clearInterval(id)
-        desktopIcons?.delete(desktopIconInfo);
+watchEffect(() => {
+    if (hasFocus.value) {
+        focusedIcons?.add(desktopIconInfo);
+    } else {
         focusedIcons?.delete(desktopIconInfo);
-    });
+    }
+});
+
+onMounted(() => {
+    desktopIcons?.add(desktopIconInfo);
+});
+
+onBeforeUnmount(() => {
+    // clearInterval(id)
+    desktopIcons?.delete(desktopIconInfo);
+    focusedIcons?.delete(desktopIconInfo);
+});
 </script>
 
 <template>
@@ -46,21 +46,21 @@
 </template>
 
 <style scoped>
-    .desktop-icon:hover {
-        background-color: #9ae7ff41;
-    }
+.desktop-icon:hover {
+    background-color: #9ae7ff41;
+}
 
-    .icon-name {
-        text-shadow:
-            2px 2px 5px #000000,
-            -2px -2px 5px #000000;
-    }
+.icon-name {
+    text-shadow:
+        2px 2px 5px #000000,
+        -2px -2px 5px #000000;
+}
 
-    .clicked {
-        background-color: #2098bd9f;
-    }
+.clicked {
+    background-color: #2098bd9f;
+}
 
-    .clicked:hover {
-        background-color: #0386ad86;
-    }
+.clicked:hover {
+    background-color: #0386ad86;
+}
 </style>
