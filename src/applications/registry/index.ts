@@ -18,9 +18,7 @@ export default [
 ] satisfies Application[];
 
 /** defaultify  */
-type ExtractDefaultImportType<T extends Promise<{ default: unknown }>> = Promise<
-    Awaited<T>["default"]
->;
+type ExtractDefaultImportType<T extends Promise<{ default: unknown }>> = Promise<Awaited<T>["default"]>;
 
 async function defy<T extends Promise<{ default: unknown }>>(prom: T): ExtractDefaultImportType<T> {
     const c = await prom;

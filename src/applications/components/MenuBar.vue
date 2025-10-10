@@ -13,11 +13,7 @@ const props = inject(WINDOW_PROPS)!;
                 <Icon :icon="ICONS['minimize']" width="20" height="20" />
             </span>
             <span>
-                <Icon
-                    :icon="props.isMaximized ? ICONS['restore'] : ICONS['maximize']"
-                    width="20"
-                    height="20"
-                />
+                <Icon :icon="props.isMaximized ? ICONS['restore'] : ICONS['maximize']" width="20" height="20" />
             </span>
             <span class="close">
                 <Icon :icon="ICONS['close']" width="20" height="20" />

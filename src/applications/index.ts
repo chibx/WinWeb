@@ -1,9 +1,4 @@
-import type {
-    Application,
-    ApplicationConfig,
-    ApplicationProps,
-    OpenWindow,
-} from "@/applications/types";
+import type { Application, ApplicationConfig, ApplicationProps, OpenWindow } from "@/applications/types";
 import { createWindowObject, openWindows } from "@/applications/utils";
 import registry from "./registry/index";
 import { APP_ID } from "@/utils/keys";
@@ -69,10 +64,7 @@ export async function openApp(name: string, data: ApplicationProps = {}) {
 
     const numberOfInstances = windows.filter((e) => e.name === $app.name).length;
     // TODO Handle case of multiple files
-    const canOpen = await ($app.config as unknown as ApplicationConfig).canOpen(
-        numberOfInstances,
-        data["opener"],
-    );
+    const canOpen = await ($app.config as unknown as ApplicationConfig).canOpen(numberOfInstances, data["opener"]);
     if (!canOpen.success) {
         // TODO Consider throwing an error
         return false;

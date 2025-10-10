@@ -1,6 +1,6 @@
 import type { Config } from "prettier";
 
 export default {
-    printWidth: 100,
+    printWidth: 120,
     tabWidth: 4,
 } as Config;

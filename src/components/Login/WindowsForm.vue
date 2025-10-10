@@ -128,11 +128,7 @@ onMounted(() => {
         <!-- svg-spinners:8-dots-rotate -->
     </div>
 
-    <LoginAvailableUsers
-        v-if="!isLoginSuccess"
-        :users="totalUsers"
-        class="fixed left-2.5 bottom-7"
-    />
+    <LoginAvailableUsers v-if="!isLoginSuccess" :users="totalUsers" class="fixed left-2.5 bottom-7" />
     <!-- <DotLoader style="--uib-size: 50px;" /> -->
 </template>
 

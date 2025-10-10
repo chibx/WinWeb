@@ -104,25 +104,15 @@ useEventListener(document, "pointermove", (ev) => {
         if (el) {
             const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41;
             el.style.transform = `translateX(${curTranslateX + ICON_SIZE}px)`;
-            virtualTaskbarIcons.splice(
-                translateIdx - 1,
-                0,
-                ...virtualTaskbarIcons.splice(translateIdx, 1),
-            );
+            virtualTaskbarIcons.splice(translateIdx - 1, 0, ...virtualTaskbarIcons.splice(translateIdx, 1));
             translateIdx -= 1;
         }
     } else if (inferredLeft > correctLeft + 30) {
-        const el = virtualTaskbarIcons.at(
-            Math.min(translateIdx + 1, virtualTaskbarIcons.length - 1),
-        );
+        const el = virtualTaskbarIcons.at(Math.min(translateIdx + 1, virtualTaskbarIcons.length - 1));
         if (el) {
             const curTranslateX = new DOMMatrixReadOnly(el.style.transform).m41;
             el.style.transform = `translateX(${-ICON_SIZE + curTranslateX}px)`;
-            virtualTaskbarIcons.splice(
-                translateIdx + 1,
-                0,
-                ...virtualTaskbarIcons.splice(translateIdx, 1),
-            );
+            virtualTaskbarIcons.splice(translateIdx + 1, 0, ...virtualTaskbarIcons.splice(translateIdx, 1));
             translateIdx += 1;
         }
     }
@@ -172,10 +162,7 @@ onMounted(() => {
         @contextmenu.prevent=""
     >
         <div class="w-full">
-            <div
-                id="task-wrapper"
-                class="h-full pl-2.5 flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2"
-            >
+            <div id="task-wrapper" class="h-full pl-2.5 flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2">
                 <WindowsTaskBarIcon
                     class="windows-start-icon"
                     name="Start"
@@ -183,11 +170,7 @@ onMounted(() => {
                     :r-click="rClick"
                 />
 
-                <WindowsTaskBarIcon
-                    name="Microsoft Copilot"
-                    icon="/icons/microsoft-copilot.svg"
-                    :r-click="rClick"
-                />
+                <WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :r-click="rClick" />
 
                 <div id="taskbar-inner" ref="taskbar-inner" class="flex items-center">
                     <WindowsTaskBarIcon
@@ -201,10 +184,7 @@ onMounted(() => {
             </div>
         </div>
 
-        <div
-            ref="taskbar-right"
-            class="taskbar-right h-full flex gap-[5px] absolute right-4 top-1/2 -translate-y-1/2"
-        >
+        <div ref="taskbar-right" class="taskbar-right h-full flex gap-[5px] absolute right-4 top-1/2 -translate-y-1/2">
             <div class="chevron-ic">
                 <Icon :icon="ICONS['chevron-up']" />
             </div>

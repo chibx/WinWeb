@@ -52,30 +52,14 @@ function onDrag(_: MouseEvent, { height, left, top, width, x, y }: DragPaneCoord
         const inScope =
             height > 0 &&
             width > 0 &&
-            ((!isDraggingLeft &&
-                !isDraggingUp &&
-                bottom > ct + 20 &&
-                right > cl + 15 &&
-                y < cb - 20 &&
-                x < cr - 15) ||
-                (isDraggingLeft &&
-                    !isDraggingUp &&
-                    bottom > ct + 20 &&
-                    left < cr - 15 &&
-                    y < cb - 20 &&
-                    x > cr - 15) ||
-                (isDraggingLeft &&
-                    isDraggingUp &&
-                    top < cb - 20 &&
-                    left < cr - 15 &&
-                    y > ct + 20 &&
-                    x > cr - 15) ||
-                (!isDraggingLeft &&
-                    isDraggingUp &&
-                    top < cb - 20 &&
-                    right > cl + 15 &&
-                    y > ct - 20 &&
-                    x < cr - 15));
+            /** Going to bottom right */
+            ((!isDraggingLeft && !isDraggingUp && bottom > ct + 20 && right > cl + 15 && y < cb - 20 && x < cr - 15) ||
+                /** Going to bottom right */
+                (isDraggingLeft && !isDraggingUp && bottom > ct + 20 && left < cr - 15 && y < cb - 20 && x > cr - 15) ||
+                /** Going to bottom right */
+                (isDraggingLeft && isDraggingUp && top < cb - 20 && left < cr - 15 && y > ct + 20 && x > cr - 15) ||
+                /** Going to bottom right */
+                (!isDraggingLeft && isDraggingUp && top < cb - 20 && right > cl + 15 && y > ct - 20 && x < cr - 15));
 
         focused.value = inScope;
     });
@@ -108,8 +92,7 @@ useEventListener(homeEl, "mousedown", (ev) => {
 });
 
 function toggleTaskbarPos() {
-    desktop.config.taskbar.iconPosition =
-        desktop.config.taskbar.iconPosition == "center" ? "left" : "center";
+    desktop.config.taskbar.iconPosition = desktop.config.taskbar.iconPosition == "center" ? "left" : "center";
 }
 
 onMounted(() => {
@@ -135,28 +118,14 @@ onMounted(() => {
                         :icon
                         :r-click
                     ></WindowsDesktopIcon>
-                    <button
-                        style="background-color: black; padding: 20px"
-                        @click="toggleTaskbarPos"
-                    >
-                        Toggle pos
-                    </button>
+                    <button style="background-color: black; padding: 20px" @click="toggleTaskbarPos">Toggle pos</button>
                 </div>
             </WindowsDragPane>
         </div>
 
         <TransitionGroup :css="false">
             <ApplicationWindowWrapper
-                v-for="{
-                    id,
-                    coords,
-                    isActive,
-                    isMinimized,
-                    name,
-                    props,
-                    zIndex,
-                    isMaximized,
-                } in openWindows"
+                v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows"
                 :id="id"
                 :key="id"
                 :name="name"

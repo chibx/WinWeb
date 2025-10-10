@@ -8,11 +8,7 @@ defineProps<{ stopBlur?: boolean }>();
             class="fixed z-[1] h-full w-full overflow-hidden blur-transition"
             :style="!stopBlur ? { backdropFilter: 'blur(20px)' } : null"
         ></div>
-        <img
-            src="/backgrounds/windows_11_logo.webp"
-            class="object-cover fixed h-full w-full"
-            alt="background"
-        />
+        <img src="/backgrounds/windows_11_logo.webp" class="object-cover fixed h-full w-full" alt="background" />
     </div>
     <slot />
 </template>

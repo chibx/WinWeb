@@ -76,11 +76,7 @@ function changeTabFocus(e: MouseEvent, key: string) {
 
 <template>
     <div class="tabs-wrapper-cont w-[calc(100%-130px)] flex select-none">
-        <div
-            ref="tabs-wrapper"
-            @wheel.prevent="tabWheel"
-            class="tabs-wrapper overflow-x-auto flex pl-2.5"
-        >
+        <div ref="tabs-wrapper" @wheel.prevent="tabWheel" class="tabs-wrapper overflow-x-auto flex pl-2.5">
             <div
                 v-for="({ path, key }, index) in tabs"
                 @click="changeTabFocus($event, key)"
@@ -95,16 +91,11 @@ function changeTabFocus(e: MouseEvent, key: string) {
                         draggable="false"
                         :alt="getEndName(path)"
                     />
-                    <span
-                        class="w-[150px] text-ellipsis overflow-x-hidden whitespace-nowrap select-none"
-                        >{{ getEndName(path) }}</span
-                    >
+                    <span class="w-[150px] text-ellipsis overflow-x-hidden whitespace-nowrap select-none">{{
+                        getEndName(path)
+                    }}</span>
                 </div>
-                <span
-                    aria-label="Close the tab"
-                    class="close p-0.5 rounded-full"
-                    @click="closeTab(key)"
-                >
+                <span aria-label="Close the tab" class="close p-0.5 rounded-full" @click="closeTab(key)">
                     <Icon :icon="ICONS['close']" width="20" height="20" />
                 </span>
             </div>

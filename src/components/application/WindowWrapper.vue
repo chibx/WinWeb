@@ -51,8 +51,7 @@ watch(isMinimized, (newVal, _, onCleanup) => {
     if (!appWindowEl.value) return;
 
     const appTaskIconX = getTaskIconX(name);
-    const inBounds =
-        appTaskIconX && appTaskIconX > coords.x && appTaskIconX < coords.x + coords.width;
+    const inBounds = appTaskIconX && appTaskIconX > coords.x && appTaskIconX < coords.x + coords.width;
     const { width, height } = screenDimensions;
     const { pushX, pushY } = pushCoords(width, height);
     const animation = animate(
@@ -94,10 +93,7 @@ watch(isMaximized, (newVal, _, onCleanup) => {
         appWindowEl.value,
         {
             transform: newVal
-                ? [
-                      "scale(1)",
-                      `scaleX(${width / (coords.width + pushX)}) scaleY(${height / (coords.height + pushY)})`,
-                  ]
+                ? ["scale(1)", `scaleX(${width / (coords.width + pushX)}) scaleY(${height / (coords.height + pushY)})`]
                 : `scale(1)`,
         },
         {

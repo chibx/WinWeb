@@ -11,14 +11,14 @@ const props = defineProps<{
 
 // const dragEl = useTemplateRef("dragEl");
 // const dragParent = useTemplateRef('dragParent');
-const [dragEl, coords, isActive] = useDragPane({ canDrag: props.canDrag, onMove: props.onMove })
+const [dragEl, coords, isActive] = useDragPane({ canDrag: props.canDrag, onMove: props.onMove });
 </script>
 
 <template>
     <div
         ref="dragEl"
         class="drag-pane absolute z-[9]"
-        :class="{'active': isActive}"
+        :class="{ active: isActive }"
         :style="{
             width: `${coords.width}px`,
             height: `${coords.height}px`,

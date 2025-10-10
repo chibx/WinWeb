@@ -17,14 +17,8 @@ const requestClose = inject(CLOSE_REQUEST);
             <span class="hover:bg-gray-800" @click="appWindow.isMinimized.value = true">
                 <Icon :icon="ICONS['minimize']" width="20" height="20" />
             </span>
-            <span
-                class="hover:bg-gray-800"
-                @click="appWindow.isMaximized.value = !appWindow.isMaximized.value"
-            >
-                <Icon
-                    :icon="appWindow.isMaximized.value ? ICONS['restore'] : ICONS['maximize']"
-                    size="20"
-                />
+            <span class="hover:bg-gray-800" @click="appWindow.isMaximized.value = !appWindow.isMaximized.value">
+                <Icon :icon="appWindow.isMaximized.value ? ICONS['restore'] : ICONS['maximize']" size="20" />
             </span>
             <span class="close" @click="requestClose">
                 <Icon :icon="ICONS['close']" width="20" height="20" />

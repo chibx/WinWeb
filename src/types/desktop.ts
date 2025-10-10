@@ -16,10 +16,7 @@ export type DesktopIcon = {
     rClick(): Promise<DesktopIconMenu[]>;
 };
 
-export type DesktopIconWithFocus = [
-    Readonly<ShallowRef<HTMLElement | null>>,
-    Ref<boolean, boolean>,
-];
+export type DesktopIconWithFocus = [Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean, boolean>];
 
 export type DesktopConfig = {
     taskbar: {
