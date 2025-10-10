@@ -18,7 +18,7 @@ export const keyboardKeys = reactive({
 });
 
 export function delay(number: number) {
-    return new Promise<void>((resolve) => {
+    return new Promise((resolve) => {
         setTimeout(resolve, number);
     });
 }
@@ -53,3 +53,7 @@ export type FunctionHandler<T = boolean> = (
 export function mat2Color(r: number, g: number, b: number, alpha: number) {
     return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
 }
+
+export const noop = () => {}
+export const noop_true = (() => true)
+export const noop_false = (() => false)
