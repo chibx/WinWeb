@@ -33,33 +33,63 @@ const validator = (ev: MouseEvent) => {
     return res;
 };
 
-function onDrag(_: MouseEvent, { height, left, top, width, x, y }: DragPaneCoords) {
+function onDrag(
+    _: MouseEvent,
+    {
+        height: paneHeight,
+        left: paneLeft,
+        top: paneTop,
+        width: paneWidth,
+        x: paneInitialX,
+        y: paneInitialY,
+    }: DragPaneCoords,
+) {
     // console.time('res')
-    const right = left + width;
-    const bottom = top + height;
+    const paneRight = paneLeft + paneWidth;
+    const paneBottom = paneTop + paneHeight;
 
     desktopIcons.forEach(([el, focused]) => {
         const element = unref(el);
         if (!element) {
             return;
         }
-        const { left: cl, top: ct, width: cw, height: ch } = element.getBoundingClientRect();
-        const cr = cl + cw;
-        const cb = ct + ch;
-        const isDraggingLeft = left < x;
-        const isDraggingUp = top < y;
+        const { left: iconLeft, top: iconTop, width: iconWidth, height: iconHeight } = element.getBoundingClientRect();
+        const iconRight = iconLeft + iconWidth;
+        const iconBottom = iconTop + iconHeight;
+        const isDraggingLeft = paneLeft < paneInitialX;
+        const isDraggingUp = paneTop < paneInitialY;
 
         const inScope =
-            height > 0 &&
-            width > 0 &&
-            /** Going to bottom right */
-            ((!isDraggingLeft && !isDraggingUp && bottom > ct + 20 && right > cl + 15 && y < cb - 20 && x < cr - 15) ||
-                /** Going to bottom right */
-                (isDraggingLeft && !isDraggingUp && bottom > ct + 20 && left < cr - 15 && y < cb - 20 && x > cr - 15) ||
-                /** Going to bottom right */
-                (isDraggingLeft && isDraggingUp && top < cb - 20 && left < cr - 15 && y > ct + 20 && x > cr - 15) ||
-                /** Going to bottom right */
-                (!isDraggingLeft && isDraggingUp && top < cb - 20 && right > cl + 15 && y > ct - 20 && x < cr - 15));
+            paneHeight > 0 &&
+            paneWidth > 0 &&
+            /** --------------------------- */
+            ((!isDraggingLeft &&
+                !isDraggingUp &&
+                paneBottom > iconTop + 20 &&
+                paneRight > iconLeft + 15 &&
+                paneInitialY < iconBottom - 20 &&
+                paneInitialX < iconRight - 15) ||
+                /** --------------------------- */
+                (isDraggingLeft &&
+                    !isDraggingUp &&
+                    paneBottom > iconTop + 20 &&
+                    paneLeft < iconRight - 15 &&
+                    paneInitialY < iconBottom - 20 &&
+                    paneInitialX > iconRight - 15) ||
+                /** --------------------------- */
+                (isDraggingLeft &&
+                    isDraggingUp &&
+                    paneTop < iconBottom - 20 &&
+                    paneLeft < iconRight - 15 &&
+                    paneInitialY > iconTop + 20 &&
+                    paneInitialX > iconRight - 15) ||
+                /** --------------------------- */
+                (!isDraggingLeft &&
+                    isDraggingUp &&
+                    paneTop < iconBottom - 20 &&
+                    paneRight > iconLeft + 15 &&
+                    paneInitialY > iconTop - 20 &&
+                    paneInitialX < iconRight - 15));
 
         focused.value = inScope;
     });
