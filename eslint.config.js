@@ -28,6 +28,9 @@ export default defineConfig(
             "no-empty": "off",
             "vue/first-attribute-linebreak": "off",
             "vue/html-self-closing": "off",
+            "vue/html-indent": "off",
+            "vue/max-attributes-per-line": "off",
+            "vue/html-closing-bracket-newline": "off",
         },
     },
 );
