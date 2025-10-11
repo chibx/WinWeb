@@ -1,8 +1,9 @@
-import pluginVue from "eslint-plugin-vue";
-import tsPlugin from "typescript-eslint";
 import pluginOxlint from "eslint-plugin-oxlint";
-import globals from "globals";
+import pluginVue from "eslint-plugin-vue";
 import { defineConfig } from "eslint/config";
+import globals from "globals";
+import tsPlugin from "typescript-eslint";
+import parser from "vue-eslint-parser";
 
 export default defineConfig(
     { ignores: ["*.d.ts", "**/coverage", "**/dist"] },
@@ -15,12 +16,12 @@ export default defineConfig(
         ],
         files: ["**/*.{ts,vue}"],
         languageOptions: {
-            parser: "vue-eslint-parser",
+            parser: parser,
             ecmaVersion: "latest",
             sourceType: "module",
             globals: globals.browser,
             parserOptions: {
-                parser: "@typescript-eslint/parser",
+                parser: tsPlugin.parser,
             },
         },
         rules: {

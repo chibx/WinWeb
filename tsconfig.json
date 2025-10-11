@@ -1,8 +1,23 @@
 {
     "extends": "@vue/tsconfig/tsconfig.dom.json",
-    "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+    "include": [
+        "env.d.ts",
+        "src/**/*",
+        "src/**/*.vue",
+        "vite.config.*",
+        "vitest.config.*",
+        "cypress.config.*",
+        "nightwatch.conf.*",
+        "playwright.config.*",
+        "eslint.config.*"
+    ],
     "exclude": ["src/**/tests/*"],
     "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "types": [],
+        "checkJs": true,
+        "strict": true,
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "paths": {
             "@/*": ["./src/*"],

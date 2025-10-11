@@ -49,7 +49,7 @@ function $showLogin() {
             });
         }
         totalUsers.value = users;
-    } catch {}
+    } catch { }
 
     await delay(2000);
     gettingWindowsReady.value = false;
@@ -67,10 +67,8 @@ function $showLogin() {
             <template #default>
                 <div class="h-full w-full relative">
                     <Transition name="fade">
-                        <div
-                            v-if="!showLogin"
-                            class="h-full absolute z-[2] select-none flex-col gap-4 w-full flex items-center justify-center"
-                        >
+                        <div v-if="!showLogin"
+                            class="h-full absolute z-[2] select-none flex-col gap-4 w-full flex items-center justify-center">
                             <LoginLockScreen />
                         </div>
                         <div v-else class="h-full w-full absolute flex justify-center">
@@ -100,7 +98,7 @@ html,
 body,
 #app {
     height: 100%;
-    /*overflow: hidden;*/
+    overflow: hidden;
 }
 
 #app {

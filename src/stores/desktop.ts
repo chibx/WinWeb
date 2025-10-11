@@ -1,7 +1,7 @@
-import type { TaskBarIcon, DesktopConfig, StartMenuStyles } from "@/types/desktop";
-import { useLocalStorage, toReactive } from "@vueuse/core";
+import type { DesktopConfig, StartMenuStyles, TaskBarIcon } from "@/types/desktop";
+import { toReactive, useLocalStorage } from "@vueuse/core";
 import { acceptHMRUpdate, defineStore } from "pinia";
-import { reactive, ref, computed } from "vue";
+import { computed, reactive, ref } from "vue";
 
 const DESKTOP_CONFIG_KEY = "desktop-config";
 const START_MENU_CONFIG_KEY = "startMenu";
