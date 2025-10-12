@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import WindowsDragPane from "@/components/Windows/DragPane.vue";
-import WindowsDesktopIcon from "@/components/Windows/DesktopIcon.vue";
 import ApplicationWindowWrapper from "@/components/application/WindowWrapper.vue";
-import WindowsTaskBar from "@/components/Windows/TaskBar.vue";
+import WindowsDesktopIcon from "@/components/Windows/DesktopIcon.vue";
+import WindowsDragPane from "@/components/Windows/DragPane.vue";
 import WindowsStartMenu from "@/components/Windows/StartMenu.vue";
+import WindowsTaskBar from "@/components/Windows/TaskBar.vue";
 
 import { getAppWindows } from "@/applications/index";
-import type { DragPaneCoords } from "@/types/desktop";
-import { desktopIcons, keyboardKeys } from "@/utils/utils";
 import { useDesktop } from "@/stores/desktop";
+import type { DragPaneCoords } from "@/types/desktop";
+import { stubDesktopIcons } from "@/utils/desktop";
 import { idb } from "@/utils/idb";
 import { getSystemBackgrounds } from "@/utils/idb/backgounds";
-import { useLocalStorage, useObjectUrl, useEventListener } from "@vueuse/core";
-import { ref, useTemplateRef, unref, onMounted } from "vue";
-import { stubDesktopIcons } from "@/utils/desktop";
+import { desktopIcons, keyboardKeys } from "@/utils/utils";
+import { useEventListener, useLocalStorage, useObjectUrl } from "@vueuse/core";
+import { onMounted, ref, unref, useTemplateRef } from "vue";
 
 const desktop = useDesktop();
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0]?.uid);
@@ -121,10 +121,6 @@ useEventListener(homeEl, "mousedown", (ev) => {
     isPointerDown.value = true;
 });
 
-function toggleTaskbarPos() {
-    desktop.config.taskbar.iconPosition = desktop.config.taskbar.iconPosition == "center" ? "left" : "center";
-}
-
 onMounted(() => {
     const audio = new Audio("/audio/startup.mp3");
     audio.play();
@@ -133,39 +129,22 @@ onMounted(() => {
 
 <template>
     <div ref="home" :style="desktop.desktopVars" class="text-white">
-        <div
-            id="home-screen"
-            ref="home-screen"
+        <div id="home-screen" ref="home-screen"
             class="select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
-            :style="{ backgroundImage: background && `url(${background})` }"
-        >
+            :style="{ backgroundImage: background && `url(${background})` }">
             <WindowsDragPane :can-drag="validator" :on-move="onDrag">
-                <div id="desk-house" class="h-full py-2.5 jsdjlj">
-                    <WindowsDesktopIcon
-                        v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)"
-                        :key="name"
-                        :name
-                        :icon
-                        :r-click
-                    ></WindowsDesktopIcon>
-                    <button style="background-color: black; padding: 20px" @click="toggleTaskbarPos">Toggle pos</button>
+                <div id="desk-house" class="h-full py-2.5">
+                    <WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :key="name" :name
+                        :icon :r-click></WindowsDesktopIcon>
                 </div>
             </WindowsDragPane>
         </div>
 
         <TransitionGroup :css="false">
             <ApplicationWindowWrapper
-                v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows"
-                :id="id"
-                :key="id"
-                :name="name"
-                :coords="coords"
-                :z-index="zIndex"
-                :is-active="isActive"
-                :is-minimized="isMinimized"
-                :is-maximized="isMaximized"
-                :props="props"
-            />
+                v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows" :id="id"
+                :key="id" :name="name" :coords="coords" :z-index="zIndex" :is-active="isActive"
+                :is-minimized="isMinimized" :is-maximized="isMaximized" :props="props" />
         </TransitionGroup>
 
         <WindowsStartMenu open />

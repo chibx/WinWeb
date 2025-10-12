@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed } from "vue";
-import type { TaskBarIcon } from "@/types/desktop";
 import { getAppWindows, openApp } from "@/applications";
+import type { TaskBarIcon } from "@/types/desktop";
+import { computed } from "vue";
 const props = defineProps<TaskBarIcon>();
 const openWindows = getAppWindows();
 const openInstances = computed(() => {
@@ -12,7 +12,9 @@ function iconClick() {
     const numOfInstances = openInstances.value.length;
     if (numOfInstances > 0) {
         if (numOfInstances === 1) {
-            openInstances.value[0]!.isMinimized.value = false;
+            if (openInstances.value[0]) {
+                openInstances.value[0].isMinimized.value = false;
+            }
         } else {
             // TODO: Do something
         }
@@ -23,15 +25,8 @@ function iconClick() {
 </script>
 
 <template>
-    <div
-        class="icon moving w-[50px] h-[50px] relative p-2.5 cursor-pointer flex justify-center"
-        :data-name="name"
-        :aria-label="name"
-        :title="name"
-        @click="iconClick"
-        @auxclick="openApp(name)"
-        @contextmenu.prevent="rClick"
-    >
+    <div class="icon moving w-[50px] h-[50px] relative p-2.5 cursor-pointer flex justify-center" :data-name="name"
+        :aria-label="name" :title="name" @click="iconClick" @auxclick="openApp(name)" @contextmenu.prevent="rClick">
         <img class="-mt-0.5 w-[25px] h-[25px]" :src="icon" :alt="name" draggable="false" />
 
         <div class="app-open-indicator" :class="{ active: openInstances.length > 0 }"></div>

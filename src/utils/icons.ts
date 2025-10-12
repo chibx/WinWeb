@@ -6,7 +6,7 @@ export const ICONS = {
     "arrow-left": "material-symbols:arrow-left-alt-rounded",
     circle: "svg-spinners:ring-resize",
     spinner: "svg-spinners:6-dots-rotate",
-    online: "material-symbols:wifsharp",
+    online: "material-symbols:wifi",
     offline: "carbon:cloud-offline",
     globe: "solar:global-outline",
     "battery-charging": "bi:battery-charging",
@@ -21,4 +21,5 @@ export const ICONS = {
     restore: "cil:window-restore",
     close: "material-symbols:close",
     "plus-r": "material-symbols:add-2-rounded",
+    search: "material-symbols:search-rounded",
 } as const;

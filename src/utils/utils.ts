@@ -6,6 +6,7 @@ import { reactive, ref } from "vue";
 
 export const showLogin = ref(false);
 export const isLoginSuccess = ref(false);
+export const startMenuIconRef = ref<HTMLElement>(); // This is only to ensure that during HMR updates i dont store an old copy
 export const totalUsers = ref<User[]>([]);
 export const desktopIcons = new Set<DesktopIconWithFocus>();
 export const focusedIcons = new Set<DesktopIconWithFocus>();
@@ -38,7 +39,7 @@ export function createHandler<T = boolean>(): [Set<() => PromiseOrNot<T>>, Funct
             listeners.add(func);
 
             return () => {
-                listeners.delete(func!);
+                listeners.delete(func as () => PromiseOrNot<T>);
                 func = undefined;
             };
         },

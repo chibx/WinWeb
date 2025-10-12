@@ -5,13 +5,14 @@ import { useDesktop } from "@/stores/desktop";
 import { useNow, useDateFormat, useEventListener } from "@vueuse/core";
 import { rClick, stubTaskbarIcons } from "@/utils/desktop";
 import { useTemplateRef, computed, unref, nextTick, watch, onMounted } from "vue";
-import { battery, delay } from "@/utils/utils";
+import { battery, delay, startMenuIconRef as _iconRef } from "@/utils/utils";
 import { ICONS } from "@/utils/icons";
 import { Icon } from "@iconify/vue";
 const ICON_SIZE = 50; // 50px
 // const SPACE_AFTER_RIGHT_BAR = 16; // 16px
 
 const desktop = useDesktop();
+const startMenuIconRef = _iconRef;
 
 // const taskbarEl = useTemplateRef("taskbar");
 const innerBar = useTemplateRef("taskbar-inner");
@@ -37,7 +38,7 @@ useEventListener(document, "pointerdown", (ev) => {
         focusedTaskbarIcon = (ev.target as HTMLElement).closest(".icon");
         if (!focusedTaskbarIcon) return;
         initialClientX = ev.clientX;
-        initialElX = focusedTaskbarIcon!.getBoundingClientRect().left;
+        initialElX = focusedTaskbarIcon.getBoundingClientRect().left;
         taskbarIconIndex = Array.from(unref(innerBar)?.querySelectorAll(".icon") || []).findIndex(
             (el) => el === focusedTaskbarIcon,
         );
@@ -65,7 +66,9 @@ useEventListener(document, "pointerup", async () => {
     // Update the reactive state
     const taskbarItems = stubTaskbarIcons.value.slice();
     const focusedItem = taskbarItems.splice(taskbarIconIndex, 1);
-    taskbarItems.splice(translateIdx, 0, focusedItem[0]!);
+    if (focusedItem[0]) {
+        taskbarItems.splice(translateIdx, 0, focusedItem[0]);
+    }
     stubTaskbarIcons.value = taskbarItems;
     await nextTick();
     virtualTaskbarIcons.forEach(async (el) => {
@@ -121,20 +124,20 @@ useEventListener(document, "pointermove", (ev) => {
 });
 
 // TODO Handle positioning the taskbar on different screens
-function animateBar(dur = 0) {
+function animateBar(dur: number) {
     const taskbarWrapEl = document.querySelector("#task-wrapper");
     if (!taskbarWrapEl) {
         return;
     }
     const style = isCentered.value
         ? {
-              transform: ["translateX(0)", "translateX(-50%)"],
-              left: ["0", "50%"],
-          }
+            transform: ["translateX(0)", "translateX(-50%)"],
+            left: ["0", "50%"],
+        }
         : {
-              transform: ["translateX(-50%)", "translateX(0)"],
-              left: ["50%", "0"],
-          };
+            transform: ["translateX(-50%)", "translateX(0)"],
+            left: ["50%", "0"],
+        };
 
     animate(
         taskbarWrapEl,
@@ -145,46 +148,41 @@ function animateBar(dur = 0) {
     );
 }
 
+function toggleTaskbarPos() {
+    desktop.config.taskbar.iconPosition = desktop.config.taskbar.iconPosition == "center" ? "left" : "center";
+}
+
 watch(isCentered, async () => {
     animateBar(0.3);
+    console.log("Animated")
 });
 
 onMounted(() => {
-    animateBar();
+    animateBar(0.3);
 });
 </script>
 
 <template>
-    <div
-        id="taskbar"
-        ref="taskbar"
-        class="fixed z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none"
-        @contextmenu.prevent=""
-    >
+    <div id="taskbar" ref="taskbar"
+        class="fixed flex gap-2.5 z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none"
+        @contextmenu.prevent="">
         <div class="w-full">
-            <div id="task-wrapper" class="h-full pl-2.5 flex items-center gap-0.5 absolute top-1/2 -translate-y-1/2">
-                <WindowsTaskBarIcon
-                    class="windows-start-icon"
-                    name="Start"
-                    icon="/icons/windows_11.svg"
-                    :r-click="rClick"
-                />
+            <div id="task-wrapper" class="w-fit h-full relative pl-2.5 flex items-center gap-0.5">
+                <WindowsTaskBarIcon ref="startMenuIconRef" class="windows-start-icon" name="Start"
+                    icon="/icons/windows_11.svg" :r-click="rClick" />
 
                 <WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :r-click="rClick" />
+                <WindowsTaskBarIcon name="Toggle Align" icon="/icons/home.svg" :r-click="rClick"
+                    @click="toggleTaskbarPos" />
 
                 <div id="taskbar-inner" ref="taskbar-inner" class="flex items-center">
-                    <WindowsTaskBarIcon
-                        v-for="{ icon, name, rClick } in stubTaskbarIcons"
-                        :key="name"
-                        :name="name"
-                        :icon="icon"
-                        :r-click="rClick"
-                    />
+                    <WindowsTaskBarIcon v-for="{ icon, name, rClick: rC } in stubTaskbarIcons" :key="name" :name="name"
+                        :icon="icon" :r-click="rC" />
                 </div>
             </div>
         </div>
 
-        <div ref="taskbar-right" class="taskbar-right h-full flex gap-[5px] absolute right-4 top-1/2 -translate-y-1/2">
+        <div ref="taskbar-right" class="taskbar-right flex items-center gap-[5px]">
             <div class="chevron-ic">
                 <Icon :icon="ICONS['chevron-up']" />
             </div>
@@ -196,15 +194,12 @@ onMounted(() => {
 
                 <!-- :title="charging ? `${chargingTime} ${level * 100}%` : `${dischargingTime} ${level * 100}%`" -->
                 <div :title="`${level * 100}% left`">
-                    <Icon
-                        :icon="
-                            charging
-                                ? ICONS['battery-charging']
-                                : level > 0.75
-                                  ? ICONS['battery']
-                                  : ICONS['battery-half']
-                        "
-                    />
+                    <Icon :icon="charging
+                        ? ICONS['battery-charging']
+                        : level > 0.75
+                            ? ICONS['battery']
+                            : ICONS['battery-half']
+                        " />
                 </div>
 
                 <div>
