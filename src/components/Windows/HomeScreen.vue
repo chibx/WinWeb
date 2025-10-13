@@ -14,8 +14,10 @@ import { getSystemBackgrounds } from "@/utils/idb/backgounds";
 import { desktopIcons, keyboardKeys } from "@/utils/utils";
 import { useEventListener, useLocalStorage, useObjectUrl } from "@vueuse/core";
 import { onMounted, ref, unref, useTemplateRef } from "vue";
+import { useStartMenu } from "@/stores/startmenu";
 
 const desktop = useDesktop();
+const startMenu = useStartMenu();
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0]?.uid);
 const bg = await idb.get("backgrounds", lastBg.value || "");
 const background = useObjectUrl(bg?.data);
@@ -129,25 +131,45 @@ onMounted(() => {
 
 <template>
     <div ref="home" :style="desktop.desktopVars" class="text-white">
-        <div id="home-screen" ref="home-screen"
+        <div
+            id="home-screen"
+            ref="home-screen"
             class="select-none h-full w-full fixed top-0 left-0 overflow-hidden bg-blue-950"
-            :style="{ backgroundImage: background && `url(${background})` }">
+            :style="{ backgroundImage: background && `url(${background})` }"
+        >
             <WindowsDragPane :can-drag="validator" :on-move="onDrag">
                 <div id="desk-house" class="h-full py-2.5">
-                    <WindowsDesktopIcon v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)" :key="name" :name
-                        :icon :r-click></WindowsDesktopIcon>
+                    <WindowsDesktopIcon
+                        v-for="{ icon, name, rClick } in stubDesktopIcons.slice(0, 5)"
+                        :key="name"
+                        :name
+                        :icon
+                        :r-click
+                    ></WindowsDesktopIcon>
                 </div>
             </WindowsDragPane>
         </div>
 
         <TransitionGroup :css="false">
             <ApplicationWindowWrapper
-                v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows" :id="id"
-                :key="id" :name="name" :coords="coords" :z-index="zIndex" :is-active="isActive"
-                :is-minimized="isMinimized" :is-maximized="isMaximized" :props="props" />
+                v-for="{ id, coords, isActive, isMinimized, name, props, zIndex, isMaximized } in openWindows"
+                :id="id"
+                :key="id"
+                :name="name"
+                :coords="coords"
+                :z-index="zIndex"
+                :is-active="isActive"
+                :is-minimized="isMinimized"
+                :is-maximized="isMaximized"
+                :props="props"
+            />
         </TransitionGroup>
 
-        <WindowsStartMenu open />
+        <Transition name="stm">
+            <Suspense>
+                <WindowsStartMenu v-show="startMenu.isOpen" />
+            </Suspense>
+        </Transition>
         <WindowsTaskBar />
     </div>
 </template>
@@ -157,5 +179,22 @@ onMounted(() => {
     background-repeat: no-repeat;
     background-size: cover;
     /* z-index: 1; */
+}
+
+.stm-enter-active,
+.stm-leave-active {
+    transition: all 0.3s;
+}
+
+.stm-enter-from,
+.stm-leave-to {
+    opacity: 0;
+    transform: translateY(100px);
+}
+
+.stm-enter-to,
+.stm-leave-from {
+    opacity: 1;
+    transform: translateY(0px);
 }
 </style>

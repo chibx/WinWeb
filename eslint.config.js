@@ -31,6 +31,8 @@ export default defineConfig(
             "vue/html-indent": "off",
             "vue/max-attributes-per-line": "off",
             "vue/html-closing-bracket-newline": "off",
+            "vue/valid-v-on": "off",
+            "@typescript-eslint/no-unused-vars": "off",
         },
     },
 );

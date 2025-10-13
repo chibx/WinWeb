@@ -1,5 +1,5 @@
 {
-    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "extends": "@vue/tsconfig/tsconfig.json",
     "include": [
         "env.d.ts",
         "src/**/*",
@@ -15,8 +15,6 @@
     "compilerOptions": {
         "module": "ESNext",
         "moduleResolution": "Bundler",
-        "types": [],
-        "checkJs": true,
         "strict": true,
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "paths": {

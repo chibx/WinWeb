@@ -1,24 +1,27 @@
 <script lang="ts" setup>
 import { animate } from "motion";
 import WindowsTaskBarIcon from "@/components/Windows/TaskBarIcon.vue";
-import { useDesktop } from "@/stores/desktop";
 import { useNow, useDateFormat, useEventListener } from "@vueuse/core";
 import { rClick, stubTaskbarIcons } from "@/utils/desktop";
 import { useTemplateRef, computed, unref, nextTick, watch, onMounted } from "vue";
-import { battery, delay, startMenuIconRef as _iconRef } from "@/utils/utils";
+import { battery, delay } from "@/utils/utils";
 import { ICONS } from "@/utils/icons";
 import { Icon } from "@iconify/vue";
+import { useTaskbar } from "@/stores/taskbar";
+import { useStartMenu } from "@/stores/startmenu";
+import { storeToRefs } from "pinia";
 const ICON_SIZE = 50; // 50px
 // const SPACE_AFTER_RIGHT_BAR = 16; // 16px
 
-const desktop = useDesktop();
-const startMenuIconRef = _iconRef;
+const taskbar = useTaskbar();
+const startMenu = useStartMenu();
+const { startMenuIcon: startMenuIconRef } = storeToRefs(startMenu);
 
 // const taskbarEl = useTemplateRef("taskbar");
 const innerBar = useTemplateRef("taskbar-inner");
 // const rightBar = useTemplateRef("taskbar-right");
 
-const isCentered = computed(() => desktop.config.taskbar.iconPosition === "center");
+const isCentered = computed(() => taskbar.config.iconPosition === "center");
 const { charging, level } = battery;
 const now = useNow();
 const taskbarTime = useDateFormat(now, "h:mm A");
@@ -131,13 +134,13 @@ function animateBar(dur: number) {
     }
     const style = isCentered.value
         ? {
-            transform: ["translateX(0)", "translateX(-50%)"],
-            left: ["0", "50%"],
-        }
+              transform: ["translateX(0)", "translateX(-50%)"],
+              left: ["0", "50%"],
+          }
         : {
-            transform: ["translateX(-50%)", "translateX(0)"],
-            left: ["50%", "0"],
-        };
+              transform: ["translateX(-50%)", "translateX(0)"],
+              left: ["50%", "0"],
+          };
 
     animate(
         taskbarWrapEl,
@@ -149,12 +152,11 @@ function animateBar(dur: number) {
 }
 
 function toggleTaskbarPos() {
-    desktop.config.taskbar.iconPosition = desktop.config.taskbar.iconPosition == "center" ? "left" : "center";
+    taskbar.config.iconPosition = taskbar.config.iconPosition == "center" ? "left" : "center";
 }
 
 watch(isCentered, async () => {
     animateBar(0.3);
-    console.log("Animated")
 });
 
 onMounted(() => {
@@ -163,21 +165,39 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="taskbar" ref="taskbar"
+    <div
+        id="taskbar"
         class="fixed flex gap-2.5 z-[999] w-full py-[4px] bottom-0 left-0 place-content-center select-none"
-        @contextmenu.prevent="">
+        :style="taskbar.taskbarVars"
+        @contextmenu.prevent=""
+    >
         <div class="w-full">
             <div id="task-wrapper" class="w-fit h-full relative pl-2.5 flex items-center gap-0.5">
-                <WindowsTaskBarIcon ref="startMenuIconRef" class="windows-start-icon" name="Start"
-                    icon="/icons/windows_11.svg" :r-click="rClick" />
+                <WindowsTaskBarIcon
+                    ref="startMenuIconRef"
+                    class="windows-start-icon"
+                    name="Start"
+                    icon="/icons/windows_11.svg"
+                    :r-click="rClick"
+                    @click="startMenu.isOpen = !startMenu.isOpen"
+                />
 
                 <WindowsTaskBarIcon name="Microsoft Copilot" icon="/icons/microsoft-copilot.svg" :r-click="rClick" />
-                <WindowsTaskBarIcon name="Toggle Align" icon="/icons/home.svg" :r-click="rClick"
-                    @click="toggleTaskbarPos" />
+                <WindowsTaskBarIcon
+                    name="Toggle Align"
+                    icon="/icons/home.svg"
+                    :r-click="rClick"
+                    @click="toggleTaskbarPos"
+                />
 
                 <div id="taskbar-inner" ref="taskbar-inner" class="flex items-center">
-                    <WindowsTaskBarIcon v-for="{ icon, name, rClick: rC } in stubTaskbarIcons" :key="name" :name="name"
-                        :icon="icon" :r-click="rC" />
+                    <WindowsTaskBarIcon
+                        v-for="{ icon, name, rClick: rC } in stubTaskbarIcons"
+                        :key="name"
+                        :name="name"
+                        :icon="icon"
+                        :r-click="rC"
+                    />
                 </div>
             </div>
         </div>
@@ -194,12 +214,15 @@ onMounted(() => {
 
                 <!-- :title="charging ? `${chargingTime} ${level * 100}%` : `${dischargingTime} ${level * 100}%`" -->
                 <div :title="`${level * 100}% left`">
-                    <Icon :icon="charging
-                        ? ICONS['battery-charging']
-                        : level > 0.75
-                            ? ICONS['battery']
-                            : ICONS['battery-half']
-                        " />
+                    <Icon
+                        :icon="
+                            charging
+                                ? ICONS['battery-charging']
+                                : level > 0.75
+                                  ? ICONS['battery']
+                                  : ICONS['battery-half']
+                        "
+                    />
                 </div>
 
                 <div>

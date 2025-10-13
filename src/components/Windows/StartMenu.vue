@@ -1,19 +1,41 @@
 <script lang="ts" setup>
-import { startMenuStyles, useDesktop } from "@/stores/desktop";
-import type { StartMenuProps } from "@/types/desktop";
+import { useTaskbar } from "@/stores/taskbar";
+import { useStartMenu } from "@/stores/startmenu";
 import { ICONS } from "@/utils/icons";
-import { delay, startMenuIconRef } from "@/utils/utils";
+import { delay } from "@/utils/utils";
 import { Icon } from "@iconify/vue";
 import { useElementBounding } from "@vueuse/core";
-import { computed, onMounted, ref, type CSSProperties } from "vue";
+import { computed, onMounted, type CSSProperties } from "vue";
+import { watch } from "vue";
 
-defineProps<StartMenuProps>();
+// defineProps<StartMenuProps>();
 
 // Access start menu icon
 // const startMenuIcon = ref<HTMLElement | null>(null);
-const canShow = ref(false)
+const taskbar = useTaskbar();
+const startMenu = useStartMenu();
 // const { left, update } = useElementBounding(startMenuIcon);
-const { left, update } = useElementBounding(startMenuIconRef);
+const { left, update } = useElementBounding(() => startMenu.startMenuIcon);
+
+watch(
+    () => taskbar.config.iconPosition,
+    () => {
+        // let id = 0;
+        // const now = performance.now();
+        // function repaint(timestamp: number) {
+        //     if (timestamp - now >= 300) {
+        //         return;
+        //     }
+
+        //     update();
+        //     requestAnimationFrame(repaint);
+        // }
+
+        // requestAnimationFrame(repaint);
+
+        delay(350).then(update);
+    },
+);
 // watch(
 //     left,
 //     () => {
@@ -22,19 +44,17 @@ const { left, update } = useElementBounding(startMenuIconRef);
 //     { immediate: true },
 // );
 
-const desktop = useDesktop()
-
 // TODO Handle the case of when users change taskbar position
 const trueLeft = computed(() => {
-    console.log("Left: ", left.value)
-    return desktop.config.taskbar.iconPosition === "center" ? left.value : left.value + 20
-})
+    console.log("Left: ", left.value);
+    return taskbar.config.iconPosition === "center" ? left.value : left.value + 20;
+});
 
 const bgStyles = computed<CSSProperties>(() => {
-    if (startMenuStyles.gradient) {
+    if (startMenu.styles.gradient) {
         return {
             // TODO:  Make the gradient possibly and array of gradients
-            backgroundImage: startMenuStyles.gradient,
+            backgroundImage: startMenu.styles.gradient,
         };
     }
     // const [r, g, b] = startMenuStyles.bgColor;
@@ -45,24 +65,26 @@ const bgStyles = computed<CSSProperties>(() => {
 });
 
 onMounted(() => {
-    // startMenuIcon.value = document.querySelector<HTMLElement>(".windows-start-icon");
     delay(100).then(() => {
-        update()
-        canShow.value = true
-    })
+        update();
+    });
 });
 </script>
 
 <template>
-    <div v-if="canShow && open" class="start-menu w-[600px] h-150 rounded-xl p-5" :style="{
-        position: 'absolute',
-        left: trueLeft + 'px',
-        bottom: '70px',
-        ...bgStyles,
-    }">
+    <div
+        class="start-menu w-[600px] h-150 rounded-xl p-5"
+        :style="{
+            position: 'absolute',
+            // left: trueLeft + 'px',
+            transform: `translateX(${trueLeft}px)`,
+            bottom: '70px',
+            ...bgStyles,
+        }"
+    >
         <div class="flex flex-col gap-5">
             <div class="relative">
-                <input type="text" class="start-search">
+                <input type="text" class="start-search" />
                 <Icon class="absolute" :icon="ICONS['search']" />
             </div>
         </div>

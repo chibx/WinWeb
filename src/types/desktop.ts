@@ -18,14 +18,14 @@ export type DesktopIcon = {
 
 export type DesktopIconWithFocus = [Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean, boolean>];
 
-export type DesktopConfig = {
-    taskbar: {
-        position: "top" | "right" | "bottom" | "left";
-        iconPosition: "center" | "left";
-        bgColor: string;
-        iconHoverColor: string;
-        shouldHide: boolean;
-    };
+export type DesktopConfig = object;
+
+export type TaskBarConfig = {
+    position: "top" | "right" | "bottom" | "left";
+    iconPosition: "center" | "left";
+    bgColor: string;
+    iconHoverColor: string;
+    shouldHide: boolean;
 };
 
 export type DesktopCoords = {
@@ -78,6 +78,6 @@ export type StartMenuStyles = {
     gradient?: string;
 };
 
-export type StartMenuProps = {
-    open: boolean;
-};
+// export type StartMenuProps = {
+//     open: boolean;
+// };
