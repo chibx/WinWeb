@@ -20,34 +20,14 @@ const { left, update } = useElementBounding(() => startMenu.startMenuIcon);
 watch(
     () => taskbar.config.iconPosition,
     () => {
-        // let id = 0;
-        // const now = performance.now();
-        // function repaint(timestamp: number) {
-        //     if (timestamp - now >= 300) {
-        //         return;
-        //     }
-
-        //     update();
-        //     requestAnimationFrame(repaint);
-        // }
-
-        // requestAnimationFrame(repaint);
-
         delay(350).then(update);
     },
 );
-// watch(
-//     left,
-//     () => {
-//         console.log(left.value);
-//     },
-//     { immediate: true },
-// );
 
 // TODO Handle the case of when users change taskbar position
 const trueLeft = computed(() => {
     console.log("Left: ", left.value);
-    return taskbar.config.iconPosition === "center" ? left.value : left.value + 20;
+    return taskbar.config.iconPosition === "center" ? left.value - 100 : left.value + 20;
 });
 
 const bgStyles = computed<CSSProperties>(() => {
@@ -62,12 +42,6 @@ const bgStyles = computed<CSSProperties>(() => {
     return {
         // backgroundColor: mat2Color(r, g, b, startMenuStyles.opacity),
     };
-});
-
-onMounted(() => {
-    delay(100).then(() => {
-        update();
-    });
 });
 </script>
 
