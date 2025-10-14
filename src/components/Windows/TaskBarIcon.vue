@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { getAppWindows, openApp } from "@/applications";
-import type { TaskBarIcon } from "@/types/desktop";
+import type { TaskBarIcon } from "@/types/taskbar";
 import { computed } from "vue";
 const props = defineProps<TaskBarIcon>();
 const openWindows = getAppWindows();
