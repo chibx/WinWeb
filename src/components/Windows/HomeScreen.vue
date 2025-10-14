@@ -167,7 +167,7 @@ onMounted(() => {
 
         <Transition name="stm">
             <Suspense>
-                <WindowsStartMenu v-show="startMenu.isOpen" />
+                <WindowsStartMenu v-if="startMenu.isOpen" />
             </Suspense>
         </Transition>
         <WindowsTaskBar />
@@ -190,11 +190,5 @@ onMounted(() => {
 .stm-leave-to {
     opacity: 0;
     transform: translateY(100px);
-}
-
-.stm-enter-to,
-.stm-leave-from {
-    opacity: 1;
-    transform: translateY(0px);
 }
 </style>
