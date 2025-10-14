@@ -2,7 +2,7 @@
 // import type { ComponentOptionsMixin, ComputedOptions, DefineComponent, Directive, EmitsOptions, MethodOptions, PublicProps, SlotsType } from "vue"
 
 import type { DefineComponent, Ref } from "vue";
-import type { TaskBarMenu } from "@/types/desktop";
+import type { TaskBarMenu } from "@/types/taskbar";
 
 export type Application = {
     /** Name of the Application */
