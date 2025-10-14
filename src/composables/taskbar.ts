@@ -1,9 +1,11 @@
 import { TASKBAR_ICON_SIZE } from "@/utils/constants";
 import { stubTaskbarIcons } from "@/utils/desktop";
 import { useEventListener } from "@vueuse/core";
-import { delay } from "motion";
+import { delay } from "@/utils/utils";
 import { unref, nextTick, type Ref } from "vue";
 
+// I have forgotten what this does, my bad for not documenting it properly before
+// It works so dont touch it for now
 export function useTaskbarIconDrag(innerBar: Ref<HTMLElement | null>) {
     let initialClientX = 0;
     let initialElX = 0;

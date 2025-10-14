@@ -7,14 +7,15 @@ import WindowsTaskBar from "@/components/Windows/TaskBar.vue";
 
 import { getAppWindows } from "@/applications/index";
 import { useDesktop } from "@/stores/desktop";
+import { useStartMenu } from "@/stores/startmenu";
 import type { DragPaneCoords } from "@/types/desktop";
 import { stubDesktopIcons } from "@/utils/desktop";
 import { idb } from "@/utils/idb";
 import { getSystemBackgrounds } from "@/utils/idb/backgounds";
 import { desktopIcons, keyboardKeys } from "@/utils/utils";
+import { onBeforeEnter, onEnter, onLeave } from "@/utils/startmenu";
 import { useEventListener, useLocalStorage, useObjectUrl } from "@vueuse/core";
 import { onMounted, ref, unref, useTemplateRef } from "vue";
-import { useStartMenu } from "@/stores/startmenu";
 
 const desktop = useDesktop();
 const startMenu = useStartMenu();
@@ -165,7 +166,7 @@ onMounted(() => {
             />
         </TransitionGroup>
 
-        <Transition name="stm">
+        <Transition name="stm" :css="false" @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave">
             <Suspense>
                 <WindowsStartMenu v-if="startMenu.isOpen" />
             </Suspense>
@@ -181,14 +182,13 @@ onMounted(() => {
     /* z-index: 1; */
 }
 
-.stm-enter-active,
+/*.stm-enter-active,
 .stm-leave-active {
     transition: all 0.3s;
 }
 
 .stm-enter-from,
 .stm-leave-to {
-    opacity: 0;
     transform: translateY(100px);
-}
+}*/
 </style>

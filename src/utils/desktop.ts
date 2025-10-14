@@ -1,4 +1,5 @@
-import type { DesktopIcon, TaskBarIcon, DesktopIconWithFocus } from "@/types/desktop";
+import type { DesktopIcon, DesktopIconWithFocus } from "@/types/desktop";
+import type { TaskBarIcon } from "@/types/taskbar";
 import { type Ref, shallowRef } from "vue";
 
 export const rClick = async () => [];
@@ -214,8 +215,6 @@ export const stubTaskbarIcons: Ref<TaskBarIcon[]> = shallowRef([
     },
 ]);
 
-export function convertToGrid(
-    desktopIcons: Set<DesktopIconWithFocus>,
-): ((DesktopIconWithFocus | undefined)[] | undefined)[] {
-    return (desktopIcons.size, []);
+export function convertToGrid(desktopIcons: Set<DesktopIconWithFocus>): DesktopIconWithFocus[][] {
+    return [Array.from(desktopIcons)];
 }

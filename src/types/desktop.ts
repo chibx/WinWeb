@@ -1,12 +1,5 @@
 import type { Ref, ShallowRef } from "vue";
 
-export type TaskBarIcon = {
-    name: string;
-    icon: string;
-    pinned?: boolean;
-    rClick(): Promise<TaskBarMenu[]>;
-};
-
 export type DesktopIcon = {
     /** Name of the resource */
     name: string;
@@ -17,16 +10,6 @@ export type DesktopIcon = {
 };
 
 export type DesktopIconWithFocus = [Readonly<ShallowRef<HTMLElement | null>>, Ref<boolean, boolean>];
-
-export type DesktopConfig = object;
-
-export type TaskBarConfig = {
-    position: "top" | "right" | "bottom" | "left";
-    iconPosition: "center" | "left";
-    bgColor: string;
-    iconHoverColor: string;
-    shouldHide: boolean;
-};
 
 export type DesktopCoords = {
     left: number;
@@ -49,17 +32,6 @@ export type Windows = {
     /** Unique ID of the instance (Obviously gonna be the key) */
     id: string;
     isMini: boolean;
-};
-
-export type TaskBarMenu = {
-    group: string;
-    fields: TaskBarMenuField[];
-};
-
-type TaskBarMenuField = {
-    name: string;
-    title?: string;
-    onclick(): void;
 };
 
 export type DesktopIconMenu = {

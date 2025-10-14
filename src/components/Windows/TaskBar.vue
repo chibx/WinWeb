@@ -11,6 +11,7 @@ import { useTaskbar } from "@/stores/taskbar";
 import { useStartMenu } from "@/stores/startmenu";
 import { storeToRefs } from "pinia";
 import { useTaskbarIconDrag } from "@/composables/taskbar";
+import { useSettings } from "@/stores/settings";
 
 const taskbar = useTaskbar();
 const startMenu = useStartMenu();

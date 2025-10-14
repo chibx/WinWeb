@@ -4,18 +4,23 @@ import { useStartMenu } from "@/stores/startmenu";
 import { ICONS } from "@/utils/icons";
 import { delay } from "@/utils/utils";
 import { Icon } from "@iconify/vue";
-import { useElementBounding } from "@vueuse/core";
+import { onClickOutside, useElementBounding } from "@vueuse/core";
 import { computed, onMounted, type CSSProperties } from "vue";
 import { watch } from "vue";
+import { ref } from "vue";
 
 // defineProps<StartMenuProps>();
 
 // Access start menu icon
-// const startMenuIcon = ref<HTMLElement | null>(null);
+const startMenuEl = ref<HTMLElement | null>(null);
 const taskbar = useTaskbar();
 const startMenu = useStartMenu();
 // const { left, update } = useElementBounding(startMenuIcon);
 const { left, update } = useElementBounding(() => startMenu.startMenuIcon);
+update();
+onClickOutside(startMenuEl, () => {
+    startMenu.isOpen = false;
+});
 
 watch(
     () => taskbar.config.iconPosition,
@@ -26,7 +31,6 @@ watch(
 
 // TODO Handle the case of when users change taskbar position
 const trueLeft = computed(() => {
-    console.log("Left: ", left.value);
     return taskbar.config.iconPosition === "center" ? left.value - 100 : left.value + 20;
 });
 
@@ -47,6 +51,7 @@ const bgStyles = computed<CSSProperties>(() => {
 
 <template>
     <div
+        ref="startMenuEl"
         class="start-menu w-[600px] h-150 rounded-xl p-5"
         :style="{
             position: 'absolute',
@@ -58,8 +63,8 @@ const bgStyles = computed<CSSProperties>(() => {
     >
         <div class="flex flex-col gap-5">
             <div class="relative">
-                <input type="text" class="start-search" />
-                <Icon class="absolute" :icon="ICONS['search']" />
+                <input name="start-search" type="text" class="start-search" placeholder="Search for anything..." />
+                <Icon class="absolute text-blue-600 left-2.5 top-1/2 -translate-y-1/2" :icon="ICONS['search']" />
             </div>
         </div>
     </div>
@@ -76,12 +81,25 @@ const bgStyles = computed<CSSProperties>(() => {
 
     background-color: #f1f1f1;
     box-shadow:
-        inset 15px 0px 80px #929292ad,
-        inset -15px 0px 80px #929292ad;
+        inset 10px 0px 50px #929292ad,
+        inset -10px 0px 50px #929292ad;
 }
 
 .start-search {
     width: 100%;
-    border: none;
+    /*border: none;*/
+    color: black;
+    outline: none;
+    background-color: white;
+    padding: 5px 20px 5px 30px;
+    /*border-radius: 0 0 10px 10px;*/
+}
+
+.start-search::placeholder {
+    color: grey;
+}
+
+.start-search:focus {
+    border-bottom: 2px solid #006dff;
 }
 </style>
