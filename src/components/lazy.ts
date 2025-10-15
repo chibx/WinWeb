@@ -12,21 +12,9 @@ async function loadHomeScreen() {
         console.log("Loaded!!!");
         isHomeScreenLoading.value = false;
     }
-    // return import("@/components/Windows/HomeScreen.vue")
-    //   .then(
-    //       /* @__PURE__ */ async (cmp) => {
-    //           // isHomeScreenLoading.value = false;
-    //           return cmp;
-    //       },
-    //   )
-    //   .finally(
-    //       /* @__PURE__ */ () => {
-    //           isHomeScreenLoading.value = false;
-    //       },
-    //   );
 }
 
 const LazyLoginWindowsForm = defineAsyncComponent(() => import("@/components/Login/WindowsForm.vue"));
-const LazyWindowsHomeScreen = defineAsyncComponent(/* @__PURE__ */ loadHomeScreen);
+const LazyWindowsHomeScreen = defineAsyncComponent(loadHomeScreen);
 
 export { LazyLoginWindowsForm, LazyWindowsHomeScreen };
