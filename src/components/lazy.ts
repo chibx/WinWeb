@@ -27,6 +27,6 @@ async function loadHomeScreen() {
 }
 
 const LazyLoginWindowsForm = defineAsyncComponent(() => import("@/components/Login/WindowsForm.vue"));
-const LazyWindowsHomeScreen = defineAsyncComponent(loadHomeScreen);
+const LazyWindowsHomeScreen = defineAsyncComponent(/* @__PURE__ */ loadHomeScreen);
 
 export { LazyLoginWindowsForm, LazyWindowsHomeScreen };
