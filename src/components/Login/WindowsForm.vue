@@ -4,7 +4,7 @@ import ProfileIcon from "@/components/ProfileIcon.vue";
 import LoginAvailableUsers from "@/components/Login/AvailableUsers.vue";
 
 import { storeToRefs } from "pinia";
-import { showLogin, isLoginSuccess, totalUsers, delay } from "@/utils/utils";
+import { showLogin, isLoginSuccess, isHomeScreenLoading, totalUsers, delay } from "@/utils/utils";
 import { useUser } from "@/stores/user";
 
 import { SELECTED_USER } from "@/utils/keys";
@@ -120,7 +120,7 @@ onMounted(() => {
                 </div>
             </Transition>
         </div>
-        <div v-else class="mt-5 flex flex-col items-center justify-center">
+        <div v-else-if="isLoginSuccess && isHomeScreenLoading" class="mt-5 flex flex-col items-center justify-center">
             <div class="text-center font-medium segoe tracking-wider text-3xl">Please Wait</div>
             <Icon :icon="ICONS['spinner']" width="50" height="50" class="mt-6" />
         </div>

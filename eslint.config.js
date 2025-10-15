@@ -33,6 +33,7 @@ export default defineConfig(
             "vue/html-closing-bracket-newline": "off",
             "vue/valid-v-on": "off",
             "@typescript-eslint/no-unused-vars": "off",
+            "vue/singleline-html-element-content-newline": "off",
         },
     },
 );

@@ -32,10 +32,10 @@ watch(isClosed, (newVal) => {
     if (!userGroup.value) return;
     const el = userGroup.value;
     if (newVal) {
-        animate(el!, { y: translateY }, { duration: 0.2 });
+        animate(el, { y: translateY }, { duration: 0.2 });
         return;
     }
-    animate(el!, { y: 0 }, { duration: 0.2 });
+    animate(el, { y: 0 }, { duration: 0.2 });
 });
 </script>
 

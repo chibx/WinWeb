@@ -4,10 +4,11 @@ import { useStartMenu } from "@/stores/startmenu";
 import { ICONS } from "@/utils/icons";
 import { delay } from "@/utils/utils";
 import { Icon } from "@iconify/vue";
-import { onClickOutside, useElementBounding } from "@vueuse/core";
+import { onClickOutside, onKeyPressed, useElementBounding, useEventListener } from "@vueuse/core";
 import { computed, onMounted, type CSSProperties } from "vue";
 import { watch } from "vue";
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 
 // defineProps<StartMenuProps>();
 
@@ -15,19 +16,30 @@ import { ref } from "vue";
 const startMenuEl = ref<HTMLElement | null>(null);
 const taskbar = useTaskbar();
 const startMenu = useStartMenu();
+const { startMenuIcon } = storeToRefs(startMenu);
 // const { left, update } = useElementBounding(startMenuIcon);
-const { left, update } = useElementBounding(() => startMenu.startMenuIcon);
+const { left, update } = useElementBounding(() => startMenuIcon.value);
 update();
-onClickOutside(startMenuEl, () => {
-    startMenu.isOpen = false;
+onClickOutside(
+    startMenuEl,
+    () => {
+        startMenu.isOpen = false;
+    },
+    { ignore: () => [startMenuIcon] },
+);
+
+useEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        startMenu.isOpen = false;
+    }
 });
 
-watch(
-    () => taskbar.config.iconPosition,
-    () => {
-        delay(350).then(update);
-    },
-);
+// watch(
+//     () => taskbar.config.iconPosition,
+//     () => {
+//         delay(350).then(update);
+//     },
+// );
 
 // TODO Handle the case of when users change taskbar position
 const trueLeft = computed(() => {

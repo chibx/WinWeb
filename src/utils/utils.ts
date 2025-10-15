@@ -5,6 +5,7 @@ import { useBattery, useKeyModifier, useWindowSize } from "@vueuse/core";
 import { reactive, ref } from "vue";
 
 export const showLogin = ref(false);
+export const isHomeScreenLoading = ref(false);
 export const isLoginSuccess = ref(false);
 export const totalUsers = ref<User[]>([]);
 export const desktopIcons = new Set<DesktopIconWithFocus>();

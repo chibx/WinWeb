@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { isLoginSuccess, totalUsers, showLogin, delay } from "@/utils/utils";
+import { isLoginSuccess, totalUsers, showLogin, delay, isHomeScreenLoading } from "@/utils/utils";
 
 import LoginWindowsLoading from "@/components/Login/WindowsLoading.vue";
 import LoginLockScreen from "@/components/Login/LockScreen.vue";
 import GettingWindowsReady from "@/components/GettingWindowsReady.vue";
-import WindowsHomeScreen from "@/components/Windows/HomeScreen.vue";
-import { LazyLoginWindowsForm } from "@/components/lazy";
+import { LazyLoginWindowsForm, LazyWindowsHomeScreen } from "@/components/lazy";
 import { useUser } from "@/stores/user";
 import { ref } from "vue";
 import type { User } from "@/types/idb";
@@ -18,7 +17,8 @@ const gettingWindowsReady = ref(true);
 const userStore = useUser();
 const isFirstTime = useLocalStorage("first-time", true);
 const hideLogin = asyncComputed(async () => {
-    const res = isLoginSuccess.value;
+    const res = isLoginSuccess.value && !isHomeScreenLoading.value;
+    console.log(res);
     if (res) {
         await delay(1000);
     }
@@ -84,7 +84,7 @@ function $showLogin() {
 
     <Transition name="fade">
         <Suspense>
-            <WindowsHomeScreen v-if="isLoginSuccess" @contextmenu.prevent="" />
+            <LazyWindowsHomeScreen v-if="isLoginSuccess" @contextmenu.prevent="" />
         </Suspense>
     </Transition>
 </template>
