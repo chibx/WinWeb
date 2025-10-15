@@ -7,7 +7,7 @@
     font-weight: normal;
     src:
         local("Segoe UI Bold"),
-        url("~/assets/fonts/Segoe UI Bold.woff") format("woff");
+        url("@@/assets/fonts/Segoe UI Bold.woff") format("woff");
 }
 
 @font-face {
@@ -16,5 +16,5 @@
     font-weight: normal;
     src:
         local("Segoe UI Regular"),
-        url("~/assets/fonts/Segoe UI.woff") format("woff");
+        url("@@/assets/fonts/Segoe UI.woff") format("woff");
 }
