@@ -8,7 +8,14 @@ import { defineConfig } from "vite";
 // https://vite.dev/config/
 export default defineConfig((m) => {
     return {
-        plugins: [vue(), tailwindcss()],
+        plugins: [
+            vue({
+                features: {
+                    optionsAPI: false,
+                },
+            }),
+            tailwindcss(),
+        ],
         resolve: {
             alias: {
                 "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -16,17 +23,15 @@ export default defineConfig((m) => {
             },
         },
         define: {
-            "import.meta.dev": m.mode == "development",
+            "import.meta.dev": JSON.stringify(m.mode == "development"),
         },
         server: {
             port: 3000,
             allowedHosts: true,
         },
         preview: {
-            port: 3000,
+            port: 3001,
         },
-        build: {
-            target: "es2022",
-        },
+        build: {},
     };
 });

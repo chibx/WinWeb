@@ -8,8 +8,9 @@ import { idb } from "@/utils/idb";
 
 const installedApps: Set<string> = reactive(new Set());
 
-// Install apps found in the installed field in the application IDB table
-try {
+/** Install apps and load their config found in the installedApps field in the application IDB table */
+export async function loadAppsConfig() {
+    // I know that this is not the best approach due to lack of context for the store
     const uid = useUser().currentUser?.uid;
     if (!uid) {
         throw Error("User is null");
@@ -30,8 +31,6 @@ try {
 
         await Promise.all(promises);
     }
-} catch {
-    // TODO Handle this error
 }
 // -------------------------------------------------------------------------
 
@@ -77,13 +76,16 @@ export async function openApp(name: string, data: ApplicationProps = {}) {
 }
 
 async function initializeApp($app: Application) {
-    const promises: Promise<unknown>[] = [];
-    if ($app.config instanceof Function) {
-        promises.push($app.config().then((c) => ($app.config = c)));
-    }
+    // const promises: Promise<unknown>[] = [];
+    // if ($app.config instanceof Function) {
+    //     promises.push($app.config().then((c) => ($app.config = c)));
+    // }
 
-    // TODO Write error case later
-    await Promise.all(promises);
+    // // TODO Write error case later
+    // await Promise.all(promises);
+    if ($app.config instanceof Function) {
+        await $app.config().then((c) => ($app.config = c));
+    }
 }
 
 export function useAppAction() {

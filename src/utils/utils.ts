@@ -1,12 +1,19 @@
 import type { PromiseOrNot } from "@/applications/types";
 import type { DesktopIconWithFocus } from "@/types/desktop";
 import type { User } from "@/types/idb";
-import { useBattery, useKeyModifier, useWindowSize } from "@vueuse/core";
+import { asyncComputed, useBattery, useKeyModifier, useWindowSize } from "@vueuse/core";
 import { reactive, ref } from "vue";
 
-export const showLogin = ref(false);
+export const showLoginForm = ref(false);
 export const isHomeScreenLoading = ref(false);
 export const isLoginSuccess = ref(false);
+export const hideLogin = asyncComputed(async () => {
+    const res = isLoginSuccess.value && !isHomeScreenLoading.value;
+    if (res) {
+        await delay(1000);
+    }
+    return res;
+});
 export const totalUsers = ref<User[]>([]);
 export const desktopIcons = new Set<DesktopIconWithFocus>();
 export const focusedIcons = new Set<DesktopIconWithFocus>();

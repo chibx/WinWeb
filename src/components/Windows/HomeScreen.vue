@@ -5,7 +5,7 @@ import WindowsDragPane from "@/components/Windows/DragPane.vue";
 import WindowsStartMenu from "@/components/Windows/StartMenu.vue";
 import WindowsTaskBar from "@/components/Windows/TaskBar.vue";
 
-import { getAppWindows } from "@/applications/index";
+import { getAppWindows, loadAppsConfig } from "@/applications/index";
 import { useDesktop } from "@/stores/desktop";
 import { useStartMenu } from "@/stores/startmenu";
 import type { DragPaneCoords } from "@/types/desktop";
@@ -25,6 +25,8 @@ const background = useObjectUrl(bg?.data);
 const isPointerDown = ref(false);
 const homeEl = useTemplateRef("home-screen");
 const openWindows = getAppWindows();
+
+loadAppsConfig();
 
 const validator = (ev: MouseEvent) => {
     // Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener

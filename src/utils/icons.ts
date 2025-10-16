@@ -22,4 +22,5 @@ export const ICONS = {
     close: "material-symbols:close",
     "plus-r": "material-symbols:add-2-rounded",
     search: "material-symbols:search-rounded",
+    refresh: "material-symbols:refresh-rounded",
 } as const;

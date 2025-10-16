@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { showLogin } from "@/utils/utils";
+import { showLoginForm } from "@/utils/utils";
 import { formatDate, useEventListener, useNow } from "@vueuse/core";
 import { computed } from "vue";
 
@@ -9,7 +9,7 @@ const dateStr = computed(() => formatDate(now.value, "dddd, MMM DD YYYY"));
 
 useEventListener("keydown", (e) => {
     if (e.code === "Space" || e.key === "Enter") {
-        showLogin.value = true;
+        showLoginForm.value = true;
     }
 });
 </script>

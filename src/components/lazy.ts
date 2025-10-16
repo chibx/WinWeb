@@ -5,11 +5,10 @@ async function loadHomeScreen() {
     isHomeScreenLoading.value = true;
     try {
         const cmp = await import("@/components/Windows/HomeScreen.vue");
+        // Simulate some delay
         await delay(1000);
-        console.log("Loading...");
         return cmp;
     } finally {
-        console.log("Loaded!!!");
         isHomeScreenLoading.value = false;
     }
 }
