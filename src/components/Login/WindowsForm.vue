@@ -56,11 +56,6 @@ onMounted(() => {
 </script>
 
 <template>
-    <!-- <button v-if="!isLoginSuccess" class="px-3 py-2 rounded fixed top-10 left-5" aria-label="Go Back" title="Go Back"
-        @click="showLogin = false">
-        <Icon class="text-white" :name="ICONS['arrow-left']" size="40" />
-    </button> -->
-
     <div class="w-[600px] flex flex-col relative mt-40 gap-5 items-center">
         <ProfileIcon class="login-profile w-[200px] h-[200px]" :src="selectedUser?.avatar" />
         <span class="poppins text-white text-3xl">{{ selectedUser?.userName }}</span>
@@ -124,8 +119,6 @@ onMounted(() => {
             <Icon :icon="ICONS['spinner']" width="50" height="50" />
             <div class="text-center font-medium segoe tracking-wider text-3xl mt-6">Welcome</div>
         </div>
-
-        <!-- svg-spinners:8-dots-rotate -->
     </div>
 
     <LoginAvailableUsers v-if="!isLoginSuccess" :users="totalUsers" class="fixed left-2.5 bottom-7" />

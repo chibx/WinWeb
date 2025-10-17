@@ -3,7 +3,12 @@ export const ICONS = {
     "eye-open": "material-symbols:visibility-outline-rounded",
     "chevron-down": "material-symbols:expand-more",
     "chevron-up": "material-symbols:expand-less",
-    "arrow-left": "material-symbols:arrow-left-alt-rounded",
+    "arrow-up": "solar:arrow-up-linear",
+    "arrow-down": "solar:arrow-down-linear",
+    "arrow-left": "solar:arrow-left-linear",
+    "arrow-right": "solar:arrow-right-linear",
+    scissors: "solar:scissors-linear",
+    house: "material-symbols-light:home-outline-rounded",
     circle: "svg-spinners:ring-resize",
     spinner: "svg-spinners:6-dots-rotate",
     online: "material-symbols:wifi",
@@ -23,4 +28,6 @@ export const ICONS = {
     "plus-r": "material-symbols:add-2-rounded",
     search: "material-symbols:search-rounded",
     refresh: "material-symbols:refresh-rounded",
-} as const;
+};
+
+export const SVG = {};
