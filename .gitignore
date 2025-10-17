@@ -12,6 +12,7 @@ node_modules/
 
 # Optional npm cache directory
 .npm
+tsconfig.tsbuildinfo
 
 # Optional eslint cache
 .eslintcache

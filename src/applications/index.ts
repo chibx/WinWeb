@@ -1,0 +1,143 @@
+import type { Application, ApplicationConfig, ApplicationProps, OpenWindow } from "@/applications/types";
+import { createWindowObject, openWindows } from "@/applications/utils";
+import registry from "./registry/index";
+import { APP_ID } from "@/utils/keys";
+import { inject, reactive } from "vue";
+import { useUser } from "@/stores/user";
+import { idb } from "@/utils/idb";
+
+const installedApps: Set<string> = reactive(new Set());
+
+/** Install apps and load their config found in the installedApps field in the application IDB table */
+export async function loadAppsConfig() {
+    // I know that this is not the best approach due to lack of context for the store
+    const uid = useUser().currentUser?.uid;
+    if (!uid) {
+        throw Error("User is null");
+    }
+    const appTable = await idb.get("apps", IDBKeyRange.only(uid));
+    if (appTable) {
+        (appTable.installedApps as string[]).forEach((e) => installedApps.add(e));
+
+        const promises = registry
+            .filter((e) => installedApps.has(e.name))
+            .map((app) => {
+                return new Promise((res) => {
+                    return initializeApp(app)
+                        .then(() => (app.config as unknown as ApplicationConfig).install())
+                        .then(res);
+                });
+            });
+
+        await Promise.all(promises);
+    }
+}
+// -------------------------------------------------------------------------
+
+export function getAppRegistry() {
+    return registry;
+}
+
+export function getAppByName(name: string) {
+    return registry.find((app) => app.name === name);
+}
+
+export async function getInstalledApps() {
+    return registry.filter((el) => installedApps.has(el.name)) || [];
+}
+
+export async function openApp(name: string, data: ApplicationProps = {}) {
+    const windows = openWindows.value;
+    // This is to enable the developer to focus on a small set of windows
+    if (import.meta.dev && windows.length >= 4) return false;
+    const $app = registry.find((app) => app.name === name);
+    if (!$app) return false; // |Application not found|
+
+    // Initialize once
+    await initializeApp($app);
+
+    if (!installedApps.has($app.name)) {
+        await ($app.config as unknown as ApplicationConfig).install();
+        installedApps.add($app.name);
+    }
+
+    const numberOfInstances = windows.filter((e) => e.name === $app.name).length;
+    // TODO Handle case of multiple files
+    const canOpen = await ($app.config as unknown as ApplicationConfig).canOpen(numberOfInstances, data["opener"]);
+    if (!canOpen.success) {
+        // TODO Consider throwing an error
+        return false;
+    }
+
+    windows.push(createWindowObject(name, { ...data }));
+    openWindows.value = windows.slice();
+    // TODO Maybe I should just test for any nextTick issue
+    return true;
+}
+
+async function initializeApp($app: Application) {
+    // const promises: Promise<unknown>[] = [];
+    // if ($app.config instanceof Function) {
+    //     promises.push($app.config().then((c) => ($app.config = c)));
+    // }
+
+    // // TODO Write error case later
+    // await Promise.all(promises);
+    if ($app.config instanceof Function) {
+        await $app.config().then((c) => ($app.config = c));
+    }
+}
+
+export function useAppAction() {
+    const appWindow = useApp();
+    if (!appWindow) return;
+    return {
+        focus() {
+            blurWindows();
+            appWindow.isActive.value = true;
+        },
+        close() {
+            openWindows.value = openWindows.value.filter((el) => el.id !== appWindow.id);
+        },
+    };
+}
+
+/** This is used to blur the windows in order of the way they were opened and focused */
+function blurWindows() {}
+
+export function useAppId() {
+    return inject(APP_ID);
+}
+
+export function useApp() {
+    const appId = useAppId();
+    if (!appId) return;
+    return openWindows.value.find((el) => el.id === appId);
+}
+
+/** This return the record of all open windows  */
+export function getAppWindows() {
+    return openWindows;
+}
+
+/** This gives a list of open apps by name avoid duplicate  */
+export function getOpenApps() {
+    const set = new Set<string>();
+    const windows = getAppWindows().value;
+
+    windows.forEach((el) => {
+        set.add(el.name);
+    });
+
+    return Array.from(set.keys());
+}
+
+/** @param name The application name. May be undefined */
+export function useAppInstances(name?: string) {
+    if (!name) {
+        name = useApp()?.name;
+    }
+
+    const instances: OpenWindow[] = openWindows.value.filter((el) => el.name === name);
+    return instances;
+}

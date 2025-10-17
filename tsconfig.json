@@ -1,4 +1,25 @@
 {
-  // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json"
+    "extends": "@vue/tsconfig/tsconfig.json",
+    "include": [
+        "env.d.ts",
+        "src/**/*",
+        "src/**/*.vue",
+        "vite.config.*",
+        "vitest.config.*",
+        "cypress.config.*",
+        "nightwatch.conf.*",
+        "playwright.config.*",
+        "eslint.config.*"
+    ],
+    "exclude": ["src/**/tests/*"],
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "paths": {
+            "@/*": ["./src/*"],
+            "@@/*": ["./*"]
+        }
+    }
 }
