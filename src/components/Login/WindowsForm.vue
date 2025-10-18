@@ -117,7 +117,7 @@ onMounted(() => {
         </div>
         <div v-else-if="isLoginSuccess" class="mt-5 flex flex-col items-center justify-center">
             <Icon :icon="ICONS['spinner']" width="50" height="50" />
-            <div class="text-center font-medium segoe tracking-wider text-3xl mt-6">Welcome</div>
+            <div class="text-center font-medium roboto tracking-wider text-3xl mt-6">Welcome</div>
         </div>
     </div>
 

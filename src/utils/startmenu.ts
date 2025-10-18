@@ -17,7 +17,7 @@ export function onEnter(el: Element, done: () => void) {
             // y: [100, 0],
             opacity: 1,
         },
-        { duration: 0.2, onComplete: done },
+        { duration: 0.25, onComplete: done },
     );
 }
 
@@ -30,7 +30,6 @@ export function onLeave(el: Element, done: () => void) {
             // y: 100,
             opacity: 0,
         },
-        { duration: 0.2, onComplete: done },
+        { duration: 0.25, onComplete: done },
     );
-    console.log("Leave");
 }

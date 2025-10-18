@@ -2,35 +2,19 @@ import { openDB } from "idb";
 import type { User, WinWebSchema } from "@/types/idb";
 import { uid } from "uid";
 import { useUser } from "@/stores/user";
+import { initAppTable, initBackgroundTable, initDesktopTable, initFilesTable, initUserTable } from "../schema";
 
 export const idb = await openDB<WinWebSchema>("winweb", 1, {
     upgrade(database) {
-        // User related
-        const users = database.createObjectStore("users", {
-            keyPath: "uid",
-        });
-        users.createIndex("userName", "userName", { unique: true });
-        users.createIndex("uid", "uid", { unique: true });
+        initUserTable(database);
 
-        // File related
-        const files = database.createObjectStore("files", {
-            keyPath: "uid",
-        });
-        files.createIndex("uid", "uid", { unique: true });
+        initFilesTable(database);
 
-        // Background Image Related
-        const backgrounds = database.createObjectStore("backgrounds", {
-            keyPath: "uid",
-        });
-        backgrounds.createIndex("user", "user", { unique: false });
+        initBackgroundTable(database);
 
-        // Application Data Related
-        database.createObjectStore("apps");
+        initAppTable(database);
 
-        // Desktop Data Related
-        database.createObjectStore("desktop", {
-            keyPath: "userId",
-        });
+        initDesktopTable(database);
     },
 });
 
