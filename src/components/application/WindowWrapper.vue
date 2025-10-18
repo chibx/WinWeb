@@ -12,7 +12,7 @@ import { provide } from "vue";
 const props = defineProps<OpenWindow>();
 const appWindowEl = useTemplateRef("window");
 const openWindows = getAppWindows();
-const currentWindow = openWindows.value.find((el) => el.id === props.id)!;
+const currentWindow = openWindows.value.find((el) => el.id === props.id) as OpenWindow;
 const { name, coords, isMaximized, isMinimized } = currentWindow;
 const $app = getAppByName(props.name);
 const instance = $app?.instance as unknown as SpecialComponent;
