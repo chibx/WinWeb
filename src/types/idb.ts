@@ -1,7 +1,7 @@
 import type { DBSchema } from "idb";
 
 export type User = {
-    uid: string;
+    id: number;
     fullName: string;
     userName: string;
     password: string;
@@ -12,7 +12,7 @@ export type User = {
 export type NewUser = Omit<User, "uid" | "isCurrent">;
 
 export type Background = {
-    userId: string /* "system" for all users */;
+    userId: number/* "system" for all users */;
     uid: string;
     data: Blob;
 };
@@ -30,13 +30,25 @@ export type DesktopTable = {
     taskbarIcons: string[];
 };
 
+export enum ResIDX {
+    SHORTCUT = -1,
+    FILE = 1,
+}
+
+type ResourceProps = {
+    id: number;
+    userId: string;
+    name: string;
+    parentId?: number;
+};
+
 export interface WinWebSchema extends DBSchema {
     users: {
         key: number;
-        value: User;
+        value: Omit<User, "id">;
         indexes: {
             userName: string;
-            uid: string;
+            id: number;
         };
     };
     apps: {
@@ -49,19 +61,39 @@ export interface WinWebSchema extends DBSchema {
     };
     files: {
         key: string;
-        value: {
-            uid: string;
-            user: string;
-            name: string;
-            size: number;
-            path: string;
-            isDir: boolean;
-        };
+        value: ResourceProps &
+            (
+                | {
+                      type: ResIDX.FILE;
+                  }
+                | {
+                      type: ResIDX.SHORTCUT;
+                      // `to` points to the real resource
+                      to: number;
+                  }
+            );
         indexes: {
-            uid: string;
-            fullPath: string;
-            path: string;
-            userName: string;
+            id: string;
+            userId: string;
+            name_user_pid: [string, string, number];
+        };
+    };
+    folder: {
+        key: string;
+        value: ResourceProps;
+        indexes: {
+            id: string;
+            user_folderId: [string, number];
+            name_user_pid: [string, string, number];
+        };
+    };
+    file_metadata: {
+        key: string;
+        value: {
+            size: number;
+            modified: Date;
+            created?: Date;
+            accessed?: Date;
         };
     };
     backgrounds: {

@@ -6,6 +6,7 @@ import { animate } from "motion";
 import { APP_EL } from "@/utils/keys";
 import { inject, useTemplateRef, unref, watch } from "vue";
 import { ICONS } from "@/utils/icons";
+import { Icon } from "@iconify/vue";
 
 const tabs = inject(TABS)!;
 const tabKey = inject(TAB_KEY)!;
@@ -76,12 +77,13 @@ function changeTabFocus(e: MouseEvent, key: string) {
 
 <template>
     <div class="tabs-wrapper-cont w-[calc(100%-130px)] flex select-none">
-        <div ref="tabs-wrapper" @wheel.prevent="tabWheel" class="tabs-wrapper overflow-x-auto flex pl-2.5">
+        <div ref="tabs-wrapper" class="tabs-wrapper overflow-x-auto flex pl-2.5" @wheel.prevent="tabWheel">
             <div
-                v-for="({ path, key }, index) in tabs"
-                @click="changeTabFocus($event, key)"
+                v-for="{ path, key } in tabs"
+                :key="key"
                 class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between"
                 :class="{ 'rounded-t-lg active': key === tabKey }"
+                @click="changeTabFocus($event, key)"
             >
                 <div class="flex gap-2.5 items-center">
                     <img

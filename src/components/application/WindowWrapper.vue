@@ -39,7 +39,7 @@ async function requestClose() {
                     transform: ["scale(1)", "scale(0.75)"],
                     opacity: 0,
                 },
-                { duration: 0.2 },
+                { duration: 0.1 },
             );
         }
         openWindows.value = openWindows.value.filter((el) => el.id !== props.id);
@@ -51,28 +51,33 @@ watch(isMinimized, (newVal, _, onCleanup) => {
     if (!appWindowEl.value) return;
 
     const appTaskIconX = getTaskIconX(name);
-    const inBounds = appTaskIconX && appTaskIconX > coords.x && appTaskIconX < coords.x + coords.width;
+    const inBounds = !!appTaskIconX && appTaskIconX > coords.x && appTaskIconX < coords.x + coords.width;
     const { width, height } = screenDimensions;
     const { pushX, pushY } = pushCoords(width, height);
+    const targetX = inBounds ? coords.x : appTaskIconX;
+    const targetY = coords.y + coords.height * 2; // Approximates translateY(200%)
+    const endWidth = isMaximized.value ? coords.width * (width / (coords.width + pushX)) : coords.width;
+    const endHeight = isMaximized.value ? coords.height * (height / (coords.height + pushY)) : coords.height;
+
     const animation = animate(
         appWindowEl.value,
-        {
-            transform: newVal
-                ? [
-                      "scale(1)",
-                      `scale(0) translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ""}`,
-                  ]
-                : [
-                      `translateY(200%)${!inBounds && appTaskIconX ? ` translateX(${appTaskIconX - coords.x}px)` : ""} scale(0.5)`,
-                      isMaximized.value
-                          ? `scaleX(${width / (coords.width + pushX)}) scaleY(${height / (coords.height + pushY)})`
-                          : `scale(1)`,
-                  ],
-            opacity: newVal ? 0 : 1,
-        },
+        newVal
+            ? {
+                  left: `${targetX}px`,
+                  top: `${targetY}px`,
+                  width: "0px",
+                  height: "0px",
+                  opacity: 0,
+              }
+            : {
+                  left: `${coords.x}px`,
+                  top: `${coords.y}px`,
+                  width: `${endWidth}px`,
+                  height: `${endHeight}px`,
+                  opacity: 1,
+              },
         {
             duration: newVal ? 0.35 : 0.2,
-            ease: "linear",
             opacity: {
                 duration: 0.2,
             },
@@ -89,16 +94,24 @@ watch(isMaximized, (newVal, _, onCleanup) => {
     const { width, height } = screenDimensions;
     const { pushX, pushY } = pushCoords(width, height);
 
+    const scaleX = width / (coords.width + pushX);
+    const scaleY = height / (coords.height + pushY);
+
+    const targetLeft = coords.x - (scaleX - 1) * (coords.width / 2);
+    const targetTop = coords.y - (scaleY - 1) * (coords.height / 2);
+    const targetWidth = coords.width * scaleX;
+    const targetHeight = coords.height * scaleY;
+
     const animation = animate(
         appWindowEl.value,
         {
-            transform: newVal
-                ? ["scale(1)", `scaleX(${width / (coords.width + pushX)}) scaleY(${height / (coords.height + pushY)})`]
-                : `scale(1)`,
+            left: newVal ? [`${coords.x}px`, `${targetLeft}px`] : `${coords.x}px`,
+            top: newVal ? [`${coords.y}px`, `${targetTop}px`] : `${coords.y}px`,
+            width: newVal ? [`${coords.width}px`, `${targetWidth}px`] : `${coords.width}px`,
+            height: newVal ? [`${coords.height}px`, `${targetHeight}px`] : `${coords.height}px`,
         },
         {
             duration: 0.1,
-            ease: "linear",
         },
     );
 

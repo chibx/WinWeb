@@ -1,19 +1,24 @@
 import type { WinWebSchema } from "@/types/idb";
 import type { IDBPDatabase } from "idb";
+import { NAME_USER_PID_IDX } from "../idb/files";
 
 export function initUserTable(database: IDBPDatabase<WinWebSchema>) {
     const users = database.createObjectStore("users", {
-        keyPath: "uid",
+        keyPath: "id",
+        autoIncrement: true
     });
     users.createIndex("userName", "userName", { unique: true });
-    users.createIndex("uid", "uid", { unique: true });
+    users.createIndex("id", "id", { unique: true });
 }
 
 export function initFilesTable(database: IDBPDatabase<WinWebSchema>) {
     const files = database.createObjectStore("files", {
-        keyPath: "uid",
+        keyPath: "id",
+        autoIncrement: true,
     });
-    files.createIndex("uid", "uid", { unique: true });
+    files.createIndex("id", "id", { unique: true });
+    files.createIndex("userId", "userId");
+    files.createIndex(NAME_USER_PID_IDX, ["name", "userId", "parentId"], { unique: true });
 }
 
 export function initBackgroundTable(database: IDBPDatabase<WinWebSchema>) {

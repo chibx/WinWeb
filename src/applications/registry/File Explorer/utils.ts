@@ -11,6 +11,10 @@ export const TAB_KEY: InjectionKey<Ref<string>> = Symbol();
 
 export const USERS_PATH = "C:\\Users\\";
 
+export function isValidName(name: string) {
+    return !/[#*\\/="|,`~%@$^&]/.test(name);
+}
+
 export function getDataFromProps(props: ApplicationProps) {
     const { opener } = props;
     if (opener?.type === "file" && opener.path && opener.path.startsWith("C:\\")) {
