@@ -5,25 +5,21 @@ export type User = {
     fullName: string;
     userName: string;
     password: string;
-    avatar: ArrayBuffer | null;
+    avatar: Blob | null;
     isCurrent: boolean;
 };
 
-export type NewUser = Omit<User, "uid" | "isCurrent">;
+export type NewUser = Omit<User, "id" | "isCurrent">;
 
 export type Background = {
-    userId: number/* "system" for all users */;
+    userId: number /* set to `0` for all users */;
     uid: string;
     data: Blob;
 };
 
-export type ApplicationTable =
-    | {
-          installedApps: string[];
-      }
-    | {
-          [key: string]: Record<string, unknown>;
-      };
+export type ApplicationTable = {
+    installedApps: string[];
+};
 
 export type DesktopTable = {
     desktopIcons: string[];
@@ -35,24 +31,30 @@ export enum ResIDX {
     FILE = 1,
 }
 
-type ResourceProps = {
+export type ResourceProps = {
     id: number;
     userId: string;
     name: string;
     parentId?: number;
+    created: Date;
+};
+
+type ResourceIndex = {
+    id: string;
+    name_user_pid: [string, string, number];
 };
 
 export interface WinWebSchema extends DBSchema {
     users: {
         key: number;
-        value: Omit<User, "id">;
+        value: User;
         indexes: {
             userName: string;
             id: number;
         };
     };
     apps: {
-        key: string;
+        key: number;
         value: ApplicationTable;
     };
     desktop: {
@@ -61,7 +63,7 @@ export interface WinWebSchema extends DBSchema {
     };
     files: {
         key: string;
-        value: ResourceProps &
+        value: Omit<ResourceProps, "created"> &
             (
                 | {
                       type: ResIDX.FILE;
@@ -72,19 +74,13 @@ export interface WinWebSchema extends DBSchema {
                       to: number;
                   }
             );
-        indexes: {
-            id: string;
-            userId: string;
-            name_user_pid: [string, string, number];
-        };
+        indexes: ResourceIndex;
     };
     folder: {
         key: string;
         value: ResourceProps;
-        indexes: {
-            id: string;
-            user_folderId: [string, number];
-            name_user_pid: [string, string, number];
+        indexes: ResourceIndex & {
+            user_parentId: [string, number];
         };
     };
     file_metadata: {
@@ -92,8 +88,13 @@ export interface WinWebSchema extends DBSchema {
         value: {
             size: number;
             modified: Date;
-            created?: Date;
-            accessed?: Date;
+            created: Date;
+            accessed: Date;
+            // for fast lookup with indexes
+            parentId: number;
+        };
+        indexes: {
+            file_metadata: number;
         };
     };
     backgrounds: {

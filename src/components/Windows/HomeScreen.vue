@@ -16,9 +16,12 @@ import { desktopIcons, keyboardKeys } from "@/utils/utils";
 import { onBeforeEnter, onEnter, onLeave } from "@/utils/startmenu";
 import { useEventListener, useLocalStorage, useObjectUrl } from "@vueuse/core";
 import { onMounted, ref, unref, useTemplateRef } from "vue";
+import { useUser } from "@/stores/user";
 
 const desktop = useDesktop();
 const startMenu = useStartMenu();
+const user = useUser();
+// Store based on user ID
 const lastBg = useLocalStorage("background", (await getSystemBackgrounds(1))[0]?.uid);
 const bg = await idb.get("backgrounds", lastBg.value || "");
 const background = useObjectUrl(bg?.data);
@@ -26,7 +29,7 @@ const isPointerDown = ref(false);
 const homeEl = useTemplateRef("home-screen");
 const openWindows = getAppWindows();
 
-loadAppsConfig();
+await loadAppsConfig(user.currentUser?.id);
 
 const validator = (ev: MouseEvent) => {
     // Ensure the mouse is really on the home-screen element and not on other apps that did not register the event-listener

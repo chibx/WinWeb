@@ -1,10 +1,11 @@
 import { uid } from "uid";
 import { idb } from ".";
 import type { Background } from "@/types/idb";
+import { SYSTEM_USER } from "../constants";
 
 export const defaultBgs = Array.from({ length: 7 }).map((_, i) => `/backgrounds/bg_${i + 1}.webp`);
 
-export const getUserBackgrounds = async (userId: string) => {
+export const getUserBackgrounds = async (userId: number) => {
     const bgTx = idb.transaction("backgrounds");
     let cursor = await bgTx.objectStore("backgrounds").openCursor();
     const backgrounds: Background[] = [];
@@ -23,7 +24,7 @@ export const getSystemBackgrounds = async (count?: number) => {
     let cursor = await bgTx.objectStore("backgrounds").openCursor();
     const backgrounds: Background[] = [];
     while (cursor) {
-        if (cursor.value && cursor.value.userId == "system") {
+        if (cursor.value && cursor.value.userId == SYSTEM_USER) {
             backgrounds.push(cursor.value);
         }
         cursor = await cursor.continue();
@@ -54,7 +55,7 @@ export async function preloadBackgrounds() {
             fetch(url).then(async (res) => {
                 const blob = await res.blob();
                 return await addBackground({
-                    userId: "system",
+                    userId: SYSTEM_USER,
                     data: blob,
                 });
             }),

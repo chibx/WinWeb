@@ -12,3 +12,4 @@ export const DEFAULT_TASKBAR_CONFIG: TaskBarConfig = {
 };
 
 export const DEFAULT_DESKTOP_CONFIG: DesktopConfig = {};
+export const SYSTEM_USER = 0;

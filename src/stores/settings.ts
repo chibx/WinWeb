@@ -7,7 +7,7 @@ import { DEFAULT_DESKTOP_CONFIG, DEFAULT_TASKBAR_CONFIG } from "@/utils/constant
 export const useSettings = defineStore("settings", () => {
     const user = useUser();
     const settings = toReactive(
-        useLocalStorage<Setting>(() => `user-${user.currentUser?.uid}`, {
+        useLocalStorage<Setting>(() => `user-${user.currentUser?.id}`, {
             taskbar: DEFAULT_TASKBAR_CONFIG,
             desktop: DEFAULT_DESKTOP_CONFIG,
         }),

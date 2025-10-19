@@ -1,21 +1,19 @@
 import type { Application, ApplicationConfig, ApplicationProps, OpenWindow } from "@/applications/types";
 import { createWindowObject, openWindows } from "@/applications/utils";
-import registry from "./registry/index";
+import { idb } from "@/utils/idb";
 import { APP_ID } from "@/utils/keys";
 import { inject, reactive } from "vue";
-import { useUser } from "@/stores/user";
-import { idb } from "@/utils/idb";
+import registry from "./registry/index";
 
 const installedApps: Set<string> = reactive(new Set());
 
 /** Install apps and load their config found in the installedApps field in the application IDB table */
-export async function loadAppsConfig() {
+export async function loadAppsConfig(userId?: number) {
     // I know that this is not the best approach due to lack of context for the store
-    const uid = useUser().currentUser?.uid;
-    if (!uid) {
+    if (!userId) {
         throw Error("User is null");
     }
-    const appTable = await idb.get("apps", IDBKeyRange.only(uid));
+    const appTable = await idb.get("apps", IDBKeyRange.only(userId));
     if (appTable) {
         (appTable.installedApps as string[]).forEach((e) => installedApps.add(e));
 
