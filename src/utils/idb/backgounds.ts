@@ -3,7 +3,7 @@ import { idb } from ".";
 import type { Background } from "@/types/idb";
 import { SYSTEM_USER } from "../constants";
 
-export const defaultBgs = Array.from({ length: 7 }).map((_, i) => `/backgrounds/bg_${i + 1}.webp`);
+export const defaultBgs = Array.from({ length: 6 }).map((_, i) => `/backgrounds/bg_${i + 1}.webp`);
 
 export const getUserBackgrounds = async (userId: number) => {
     const bgTx = idb.transaction("backgrounds");
