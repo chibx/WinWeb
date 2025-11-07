@@ -82,7 +82,7 @@ function changeTabFocus(e: MouseEvent, key: string) {
                 v-for="{ path, key } in tabs"
                 :key="key"
                 class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between"
-                :class="{ 'rounded-t-lg active': key === tabKey }"
+                :class="{ 'rounded-t-sm active': key === tabKey }"
                 @click="changeTabFocus($event, key)"
             >
                 <div class="flex gap-2.5 items-center">
@@ -97,14 +97,14 @@ function changeTabFocus(e: MouseEvent, key: string) {
                         getEndName(path)
                     }}</span>
                 </div>
-                <span aria-label="Close the tab" class="close p-0.5 rounded-full" @click="closeTab(key)">
+                <span aria-label="Close the tab" class="close cursor-pointer p-0.5 rounded-full" @click="closeTab(key)">
                     <Icon :icon="ICONS['close']" width="20" height="20" />
                 </span>
             </div>
         </div>
         <div
             aria-label="Create File Explorer Tabs"
-            class="add-tab p-2.5 cursor-pointer flex items-center justify-center"
+            class="add-tab text-black dark:text-white p-2.5 cursor-pointer flex items-center justify-center"
             @click="addTabs"
         >
             <Icon :icon="ICONS['plus-r']" width="20" height="20" />
@@ -117,15 +117,40 @@ function changeTabFocus(e: MouseEvent, key: string) {
     scrollbar-width: none;
 }
 
-.file-exp-tab {
+.tabs-wrapper-cont {
+    height: 40px;
+    background-color: #eaeaea;
+}
+
+.dark .tabs-wrapper-cont {
     background-color: transparent;
 }
 
+/*.file-exp-tab {
+    background-color: gray;
+}
+
+.dark .file-exp-tab {
+    background-color: transparent;
+}*/
+
+.file-exp-tab {
+    color: black;
+}
+
 .file-exp-tab:not(.active) {
-    box-shadow: inset 0 -10px 20px rgba(0, 15, 83, 0.534);
+    background-color: #eaeaea;
+}
+
+.dark .file-exp-tab:not(.active) {
+    /*box-shadow: inset 0 -10px 20px rgba(0, 15, 83, 0.534);*/
 }
 
 .active {
+    background-color: white;
+}
+
+.dark .active {
     background-color: rgb(77, 77, 117);
 }
 </style>
