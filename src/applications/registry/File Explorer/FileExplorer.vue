@@ -65,6 +65,6 @@ provide(TAB_KEY, tabKey);
 }
 
 .dark .file-exp {
-    background-color: rgba(16, 16, 34, 0.733);
+    background-color: #101022bb;
 }
 </style>
