@@ -1,7 +1,7 @@
 import type { PromiseOrNot } from "@/applications/types";
 import type { DesktopIconWithFocus } from "@/types/desktop";
 import type { User } from "@/types/idb";
-import { asyncComputed, useBattery, useKeyModifier, useWindowSize } from "@vueuse/core";
+import { asyncComputed, useBattery, useDark, useKeyModifier, useWindowSize } from "@vueuse/core";
 import { reactive, ref } from "vue";
 
 export const showLoginForm = ref(false);
@@ -15,6 +15,7 @@ export const hideLogin = asyncComputed(async () => {
     return res;
 });
 export const totalUsers = ref<User[]>([]);
+export const isDark = useDark();
 export const desktopIcons = new Set<DesktopIconWithFocus>();
 export const focusedIcons = new Set<DesktopIconWithFocus>();
 export const events = ["keydown", "keyup"] as (keyof WindowEventMap)[];

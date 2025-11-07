@@ -2,16 +2,15 @@
 import { isLoginSuccess, totalUsers, showLoginForm, delay, hideLogin } from "@/utils/utils";
 
 import LoginWindowsLoading from "@/components/Login/WindowsLoading.vue";
-import LoginLockScreen from "@/components/Login/LockScreen.vue";
 import GettingWindowsReady from "@/components/GettingWindowsReady.vue";
-import { LazyLoginWindowsForm, LazyWindowsHomeScreen } from "@/components/lazy";
+import { LazyWindowsHomeScreen } from "@/components/lazy";
 import { useUser } from "@/stores/user";
 import { ref } from "vue";
 import type { User } from "@/types/idb";
 import { isDBAvalaible, refreshDB } from "@/utils/idb";
 import { preloadBackgrounds } from "@/utils/idb/backgounds";
 import { getUsers } from "@/utils/idb/users";
-import { useLocalStorage, asyncComputed } from "@vueuse/core";
+import { useLocalStorage } from "@vueuse/core";
 const gettingWindowsReady = ref(true);
 
 const userStore = useUser();
