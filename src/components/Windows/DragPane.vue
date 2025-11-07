@@ -17,7 +17,7 @@ const [dragEl, coords, isActive] = useDragPane({ canDrag: props.canDrag, onMove:
 <template>
     <div
         ref="dragEl"
-        class="drag-pane absolute z-[9]"
+        class="drag-pane absolute z-9"
         :class="{ active: isActive }"
         :style="{
             width: `${coords.width}px`,
