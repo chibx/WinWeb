@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { uid } from "uid";
 import type { ApplicationExpose, ApplicationProps } from "@/applications/types";
+import { uid } from "uid";
+import { computed, provide, ref, shallowReactive } from "vue";
+import FileActionPanel from "./components/ActionPanel.vue";
 import FileExplorerMenuBar from "./components/MenuBar.vue";
 import FileExplorerTopMenu from "./components/TopMenu.vue";
-import { getDataFromProps, PATH, TAB_KEY, TABS } from "./utils";
 import type { FileExplorerTabProp } from "./types";
-import { ref, shallowReactive, computed, provide } from "vue";
+import { getDataFromProps, PATH, TAB_KEY, TABS } from "./utils";
+import FileControlPanel from "./components/ControlPanel.vue";
 
 const props = defineProps<ApplicationProps>();
 const rect: ApplicationExpose = {
@@ -48,6 +50,8 @@ provide(TAB_KEY, tabKey);
 <template>
     <div class="file-exp w-full h-full flex flex-col">
         <FileExplorerMenuBar />
+        <FileControlPanel />
+        <FileActionPanel />
         <div class="h-full w-full">
             <FileExplorerTopMenu />
         </div>
@@ -56,7 +60,11 @@ provide(TAB_KEY, tabKey);
 
 <style scoped>
 .file-exp {
-    background-color: rgba(16, 16, 34, 0.733);
+    background-color: white;
     backdrop-filter: blur(10px);
+}
+
+.dark .file-exp {
+    background-color: rgba(16, 16, 34, 0.733);
 }
 </style>
