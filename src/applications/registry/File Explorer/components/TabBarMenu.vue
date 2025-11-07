@@ -81,7 +81,7 @@ function changeTabFocus(e: MouseEvent, key: string) {
             <div
                 v-for="{ path, key } in tabs"
                 :key="key"
-                class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between"
+                class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between cursor-pointer"
                 :class="{ 'rounded-t-sm active': key === tabKey }"
                 @click="changeTabFocus($event, key)"
             >
@@ -119,27 +119,11 @@ function changeTabFocus(e: MouseEvent, key: string) {
 
 .tabs-wrapper-cont {
     height: 40px;
-    background-color: #eaeaea;
-}
-
-.dark .tabs-wrapper-cont {
-    background-color: transparent;
-}
-
-/*.file-exp-tab {
-    background-color: gray;
-}
-
-.dark .file-exp-tab {
-    background-color: transparent;
-}*/
-
-.file-exp-tab {
     color: black;
 }
 
-.file-exp-tab:not(.active) {
-    background-color: #eaeaea;
+.dark .tabs-wrapper-cont {
+    color: white;
 }
 
 .dark .file-exp-tab:not(.active) {
@@ -151,6 +135,6 @@ function changeTabFocus(e: MouseEvent, key: string) {
 }
 
 .dark .active {
-    background-color: rgb(77, 77, 117);
+    background-color: #4d4d75;
 }
 </style>

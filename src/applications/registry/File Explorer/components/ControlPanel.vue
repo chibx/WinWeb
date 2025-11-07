@@ -27,7 +27,7 @@ const curLocation = ref("Home");
             <div class="search rounded-[5px]">
                 <input
                     type="text"
-                    class="text-black dark:text-white placeholder:text-black/60"
+                    class="text-black dark:text-white placeholder:text-black/60 dark:placeholder:text-white/60"
                     :placeholder="`Search ${curLocation}`"
                 />
                 <Icon
@@ -57,8 +57,8 @@ const curLocation = ref("Home");
     background-color: #eeeeee;
 }
 
-.nav span:hover {
-    background-color: #eeeeee;
+.dark .nav span:hover {
+    background-color: #41415ebb;
 }
 
 .filepath {

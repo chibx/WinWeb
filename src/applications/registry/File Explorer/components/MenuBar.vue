@@ -11,7 +11,7 @@ const requestClose = inject(CLOSE_REQUEST);
 </script>
 
 <template>
-    <div class="w-full flex justify-between bg-[#eaeaea] dark:bg-white">
+    <div class="w-full flex justify-between bg-[#eaeaea] dark:bg-transparent">
         <FileExplorerTabBar />
         <div class="menubar-controls h-fit flex items-center">
             <span @click="appWindow.isMinimized.value = true">
@@ -56,6 +56,7 @@ const requestClose = inject(CLOSE_REQUEST);
 }
 
 .dark .menubar-controls span:not(.close):hover {
-    background-color: #1e2939;
+    /*background-color: #1e2939;*/
+    background-color: #0d0d19bb;
 }
 </style>
