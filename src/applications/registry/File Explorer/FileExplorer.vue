@@ -2,12 +2,11 @@
 import type { ApplicationExpose, ApplicationProps } from "@/applications/types";
 import { uid } from "uid";
 import { computed, provide, ref, shallowReactive } from "vue";
-import FileActionPanel from "./components/ActionPanel.vue";
 import FileExplorerMenuBar from "./components/MenuBar.vue";
-import FileExplorerTopMenu from "./components/TopMenu.vue";
+// import FileExplorerTopMenu from "./components/TopMenu.vue";
+import FileExplorerTab from "./components/FileExplorerTab.vue";
 import type { FileExplorerTabProp } from "./types";
 import { getDataFromProps, PATH, TAB_KEY, TABS } from "./utils";
-import FileControlPanel from "./components/ControlPanel.vue";
 
 const props = defineProps<ApplicationProps>();
 const rect: ApplicationExpose = {
@@ -15,6 +14,7 @@ const rect: ApplicationExpose = {
     minWidth: ref(0),
 };
 defineExpose(rect);
+
 const initialEntry: FileExplorerTabProp = {
     key: uid(),
     path: getDataFromProps(props),
@@ -50,11 +50,15 @@ provide(TAB_KEY, tabKey);
 <template>
     <div class="file-exp w-full h-full flex flex-col">
         <FileExplorerMenuBar />
-        <FileControlPanel />
-        <FileActionPanel />
-        <div class="h-full w-full">
+        <KeepAlive>
+            <template v-for="tab in tabs">
+                <FileExplorerTab v-if="tabKey === tab.key" :key="tab.key" />
+            </template>
+        </KeepAlive>
+
+        <!-- <div class="h-full w-full">
             <FileExplorerTopMenu />
-        </div>
+        </div> -->
     </div>
 </template>
 
