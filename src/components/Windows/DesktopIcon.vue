@@ -47,7 +47,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .desktop-icon:hover {
-    background-color: #9ae7ff41;
+    background-color: rgba(82, 163, 255, 0.4);
 }
 
 .icon-name {
@@ -57,7 +57,7 @@ onBeforeUnmount(() => {
 }
 
 .clicked {
-    background-color: #2098bd9f;
+    background-color: #0386ad86;
 }
 
 .clicked:hover {

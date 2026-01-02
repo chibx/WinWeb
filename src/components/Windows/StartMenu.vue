@@ -64,7 +64,7 @@ const bgStyles = computed<CSSProperties>(() => {
 <template>
     <div
         ref="startMenuEl"
-        class="start-menu w-[600px] h-150 rounded-xl p-5"
+        class="start-menu w-[600px] h-150 rounded-lg p-5"
         :style="{
             position: 'absolute',
             // left: trueLeft + 'px',
@@ -76,7 +76,10 @@ const bgStyles = computed<CSSProperties>(() => {
         <div class="flex flex-col gap-5">
             <div class="relative">
                 <input name="start-search" type="text" class="start-search" placeholder="Search for anything..." />
-                <Icon class="absolute text-blue-600 left-2.5 top-1/2 -translate-y-1/2" :icon="ICONS['search']" />
+                <Icon
+                    class="absolute text-blue-600 left-2.5 top-1/2 -translate-y-1/2 h-[20px] w-[20px]"
+                    :icon="ICONS['search']"
+                />
             </div>
         </div>
     </div>
@@ -93,8 +96,8 @@ const bgStyles = computed<CSSProperties>(() => {
 
     background-color: #f1f1f1;
     box-shadow:
-        inset 10px 0px 50px #929292ad,
-        inset -10px 0px 50px #929292ad;
+        inset 5px 0px 20px #929292ad,
+        inset -5px 0px 20px #929292ad;
 }
 
 .start-search {
@@ -103,8 +106,8 @@ const bgStyles = computed<CSSProperties>(() => {
     color: black;
     outline: none;
     background-color: white;
-    padding: 5px 20px 5px 30px;
-    /*border-radius: 0 0 10px 10px;*/
+    padding: 7.5px 20px 7.5px 35px;
+    border-radius: 20px;
 }
 
 .start-search::placeholder {
@@ -112,6 +115,6 @@ const bgStyles = computed<CSSProperties>(() => {
 }
 
 .start-search:focus {
-    border-bottom: 2px solid #006dff;
+    box-shadow: 1px 0 5px #949494;
 }
 </style>

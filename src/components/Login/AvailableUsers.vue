@@ -50,7 +50,7 @@ watch(isClosed, (newVal) => {
                 <!-- :style="{ '--group-height': `${translateY}px` }"  -->
                 <button
                     v-for="user in users"
-                    :key="user.uid"
+                    :key="user.id"
                     class="w-full h-fit transition duration-150 flex items-center gap-2.5 px-2.5 py-3 cursor-pointer"
                     @click="selectUser(user)"
                 >

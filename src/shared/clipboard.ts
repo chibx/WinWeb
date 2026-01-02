@@ -17,15 +17,12 @@ type ClipboardManagerItem = {
     data: unknown;
 };
 
-// let clipboard =
-
-export class ClipboardManager {
-    items: ClipboardManagerItem[] = [];
-
+const clipboard = {
+    items: [] as ClipboardManagerItem[],
     async get() {
         const value = this.items.at(-1);
         return value;
-    }
+    },
 
     async add(type: symbol, data: unknown) {
         // TODO: Implement property equality instead of instance equality
@@ -37,11 +34,11 @@ export class ClipboardManager {
             type,
             data,
         });
-    }
+    },
 
     async clear() {
         this.items.length = 0;
-    }
+    },
+};
 
-    static default() {}
-}
+export default clipboard;

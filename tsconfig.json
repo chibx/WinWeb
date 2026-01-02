@@ -15,7 +15,6 @@
     "compilerOptions": {
         "module": "ESNext",
         "moduleResolution": "Bundler",
-        "strict": true,
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "paths": {
             "@/*": ["./src/*"],

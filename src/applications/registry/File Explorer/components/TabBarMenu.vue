@@ -6,6 +6,7 @@ import { animate } from "motion";
 import { APP_EL } from "@/utils/keys";
 import { inject, useTemplateRef, unref, watch } from "vue";
 import { ICONS } from "@/utils/icons";
+import { Icon } from "@iconify/vue";
 
 const tabs = inject(TABS)!;
 const tabKey = inject(TAB_KEY)!;
@@ -76,12 +77,13 @@ function changeTabFocus(e: MouseEvent, key: string) {
 
 <template>
     <div class="tabs-wrapper-cont w-[calc(100%-130px)] flex select-none">
-        <div ref="tabs-wrapper" @wheel.prevent="tabWheel" class="tabs-wrapper overflow-x-auto flex pl-2.5">
+        <div ref="tabs-wrapper" class="tabs-wrapper overflow-x-auto flex pl-2.5" @wheel.prevent="tabWheel">
             <div
-                v-for="({ path, key }, index) in tabs"
+                v-for="{ path, key } in tabs"
+                :key="key"
+                class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between cursor-pointer"
+                :class="{ 'rounded-t-sm active': key === tabKey }"
                 @click="changeTabFocus($event, key)"
-                class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between"
-                :class="{ 'rounded-t-lg active': key === tabKey }"
             >
                 <div class="flex gap-2.5 items-center">
                     <img
@@ -95,14 +97,14 @@ function changeTabFocus(e: MouseEvent, key: string) {
                         getEndName(path)
                     }}</span>
                 </div>
-                <span aria-label="Close the tab" class="close p-0.5 rounded-full" @click="closeTab(key)">
+                <span aria-label="Close the tab" class="close cursor-pointer p-0.5 rounded-full" @click="closeTab(key)">
                     <Icon :icon="ICONS['close']" width="20" height="20" />
                 </span>
             </div>
         </div>
         <div
             aria-label="Create File Explorer Tabs"
-            class="add-tab p-2.5 cursor-pointer flex items-center justify-center"
+            class="add-tab text-black dark:text-white p-2.5 cursor-pointer flex items-center justify-center"
             @click="addTabs"
         >
             <Icon :icon="ICONS['plus-r']" width="20" height="20" />
@@ -115,15 +117,24 @@ function changeTabFocus(e: MouseEvent, key: string) {
     scrollbar-width: none;
 }
 
-.file-exp-tab {
-    background-color: transparent;
+.tabs-wrapper-cont {
+    height: 40px;
+    color: black;
 }
 
-.file-exp-tab:not(.active) {
-    box-shadow: inset 0 -10px 20px rgba(0, 15, 83, 0.534);
+.dark .tabs-wrapper-cont {
+    color: white;
+}
+
+.dark .file-exp-tab:not(.active) {
+    /*box-shadow: inset 0 -10px 20px rgba(0, 15, 83, 0.534);*/
 }
 
 .active {
-    background-color: rgb(77, 77, 117);
+    background-color: white;
+}
+
+.dark .active {
+    background-color: #4d4d75;
 }
 </style>

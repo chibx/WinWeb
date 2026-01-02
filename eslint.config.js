@@ -34,6 +34,7 @@ export default defineConfig(
             "vue/valid-v-on": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "vue/singleline-html-element-content-newline": "off",
+            "@typescript-eslint/no-non-null-assertion": "off",
         },
     },
 );

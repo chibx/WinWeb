@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { uid } from "uid";
 import type { ApplicationExpose, ApplicationProps } from "@/applications/types";
+import { uid } from "uid";
+import { computed, provide, ref, shallowReactive } from "vue";
 import FileExplorerMenuBar from "./components/MenuBar.vue";
-import FileExplorerTopMenu from "./components/TopMenu.vue";
-import { getDataFromProps, PATH, TAB_KEY, TABS } from "./utils";
+// import FileExplorerTopMenu from "./components/TopMenu.vue";
+import FileExplorerTab from "./components/FileExplorerTab.vue";
 import type { FileExplorerTabProp } from "./types";
-import { ref, shallowReactive, computed, provide } from "vue";
+import { getDataFromProps, PATH, TAB_KEY, TABS } from "./utils";
 
 const props = defineProps<ApplicationProps>();
 const rect: ApplicationExpose = {
@@ -13,6 +14,7 @@ const rect: ApplicationExpose = {
     minWidth: ref(0),
 };
 defineExpose(rect);
+
 const initialEntry: FileExplorerTabProp = {
     key: uid(),
     path: getDataFromProps(props),
@@ -48,15 +50,25 @@ provide(TAB_KEY, tabKey);
 <template>
     <div class="file-exp w-full h-full flex flex-col">
         <FileExplorerMenuBar />
-        <div class="h-full w-full">
+        <KeepAlive>
+            <template v-for="tab in tabs">
+                <FileExplorerTab v-if="tabKey === tab.key" :key="tab.key" />
+            </template>
+        </KeepAlive>
+
+        <!-- <div class="h-full w-full">
             <FileExplorerTopMenu />
-        </div>
+        </div> -->
     </div>
 </template>
 
 <style scoped>
 .file-exp {
-    background-color: rgba(16, 16, 34, 0.733);
+    background-color: white;
     backdrop-filter: blur(10px);
+}
+
+.dark .file-exp {
+    background-color: #101022bb;
 }
 </style>

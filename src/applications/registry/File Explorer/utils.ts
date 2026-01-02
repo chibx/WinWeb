@@ -9,7 +9,11 @@ export const TAB_KEY: InjectionKey<Ref<string>> = Symbol();
 
 //
 
-export const USERS_PATH = "C:\\Users\\";
+export const USERS_PATH = "C:\\";
+
+export function isValidName(name: string) {
+    return !/[#*\\/="|,`~%@$^&]/.test(name);
+}
 
 export function getDataFromProps(props: ApplicationProps) {
     const { opener } = props;

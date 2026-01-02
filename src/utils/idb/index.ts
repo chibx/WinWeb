@@ -1,36 +1,31 @@
 import { openDB } from "idb";
 import type { User, WinWebSchema } from "@/types/idb";
-import { uid } from "uid";
 import { useUser } from "@/stores/user";
+import {
+    initAppTable,
+    initBackgroundTable,
+    initDesktopTable,
+    initFileMetadataTable,
+    initFilesTable,
+    initFoldersTable,
+    initUserTable,
+} from "../schema";
 
 export const idb = await openDB<WinWebSchema>("winweb", 1, {
     upgrade(database) {
-        // User related
-        const users = database.createObjectStore("users", {
-            keyPath: "uid",
-        });
-        users.createIndex("userName", "userName", { unique: true });
-        users.createIndex("uid", "uid", { unique: true });
+        initUserTable(database);
 
-        // File related
-        const files = database.createObjectStore("files", {
-            keyPath: "uid",
-        });
-        files.createIndex("uid", "uid", { unique: true });
+        initFilesTable(database);
 
-        // Background Image Related
-        const backgrounds = database.createObjectStore("backgrounds", {
-            keyPath: "uid",
-        });
-        backgrounds.createIndex("user", "user", { unique: false });
+        initFoldersTable(database);
 
-        // Application Data Related
-        database.createObjectStore("apps");
+        initFileMetadataTable(database);
 
-        // Desktop Data Related
-        database.createObjectStore("desktop", {
-            keyPath: "userId",
-        });
+        initBackgroundTable(database);
+
+        initAppTable(database);
+
+        initDesktopTable(database);
     },
 });
 
@@ -39,11 +34,11 @@ export async function isDBAvalaible() {
 }
 
 const defaultUser: User = {
+    id: 1,
     avatar: null,
     fullName: "Default",
     isCurrent: true,
     password: "1234",
-    uid: uid(),
     userName: "User",
 };
 
@@ -52,23 +47,23 @@ const defaultApps = ["File Explorer", "Microsoft Store"];
 export async function refreshDB() {
     const userStore = useUser();
     // deleteAllUsers(tx);
-    const _tx = idb.transaction(idb.objectStoreNames, "readwrite");
-    const promises = Array.from(idb.objectStoreNames).map((name) => _tx.objectStore(name).clear());
-    promises.push(_tx.done);
+    const tx$1 = idb.transaction(idb.objectStoreNames, "readwrite");
+    const promises = Array.from(idb.objectStoreNames).map((name) => tx$1.objectStore(name).clear());
+    promises.push(tx$1.done);
     await Promise.all(promises);
 
-    const tx = idb.transaction(idb.objectStoreNames, "readwrite");
-    const users = tx.objectStore("users");
-    const apps = tx.objectStore("apps");
+    const tx$2 = idb.transaction(idb.objectStoreNames, "readwrite");
+    const users = tx$2.objectStore("users");
+    const apps = tx$2.objectStore("apps");
     await Promise.all([
         users.put(defaultUser),
         apps.put(
             {
                 installedApps: defaultApps,
             },
-            defaultUser.uid,
+            defaultUser.id,
         ),
-        tx.done,
+        tx$2.done,
     ]);
 
     userStore.$patch({
