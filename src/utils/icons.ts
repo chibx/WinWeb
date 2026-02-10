@@ -38,6 +38,7 @@ export const ICONS = {
     restore: "cil:window-restore",
     close: "material-symbols:close-rounded",
     "plus-r": "material-symbols:add-2-rounded",
+    "plus-circle": "mdi:plus-circle-outline",
     search: "material-symbols:search-rounded",
     refresh: "material-symbols:refresh-rounded",
 };
