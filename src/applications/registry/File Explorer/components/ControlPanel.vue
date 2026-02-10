@@ -23,17 +23,13 @@ const curLocation = ref("Home");
                     <Icon :icon="ICONS['refresh']" height="20" width="20" />
                 </span>
             </div>
-            <div class="filepath rounded-[5px]"></div>
+            <div class="filepath rounded-[5px] min-w-[300px]"></div>
             <div class="search rounded-[5px]">
-                <input
-                    type="text"
+                <input type="text"
                     class="text-black dark:text-white placeholder:text-black/60 dark:placeholder:text-white/60"
-                    :placeholder="`Search ${curLocation}`"
-                />
-                <Icon
-                    class="absolute top-1/2 -translate-y-1/2 right-2.5 text-black/60 dark:text-white"
-                    :icon="ICONS['search']"
-                />
+                    :placeholder="`Search ${curLocation}`" />
+                <Icon class="absolute top-1/2 -translate-y-1/2 right-2.5 text-black/60 dark:text-white"
+                    :icon="ICONS['search']" />
             </div>
         </div>
     </div>
