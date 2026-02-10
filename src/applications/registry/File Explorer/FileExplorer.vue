@@ -64,11 +64,15 @@ provide(TAB_KEY, tabKey);
 
 <style scoped>
 .file-exp {
-    background-color: white;
+    background-color: var(--exp-bg);
+}
+
+.file-exp {
+    --exp-bg: white;
     backdrop-filter: blur(10px);
 }
 
 .dark .file-exp {
-    background-color: #101022bb;
+    --exp-bg: #101022bb;
 }
 </style>
