@@ -12,8 +12,10 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
             <ResizablePanel :default-size="22" :min-size="20" :max-size="28">
                 <div class="sidebar"></div>
             </ResizablePanel>
-            <ResizableHandle />
-            <ResizablePanel><div class="main-view"></div></ResizablePanel>
+            <ResizableHandle class="bg-[#eeeeee] dark:bg-[#58588ebb]" />
+            <ResizablePanel>
+                <div class="main-view"></div>
+            </ResizablePanel>
         </ResizablePanelGroup>
     </div>
 </template>
