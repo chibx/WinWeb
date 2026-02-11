@@ -12,7 +12,7 @@ import { Icon } from '@iconify/vue';
                 <div class="flex gap-2.5">
                     <div>
                         <button
-                            class="cursor-pointer flex items-center gap-1.5 px-5 py-3 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
+                            class="rounded-md cursor-pointer flex items-center gap-1.5 px-5 py-3 text-gray-950 dark:text-white hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
                             <Icon :icon="ICONS['plus-circle']" />
                             <span>
                                 New
@@ -22,7 +22,7 @@ import { Icon } from '@iconify/vue';
                     </div>
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 text-gray-950 dark:text-white">
                     <button class="sq-menu-btn">
                         <Icon :icon="ICONS['scissors']" />
                     </button>
@@ -43,7 +43,7 @@ import { Icon } from '@iconify/vue';
                     </button>
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
-                <div class="flex gap-2.5">
+                <div class="flex gap-2.5 text-gray-950 dark:text-white">
                     <button
                         class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
                         <Icon :icon="ICONS['sort']" />
@@ -84,6 +84,15 @@ import { Icon } from '@iconify/vue';
 .sq-menu-btn {
     cursor: pointer;
     padding: 10px;
+    border-radius: calc(0.625rem - 2px);
+}
+
+.active-menu-btn {
+    background-color: #eeeeee;
+}
+
+.dark .active-menu-btn {
+    background-color: #41415ebb;
 }
 
 .sq-menu-btn:hover {
