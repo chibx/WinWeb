@@ -2,6 +2,7 @@
 import { Separator } from '@/components/ui/separator';
 import { ICONS } from '@/utils/icons';
 import { Icon } from '@iconify/vue';
+import ActionNew from './action-panel/ActionNew.vue';
 
 </script>
 
@@ -10,16 +11,7 @@ import { Icon } from '@iconify/vue';
         <div class="w-full overflow-x-auto">
             <div class="flex gap-2">
                 <div class="flex gap-2.5">
-                    <div>
-                        <button
-                            class="rounded-md cursor-pointer flex items-center gap-1.5 px-5 py-3 text-gray-950 dark:text-white hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
-                            <Icon :icon="ICONS['plus-circle']" />
-                            <span>
-                                New
-                            </span>
-                            <Icon :icon="ICONS['chevron-down']" />
-                        </button>
-                    </div>
+                    <ActionNew />
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
                 <div class="flex items-center gap-2 text-gray-950 dark:text-white">
