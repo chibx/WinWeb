@@ -32,6 +32,14 @@ export function delay(number: number) {
     });
 }
 
+export function callWithDelay(fn: () => void, delay: number) {
+    let id: number | undefined = setInterval(fn, delay) as unknown as number;
+    return function () {
+        clearInterval(id);
+        id = undefined;
+    };
+}
+
 export function pad(str: string | number) {
     return ("" + str).padStart(2, "0");
 }
@@ -56,7 +64,7 @@ export function createHandler<T = boolean>(): [Set<() => PromiseOrNot<T>>, Funct
 
 export type FunctionHandler<T = boolean> = (func: (...args: unknown[]) => PromiseOrNot<T>) => () => void;
 
-/** Alpha receives numbers between 0 - 2 */
+/** Alpha receives numbers between 0 - 1 */
 export function mat2Color(r: number, g: number, b: number, alpha: number) {
     return `rgba(${r}, ${g}, ${b}, ${alpha / 100})`;
 }
