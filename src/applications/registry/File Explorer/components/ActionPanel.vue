@@ -3,6 +3,9 @@ import { Separator } from '@/components/ui/separator';
 import { ICONS } from '@/utils/icons';
 import { Icon } from '@iconify/vue';
 import ActionNew from './action-panel/ActionNew.vue';
+import ActionSort from './action-panel/ActionSort.vue';
+import ActionView from './action-panel/ActionView.vue';
+import ActionFilter from './action-panel/ActionFilter.vue';
 
 </script>
 
@@ -36,30 +39,25 @@ import ActionNew from './action-panel/ActionNew.vue';
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
                 <div class="flex gap-2.5 text-gray-950 dark:text-white">
-                    <button
-                        class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
-                        <Icon :icon="ICONS['sort']" />
-                        <span>
-                            Sort
-                        </span>
-                        <Icon :icon="ICONS['chevron-down']" />
-                    </button>
-                    <button
+                    <ActionSort />
+                    <ActionView />
+                    <!-- <button
                         class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
                         <Icon :icon="ICONS['list']" />
                         <span>
                             View
                         </span>
                         <Icon :icon="ICONS['chevron-down']" />
-                    </button>
-                    <button
+                    </button> -->
+                    <ActionFilter />
+                    <!-- <button
                         class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
                         <Icon :icon="ICONS['filter']" />
                         <span>
                             Filter
                         </span>
                         <Icon :icon="ICONS['chevron-down']" />
-                    </button>
+                    </button> -->
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
                 <div class="flex items-center">
