@@ -27,15 +27,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div
-        ref="app-icon"
-        class="desktop-icon w-[75px] h-fit px-2.5 py-1.5"
-        :class="{ clicked: hasFocus }"
-        :title="name"
-        :aria-label="name"
-        @click="hasFocus = true"
-        @contextmenu.prevent="rClick"
-    >
+    <div ref="app-icon" class="desktop-icon relative w-[75px] h-fit px-2.5 py-1.5" :class="{ clicked: hasFocus }"
+        :title="name" :aria-label="name" @click="hasFocus = true" @contextmenu.prevent="rClick">
         <div class="flex flex-col gap-2.5 justify-center items-center">
             <img :src="props.icon" :alt="name" class="w-[30px]" draggable="false" />
             <div class="icon-name text-xs text-center">
