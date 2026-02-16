@@ -63,16 +63,16 @@ provide(TAB_KEY, tabKey);
 </template>
 
 <style scoped>
+:global(:root) {
+    --exp-bg: white;
+}
+
+:global(.dark) {
+    --exp-bg: #101022bb;
+}
+
 .file-exp {
     background-color: var(--exp-bg);
-}
-
-.file-exp {
-    --exp-bg: white;
     backdrop-filter: blur(10px);
-}
-
-.dark .file-exp {
-    --exp-bg: #101022bb;
 }
 </style>
