@@ -33,9 +33,9 @@ export function delay(number: number) {
 }
 
 export function callWithDelay(fn: () => void, delay: number) {
-    let id: number | undefined = setInterval(fn, delay) as unknown as number;
+    let id: number | undefined = setTimeout(fn, delay) as unknown as number;
     return function () {
-        clearInterval(id);
+        clearTimeout(id);
         id = undefined;
     };
 }
