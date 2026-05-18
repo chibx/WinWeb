@@ -68,7 +68,7 @@ provide(TAB_KEY, tabKey);
 }
 
 :global(.dark) {
-    --exp-bg: #101022bb;
+    --exp-bg: #0a0a1aec;
 }
 
 .file-exp {

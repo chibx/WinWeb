@@ -1,12 +1,12 @@
 import type { InjectionKey, Ref, ShallowReactive } from "vue";
 import type { ApplicationProps } from "@/applications/types";
-import type { FileExplorerTabProp, PinnedPath } from "./types";
+import type { ActionPanelOption, FileExplorerTabProp, PinnedPath } from "./types";
+import { noop } from "@/utils/utils";
 
 // KEYZ
 export const PATH: InjectionKey<Ref<string>> = Symbol();
 export const TABS: InjectionKey<ShallowReactive<FileExplorerTabProp[]>> = Symbol();
 export const TAB_KEY: InjectionKey<Ref<string>> = Symbol();
-
 //
 
 export const USERS_PATH = "C:\\";

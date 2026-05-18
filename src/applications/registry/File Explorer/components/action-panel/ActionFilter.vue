@@ -29,20 +29,19 @@ function closeMenu() {
 </script>
 
 <template>
-    <DropdownMenu v-model:open="isMenuOpen">
+    <button class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]"
+        @pointerdown="openMenu">
+        <Icon :icon="ICONS['filter']" />
+        <span>
+            Filter
+        </span>
+        <!-- <Icon :icon="ICONS['chevron-down']" /> -->
+    </button>
+    <!-- <DropdownMenu v-model:open="isMenuOpen">
         <DropdownMenuTrigger as-child>
-            <button
-                class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]"
-                @pointerdown="openMenu">
-                <Icon :icon="ICONS['filter']" />
-                <span>
-                    Filter
-                </span>
-                <Icon :icon="ICONS['chevron-down']" />
-            </button>
         </DropdownMenuTrigger>
         <OnClickOutside @trigger="closeMenu">
-            <DropdownMenuContent class="p-2.5" as-child>
+            <DropdownMenuContent class="p-2.5">
                 <DropdownMenuGroup tabindex="1" class="min-w-[100px] text-sm bg-gray-300 dark:bg-[#090916bb]">
                     <DropdownMenuItem as-child>
                         <button tabindex="1"
@@ -75,7 +74,7 @@ function closeMenu() {
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </OnClickOutside>
-    </DropdownMenu>
+    </DropdownMenu> -->
 </template>
 
 <style scoped></style>

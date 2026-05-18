@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ICONS } from '@/utils/icons';
 import { Icon } from '@iconify/vue';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuGroup } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuGroup, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { ref } from 'vue';
 import { callWithDelay, noop } from '@/utils/utils';
 import { OnClickOutside } from '@vueuse/components';
@@ -34,7 +34,7 @@ function closeMenu() {
             <button
                 class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]"
                 @pointerdown="openMenu">
-                <Icon :icon="ICONS['sort']" />
+                <Icon :icon="ICONS['list']" />
                 <span>
                     Sort
                 </span>
@@ -42,34 +42,67 @@ function closeMenu() {
             </button>
         </DropdownMenuTrigger>
         <OnClickOutside @trigger="closeMenu">
-            <DropdownMenuContent class="p-2.5" as-child>
-                <DropdownMenuGroup tabindex="1" class=" min-w-[100px] text-sm bg-gray-300 dark:bg-[#090916bb]">
+            <DropdownMenuContent class="p-2.5 bg-gray-300 dark:bg-[#090916bb]">
+                <DropdownMenuGroup tabindex="1" class=" min-w-[200px] text-sm">
                     <DropdownMenuItem as-child>
                         <button tabindex="1"
-                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
-                            <img src="/icons/folder.svg" alt="Folder" class="w-5 h-5" />
-                            <span>Folder</span>
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                            <span>Name</span>
                         </button>
                     </DropdownMenuItem>
                     <DropdownMenuItem as-child>
                         <button tabindex="1"
-                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
-                            <img src="/icons/shortcut.png" alt="" class="w-5 h-5" />
-                            <span>Shortcut</span>
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                            <span>Date</span>
                         </button>
                     </DropdownMenuItem>
                     <DropdownMenuItem as-child>
                         <button tabindex="1"
-                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
-                            <img src="/icons/notes.png" alt="Text Document" class="w-5 h-5" />
-                            <span>Text Document</span>
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                            <span>Type</span>
                         </button>
                     </DropdownMenuItem>
                     <DropdownMenuItem as-child>
                         <button tabindex="1"
-                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
-                            <img src="/icons/zip.webp" alt="Compressed Folder" class="w-5 h-5" />
-                            <span>Compressed Folder</span>
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 bg-transparent"></span>
+                            <div class="w-full flex items-center justify-between">
+                                <span>More</span>
+                                <ChevronRight class="text-[#757575bb] dark:text-[#eeeeee]" />
+                            </div>
+                        </button>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator class="my-1.5" />
+                <DropdownMenuGroup tabindex="1" class=" min-w-[200px] text-sm">
+                    <DropdownMenuItem as-child>
+                        <button tabindex="1"
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                            <span>Ascending</span>
+                        </button>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem as-child>
+                        <button tabindex="1"
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                            <span>Descending</span>
+                        </button>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator class="my-1.5" />
+                <DropdownMenuGroup tabindex="1" class=" min-w-[200px] text-sm">
+                    <DropdownMenuItem as-child>
+                        <button tabindex="1"
+                            class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
+                            <span class="p-0.5 bg-transparent"></span>
+                            <div class="w-full flex items-center justify-between">
+                                <span>Group by</span>
+                                <ChevronRight class="text-[#757575bb] dark:text-[#eeeeee]" />
+                            </div>
                         </button>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
