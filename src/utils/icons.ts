@@ -45,6 +45,7 @@ export const ICONS = {
     "plus-circle": "mdi:plus-circle-outline",
     search: "material-symbols:search-rounded",
     refresh: "material-symbols:refresh-rounded",
+    preview: "codicon:open-preview",
 };
 
 export const SVG = {};
