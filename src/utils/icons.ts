@@ -46,6 +46,7 @@ export const ICONS = {
     search: "material-symbols:search-rounded",
     refresh: "material-symbols:refresh-rounded",
     preview: "codicon:open-preview",
+    undo: "fa7-solid:undo",
 };
 
 export const SVG = {};
