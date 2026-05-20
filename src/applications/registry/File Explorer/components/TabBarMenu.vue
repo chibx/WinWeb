@@ -86,18 +86,20 @@ function changeTabFocus(e: MouseEvent, key: string) {
                         :alt="getEndName(path)" />
                     <span class="w-[150px] text-ellipsis overflow-x-hidden whitespace-nowrap select-none">{{
                         getEndName(path)
-                        }}
+                    }}
                     </span>
                 </div>
-                <span aria-label="Close the tab" class="close cursor-pointer p-0.5 rounded-full" @click="closeTab(key)">
+                <span aria-label="Close the tab"
+                    class="close cursor-pointer p-0.5 rounded-full hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]"
+                    @click="closeTab(key)">
                     <Icon :icon="ICONS['close']" width="20" height="20" />
                 </span>
             </div>
         </div>
         <div aria-label="Create File Explorer Tabs"
-            class="add-tab text-black dark:text-white p-2.5 cursor-pointer flex items-center justify-center"
+            class="add-tab text-black rounded-full dark:text-white cursor-pointer ml-2 p-1.5 place-self-center hover:bg-[#dadada] dark:hover:bg-[#41415ebb]"
             @click="addTabs">
-            <Icon :icon="ICONS['plus-r']" width="20" height="20" />
+            <Icon class="w-5 h-5" :icon="ICONS['plus-r']" width="20" height="20" />
         </div>
     </div>
 </template>
@@ -108,7 +110,7 @@ function changeTabFocus(e: MouseEvent, key: string) {
 }
 
 .tabs-wrapper-cont {
-    height: 40px;
+    /* height: 40px; */
     color: black;
 }
 
