@@ -6,6 +6,7 @@ import ActionNew from './action-panel/ActionNew.vue';
 import ActionSort from './action-panel/ActionSort.vue';
 import ActionView from './action-panel/ActionView.vue';
 import ActionFilter from './action-panel/ActionFilter.vue';
+import ActionDot from './action-panel/ActionDot.vue';
 
 </script>
 
@@ -13,7 +14,7 @@ import ActionFilter from './action-panel/ActionFilter.vue';
     <div class="w-full bg-white dark:bg-transparent px-2 py-1.5 border-y border-[#c9c9c9] dark:border-white/50">
         <div class="w-full overflow-x-auto">
             <div class="flex gap-2">
-                <div class="flex gap-2.5">
+                <div class="flex gap-2.5 text-gray-950 dark:text-white">
                     <ActionNew />
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
@@ -38,32 +39,14 @@ import ActionFilter from './action-panel/ActionFilter.vue';
                     </button>
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
-                <div class="flex gap-2.5 text-gray-950 dark:text-white">
+                <div class="flex gap-1.5 text-gray-950 dark:text-white">
                     <ActionSort />
                     <ActionView />
-                    <!-- <button
-                        class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
-                        <Icon :icon="ICONS['list']" />
-                        <span>
-                            View
-                        </span>
-                        <Icon :icon="ICONS['chevron-down']" />
-                    </button> -->
                     <ActionFilter />
-                    <!-- <button
-                        class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]">
-                        <Icon :icon="ICONS['filter']" />
-                        <span>
-                            Filter
-                        </span>
-                        <Icon :icon="ICONS['chevron-down']" />
-                    </button> -->
                     <Separator class="bg-[#eeeeee] dark:bg-[#58588ebb]" orientation="vertical" />
                 </div>
                 <div class="flex items-center">
-                    <button class="sq-menu-btn">
-                        <Icon :icon="ICONS['3dots']" />
-                    </button>
+                    <ActionDot />
                 </div>
             </div>
         </div>
