@@ -29,7 +29,7 @@ function closeMenu() {
 </script>
 
 <template>
-    <button class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]"
+    <button class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#e8e9e8] dark:hover:bg-[#41415ebb]"
         @pointerdown="openMenu">
         <Icon :icon="ICONS['filter']" />
         <span>

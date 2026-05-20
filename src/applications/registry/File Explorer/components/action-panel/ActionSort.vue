@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { ref } from 'vue';
 import { callWithDelay, noop } from '@/utils/utils';
 import { OnClickOutside } from '@vueuse/components';
+import { ChevronRightIcon } from 'lucide-vue-next';
 
 const isMenuOpen = ref(false)
 let _open = noop
@@ -34,7 +35,7 @@ function closeMenu() {
             <button
                 class="cursor-pointer flex items-center gap-1.5 px-3 py-2 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb]"
                 @pointerdown="openMenu">
-                <Icon :icon="ICONS['list']" />
+                <Icon :icon="ICONS['sort']" />
                 <span>
                     Sort
                 </span>
@@ -42,8 +43,8 @@ function closeMenu() {
             </button>
         </DropdownMenuTrigger>
         <OnClickOutside @trigger="closeMenu">
-            <DropdownMenuContent class="p-2.5 bg-gray-300 dark:bg-[#090916bb]">
-                <DropdownMenuGroup tabindex="1" class=" min-w-[200px] text-sm">
+            <DropdownMenuContent class="p-1.5 mt-1.5 bg-gray-100 dark:bg-[#090916bb]">
+                <DropdownMenuGroup tabindex="1" class="min-w-[200px] text-sm">
                     <DropdownMenuItem as-child>
                         <button tabindex="1"
                             class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 hover:bg-[#eeeeee] dark:hover:bg-[#41415ebb] focus:outline outline-gray-900 dark:outline-white">
@@ -71,7 +72,7 @@ function closeMenu() {
                             <span class="p-0.5 bg-transparent"></span>
                             <div class="w-full flex items-center justify-between">
                                 <span>More</span>
-                                <ChevronRight class="text-[#757575bb] dark:text-[#eeeeee]" />
+                                <ChevronRightIcon class="text-[#757575bb] dark:text-[#eeeeee]" />
                             </div>
                         </button>
                     </DropdownMenuItem>
@@ -101,7 +102,7 @@ function closeMenu() {
                             <span class="p-0.5 bg-transparent"></span>
                             <div class="w-full flex items-center justify-between">
                                 <span>Group by</span>
-                                <ChevronRight class="text-[#757575bb] dark:text-[#eeeeee]" />
+                                <ChevronRightIcon class="text-[#757575bb] dark:text-[#eeeeee]" />
                             </div>
                         </button>
                     </DropdownMenuItem>
