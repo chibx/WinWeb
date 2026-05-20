@@ -16,7 +16,7 @@ import {
 import { callWithDelay, noop } from "@/utils/utils";
 import { ref } from "vue";
 import { OnClickOutside } from "@vueuse/components";
-import { ChevronRight } from "lucide-vue-next";
+import { CheckIcon, ChevronRight } from "lucide-vue-next";
 import ExtraLargeViewIcon from "../icons/ExtraLargeViewIcon.vue";
 import LargeViewIcon from "../icons/LargeViewIcon.vue";
 import MediumViewIcon from "../icons/MediumViewIcon.vue";
@@ -161,14 +161,13 @@ function closeMenu() {
                                 </button>
                             </DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
-                                <DropdownMenuSubContent class="bg-gray-100 dark:bg-[#090916bb]">
-                                    <DropdownMenuGroup class=" min-w-[200px] text-sm">
+                                <DropdownMenuSubContent class="min-w-[200px] bg-gray-100 dark:bg-[#090916bb]">
+                                    <DropdownMenuGroup class="min-w-[200px] text-sm">
                                         <DropdownMenuItem as-child>
                                             <button tabindex="1"
                                                 class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 focus:bg-[#e8e9e8] hover:bg-[#e8e9e8] dark:hover:bg-[#41415ebb]">
+                                                <CheckIcon />
                                                 <span>
-                                                    <span
-                                                        class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
                                                     <Icon :icon="ICONS['undo']"
                                                         class="text-[#41415ebb] dark:text-[#eeeeee]" />
                                                 </span>
@@ -177,12 +176,11 @@ function closeMenu() {
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator class="my-1.5" />
-                                    <DropdownMenuGroup class=" min-w-[200px] text-sm">
+                                    <DropdownMenuGroup class="min-w-[200px] text-sm">
                                         <DropdownMenuItem as-child>
                                             <button tabindex="1"
                                                 class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 focus:bg-[#e8e9e8] hover:bg-[#e8e9e8] dark:hover:bg-[#41415ebb]">
-                                                <span
-                                                    class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                                                <CheckIcon />
                                                 <span>
                                                     <Icon :icon="ICONS['undo']"
                                                         class="text-[#41415ebb] dark:text-[#eeeeee]" />
@@ -192,12 +190,11 @@ function closeMenu() {
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator class="my-1.5" />
-                                    <DropdownMenuGroup class=" min-w-[200px] text-sm">
+                                    <DropdownMenuGroup class="min-w-[200px] text-sm">
                                         <DropdownMenuItem as-child>
                                             <button tabindex="1"
                                                 class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 focus:bg-[#e8e9e8] hover:bg-[#e8e9e8] dark:hover:bg-[#41415ebb]">
-                                                <span
-                                                    class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                                                <CheckIcon />
                                                 <span>
                                                     <Icon :icon="ICONS['undo']"
                                                         class="text-[#41415ebb] dark:text-[#eeeeee]" />
@@ -208,8 +205,7 @@ function closeMenu() {
                                         <DropdownMenuItem as-child>
                                             <button tabindex="1"
                                                 class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 focus:bg-[#e8e9e8] hover:bg-[#e8e9e8] dark:hover:bg-[#41415ebb]">
-                                                <span
-                                                    class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                                                <CheckIcon />
                                                 <span>
                                                     <Icon :icon="ICONS['undo']"
                                                         class="text-[#41415ebb] dark:text-[#eeeeee]" />
@@ -220,8 +216,7 @@ function closeMenu() {
                                         <DropdownMenuItem as-child>
                                             <button tabindex="1"
                                                 class="cursor-pointer w-full flex gap-2.5 pl-2 py-2.5 focus:bg-[#e8e9e8] hover:bg-[#e8e9e8] dark:hover:bg-[#41415ebb]">
-                                                <span
-                                                    class="p-0.5 rounded-full bg-[#41415ebb] dark:bg-[#eeeeee]"></span>
+                                                <CheckIcon />
                                                 <span>
                                                     <Icon :icon="ICONS['undo']"
                                                         class="text-[#41415ebb] dark:text-[#eeeeee]" />
