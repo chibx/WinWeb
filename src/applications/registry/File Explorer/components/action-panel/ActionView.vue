@@ -16,7 +16,7 @@ import {
 import { callWithDelay, noop } from "@/utils/utils";
 import { ref } from "vue";
 import { OnClickOutside } from "@vueuse/components";
-import { CheckIcon, ChevronRight } from "lucide-vue-next";
+import { CheckIcon, ChevronRight } from "@lucide/vue";
 import ExtraLargeViewIcon from "../icons/ExtraLargeViewIcon.vue";
 import LargeViewIcon from "../icons/LargeViewIcon.vue";
 import MediumViewIcon from "../icons/MediumViewIcon.vue";

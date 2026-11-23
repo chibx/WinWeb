@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { ref } from 'vue';
 import { callWithDelay, noop } from '@/utils/utils';
 import { OnClickOutside } from '@vueuse/components';
-import { ChevronRightIcon } from 'lucide-vue-next';
+import { ChevronRightIcon } from '@lucide/vue';
 
 const isMenuOpen = ref(false)
 let _open = noop
