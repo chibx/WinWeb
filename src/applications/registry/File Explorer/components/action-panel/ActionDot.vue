@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ICONS } from '@/utils/icons';
 import { Icon } from '@iconify/vue';
+import { OnClickOutside } from '@vueuse/components';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuGroup, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { callWithDelay, noop } from '@/utils/utils';
 import { ref } from 'vue';
