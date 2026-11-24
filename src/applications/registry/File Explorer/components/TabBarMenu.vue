@@ -4,9 +4,10 @@ import { TABS, TAB_KEY, getEndName, inferFolderIcon } from "../utils";
 import { uid } from "uid";
 import { animate } from "motion";
 import { APP_EL } from "@/utils/keys";
-import { inject, useTemplateRef, unref, watch } from "vue";
+import { inject, useTemplateRef, unref, watch, onMounted } from "vue";
 import { ICONS } from "@/utils/icons";
 import { Icon } from "@iconify/vue";
+import autoAnimate from "@formkit/auto-animate";
 
 const tabs = inject(TABS)!;
 const tabKey = inject(TAB_KEY)!;
@@ -73,11 +74,16 @@ function changeTabFocus(e: MouseEvent, key: string) {
     }
     tabKey.value = key;
 }
+
+onMounted(() => {
+    autoAnimate(tabsWrapper.value!)
+})
 </script>
 
 <template>
     <div class="tabs-wrapper-cont w-[calc(100%-130px)] flex select-none">
-        <div ref="tabs-wrapper" class="tabs-wrapper overflow-x-auto flex pl-2.5" @wheel.prevent="tabWheel">
+        <div ref="tabs-wrapper" class="tabs-wrapper overflow-x-auto flex pl-2.5">
+            <!-- <div ref="parent" class=""> -->
             <div v-for="{ path, key } in tabs" :key="key"
                 class="file-exp-tab w-[250px] py-2.5 px-2 flex items-center justify-between cursor-pointer"
                 :class="{ 'rounded-t-sm active': key === tabKey }" @click="changeTabFocus($event, key)">
@@ -86,7 +92,7 @@ function changeTabFocus(e: MouseEvent, key: string) {
                         :alt="getEndName(path)" />
                     <span class="w-[150px] text-ellipsis overflow-x-hidden whitespace-nowrap select-none">{{
                         getEndName(path)
-                    }}
+                        }}
                     </span>
                 </div>
                 <span aria-label="Close the tab"
@@ -101,6 +107,7 @@ function changeTabFocus(e: MouseEvent, key: string) {
             @click="addTabs">
             <Icon class="w-5 h-5" :icon="ICONS['plus-r']" width="20" height="20" />
         </div>
+        <!-- </div> -->
     </div>
 </template>
 
